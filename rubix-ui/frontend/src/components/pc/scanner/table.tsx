@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Button, Modal, Spin, Table } from "antd";
+import { Button, Modal, Spin } from "antd";
 import { RedoOutlined, PlusOutlined } from "@ant-design/icons";
 
+import RbTable from "../../common/RbTable";
 export const PcScanner = () => {
   const [data, setData] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
@@ -110,7 +111,7 @@ const ScannerTable = (props: any) => {
 
   return (
     <div>
-      <Table
+      <RbTable
         rowKey="ip"
         rowSelection={rowSelection}
         dataSource={data}

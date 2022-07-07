@@ -1,7 +1,9 @@
-import { model } from "../../../../wailsjs/go/models";
 import { Space, Spin, Table } from "antd";
-import { DeleteHost, OpenURL } from "../../../../wailsjs/go/main/App";
+
+import RbTable from "../../common/RbTable";
+import { model } from "../../../../wailsjs/go/models";
 import { openNotificationWithIcon } from "../../../utils/utils";
+import { DeleteHost, OpenURL } from "../../../../wailsjs/go/main/App";
 
 export const HostsTable = (props: any) => {
   const { hosts, networks, showModal, isFetching, connUUID, refreshList } =
@@ -83,15 +85,13 @@ export const HostsTable = (props: any) => {
       openNotificationWithIcon("error", err.message);
     }
   };
-
+  
   return (
-    <>
-      <Table
-        rowKey="uuid"
-        dataSource={hosts}
-        columns={columns}
-        loading={{ indicator: <Spin />, spinning: isFetching }}
-      />
-    </>
+    <RbTable
+      rowKey="uuid"
+      dataSource={hosts}
+      columns={columns}
+      loading={{ indicator: <Spin />, spinning: isFetching }}
+    />
   );
 };

@@ -1,18 +1,19 @@
-import {Space, Spin, Table} from "antd";
+import { Spin } from "antd";
 
+import RbTable from "../../common/RbTable";
 
 export const LocationsTable = (props: any) => {
-    let { locations, isFetching, tableSchema } = props;
-    if (!locations) return <></>;
+  let { locations, isFetching, tableSchema } = props;
+  if (!locations) return <></>;
 
-    return (
-        <div>
-            <Table
-                rowKey="uuid"
-                dataSource={locations}
-                columns={tableSchema}
-                loading={{ indicator: <Spin />, spinning: isFetching }}
-            />
-        </div>
-    );
+  return (
+    <div>
+      <RbTable
+        rowKey="uuid"
+        dataSource={locations}
+        columns={tableSchema}
+        loading={{ indicator: <Spin />, spinning: isFetching }}
+      />
+    </div>
+  );
 };

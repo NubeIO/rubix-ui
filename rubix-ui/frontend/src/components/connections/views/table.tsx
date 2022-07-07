@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { Space, Spin, Table } from "antd";
-import {DeleteConnection, PingRubixAssist} from "../../../../wailsjs/go/main/App";
-import { storage } from "../../../../wailsjs/go/models";
-import RubixConnection = storage.RubixConnection;
-import {openNotificationWithIcon} from "../../../utils/utils";
+import { Space, Spin } from "antd";
 
+import RbTable from "../../common/RbTable";
+import { storage } from "../../../../wailsjs/go/models";
+import {openNotificationWithIcon} from "../../../utils/utils";
+import {DeleteConnection, PingRubixAssist} from "../../../../wailsjs/go/main/App";
+
+import RubixConnection = storage.RubixConnection;
 export const ConnectionsTable = (props: any) => {
   const { connections, refreshList, showModal, isFetching } = props;
   if (!connections) return <></>;
@@ -103,7 +105,7 @@ export const ConnectionsTable = (props: any) => {
 
   return (
     <div>
-      <Table
+      <RbTable
         rowKey="uuid"
         dataSource={connections}
         rowSelection={rowSelection}
