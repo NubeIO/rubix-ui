@@ -162,9 +162,10 @@ link once the change is tagged.
 
 ## Licence
 
-`UNLICENSED`: proprietary NubeIO code. The repo is private to the NubeIO org.
+`UNLICENSED`: proprietary NubeIO code. The repo is public so a `github:` dep installs with no credential
+(the rubix-ai frontend builds on its deploy servers, an extension's CI, a contractor's machine), the same
+choice as `NubeDev/lb-ui-kit` and `NubeDev/lb-ext-ui-sdk`. Public visibility grants **no** licence to
+use it.
 
-Because of that, the rubix-ai app does not install it as a `github:` dep: its frontend images build on
-the deploy servers with no GitHub login. rubix-ai keeps the packed build of a tag in `ui/vendor/`
-(`make rubix-ui-bump V=X.Y.Z` there; its `docs/WORKFLOW-LB.md` §4d). Extensions use the `github:` dep,
-since the people building them are org members.
+Keep anything that must stay private (unreleased product screens, customer-specific code) out of this
+repo.
