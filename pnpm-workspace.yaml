@@ -16,3 +16,9 @@ overrides:
   # otherwise hoists a second @types/react@19 that collides with the React 18 JSX types.
   "@types/react": "18.3.31"
   "@types/react-dom": "18.3.7"
+  # ONE copy of each Radix package that keeps module-level state, the same pins rubix-ai/ui carries.
+  # Every copy keeps its own stack of open layers: a popover inside a modal sheet then inherits the
+  # sheet's `pointer-events: none` and has its typing pulled back into the sheet.
+  "@radix-ui/react-dismissable-layer": "1.1.19"
+  "@radix-ui/react-focus-scope": "1.1.16"
+  "@radix-ui/react-focus-guards": "1.1.6"

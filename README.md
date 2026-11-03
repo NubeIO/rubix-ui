@@ -17,8 +17,23 @@ to look like the app, and each copy drifted.
 | `Separator`, `Skeleton`, `Spinner` | small pieces |
 | `cn` | `clsx` + `tailwind-merge`, taught the host's custom type and radius keys |
 
-Popups (popover, select, sheet, dialog, menus, tooltip) come in a later release, together with the
-two fixes they need (see *Popups* below).
+
+Popups and overlays:
+
+| Export | What it is |
+|---|---|
+| `Popover` (+ `Trigger`, `Content`, `Anchor`) | a floating panel |
+| `Combobox`, `ComboboxOption` | the searchable select (use it, not a native `<select>`) |
+| `Dialog` (+ `Trigger`, `Content`, `Header`, `Footer`, `Title`, `Description`, `Close`, …) | a centred modal |
+| `Sheet` (+ `Content`, `Header`, `Title`, `Description`) | a drawer from the side |
+| `DropdownMenu` (+ items, groups, radio, checkbox, sub-menus) | an action menu |
+| `Menubar` (+ the same parts) | a row of menus |
+| `Tooltip` (+ `Provider`, `Trigger`, `Content`) | a hover hint |
+| `ScrollArea`, `ScrollBar`, `Collapsible` (+ `Trigger`, `Content`) | small pieces |
+| `RubixUiProvider`, `useOverlayContainer` | where popups render (see *Popups*) |
+
+Not here yet: `Tabs` and `Accordion`. Their panels animate with the app's motion preference, which
+lives in the app.
 
 ## Install
 
@@ -73,20 +88,58 @@ The app does not load `scoped.css`. It compiles the same classes with its own Ta
 - has a `:root`/`:host` rule or a `.dark` selector (it would repaint the host app), or
 - has a class or attribute rule outside `[data-ext-root]` (it would match host elements).
 
+The `animate-in`/`fade-in`/`slide-in` classes the popups use come from `tw-animate-css`, compiled under
+the same scope.
+
 The host keys (`bg-bg`, `text-fg`, `border-border`, `rounded-md`, `text-caption`, …) are copied from
 rubix-ai's `ui/src/styles/globals.css` `@theme` into `src/styles/scoped.css`. Keep the two in step.
 
 ## Popups
 
-Two things have to be true before a popup ships here:
+Two things make popups work inside an extension. Both are needed.
 
-1. **It renders where the extension's styles apply.** Radix renders popups at the end of
-   `document.body`, outside `[data-ext-root]`. A provider will take a container: in the app, none (the
-   body, as today); in an extension, `usePortalContainer()` from `@nube/ext-ui-sdk` (inside the page),
-   or a body-level element that carries `data-ext-root` for a popup that must cover the whole screen.
-2. **One copy of Radix's focus and dismiss state.** Two copies cannot see each other's open layers.
-   The host will share `@radix-ui/react-dismissable-layer`, `react-focus-scope` and `react-focus-guards`
-   through its import map, as it shares React, and extensions mark them external.
+1. **Render inside the extension's root.** Radix renders popups at the end of `document.body`, outside
+   `[data-ext-root]`, where `scoped.css` does not apply: the popup would show unstyled. Wrap the page
+   in `RubixUiProvider` with the SDK's container, and every popup here renders inside the root:
+
+   ```tsx
+   import { usePortalContainer } from "@nube/ext-ui-sdk";
+   import { RubixUiProvider } from "@nube/rubix-ui";
+
+   export function App(props) {
+     return (
+       <RubixUiProvider portalContainer={usePortalContainer()}>
+         <Page {...props} />
+       </RubixUiProvider>
+     );
+   }
+   ```
+
+   Nothing above the root traps `position: fixed`, so a dialog's overlay still covers the whole window,
+   the host's sidebar and top bar included. In the app there is no provider and popups go to the body.
+
+2. **Share the host's popup stack.** Radix keeps the stack of open popups, the focus trap and the focus
+   sentinels in three packages. With its own copy, an extension's popups cannot see the host's: Escape
+   or an outside click reaches the wrong one, and a popover inside a modal stops taking clicks. The
+   rubix-ai app shares its copy through its import map, as it shares React. Mark the three external:
+
+   ```ts
+   // vite.config.ts
+   defineExtConfig({
+     entry: "src/remoteEntry.tsx",
+     externals: [
+       "@radix-ui/react-dismissable-layer",
+       "@radix-ui/react-focus-scope",
+       "@radix-ui/react-focus-guards",
+     ],
+   });
+   ```
+
+   The extension then runs against the host's versions of those three, so its own Radix packages must be
+   ones that work with them. This package's peer ranges (`~` on the host's minor versions) keep that
+   true; a newer Radix minor (for example `react-dialog` 1.3) imports names the host's `focus-scope` does
+   not have, and the extension fails to load. Move the host and this package to a new Radix minor
+   together.
 
 ## Develop
 
