@@ -109,4 +109,9 @@ link once the change is tagged.
 
 ## Licence
 
-`UNLICENSED`: proprietary NubeIO code.
+`UNLICENSED`: proprietary NubeIO code. The repo is public so a `github:` dep installs with no credential
+(the frontend builds on the deploy servers, an extension's CI, a contractor's machine), the same choice
+as `NubeDev/lb-ui-kit` and `NubeDev/lb-ext-ui-sdk`. Public visibility grants **no** licence to use it.
+
+Keep anything that must stay private (unreleased product screens, customer-specific code) out of this
+repo.
