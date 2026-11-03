@@ -1,0 +1,167 @@
+/* The extension stylesheet (`@nube/rubix-ui/scoped.css`), and the whole of the package's CSS contract.
+ *
+ * THE HOST OWNS THE THEME. These components only READ it:
+ *
+ *   1. NO `:root { }` and NO `.dark { }` block. Either one would redefine the host's `--bg`/`--accent`/…
+ *      and repaint the whole host app. `scripts/assert-scoped-css.mjs` fails the build on it.
+ *   2. NO Preflight. Only `tailwindcss/theme.css` is imported; the host's own reset already applies.
+ *   3. Every utility is compiled UNDER `[data-ext-root]`, the root `@nube/ext-ui-sdk` mounts every
+ *      extension in, so `.p-4` ships as `[data-ext-root] .p-4` and never matches a host element.
+ *      Popups follow the same rule: one rendered into the extension's root, or into a body-level
+ *      element that carries `data-ext-root`, is styled; anything else is not.
+ *   4. The colour, radius and type keys below are the host's (`bg-bg`, `text-fg`, `border-border`,
+ *      `rounded-md`, `text-caption`…), declared `inline` so a utility reads the host variable directly
+ *      (`hsl(var(--fg))`) instead of declaring a `--color-*` of its own at `:root`. A theme or light/dark
+ *      change in the host therefore reaches every component without a rebuild.
+ *
+ * The rubix-ai app does not load this file. It compiles the same class strings with its own Tailwind
+ * (`@source` on this package), against the same keys, so both read identically.
+ *
+ * Keep the keys below in step with `rubix-ai/ui/src/styles/globals.css` `@theme`.
+ */
+
+@layer theme, utilities;
+
+@import "tailwindcss/theme.css" layer(theme) theme(inline);
+
+@source "../components";
+
+/* The host's keys. Copied from rubix-ai's `globals.css` `@theme`, made `inline`. */
+@theme inline {
+  --color-bg: hsl(var(--bg));
+  --color-panel: hsl(var(--panel));
+  --color-border: hsl(var(--border));
+  --color-fg: hsl(var(--fg));
+  --color-muted: hsl(var(--muted));
+  --color-accent: hsl(var(--accent));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted-bg: hsl(var(--muted-bg));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  /* Tone widening (theme-appearance scope): a raised-panel step, an overlay tone, a secondary accent,
+     and semantic success/warning alongside the existing destructive — so presets/looks express more
+     than a two-tone surface. `panel-2`/`overlay`/`accent-2` are DERIVED from the base seven in
+     `:root`/`.dark`; success/warning are fixed semantic hues (like destructive). */
+  --color-panel-2: hsl(var(--panel-2));
+  --color-overlay: hsl(var(--overlay));
+  --color-accent-2: hsl(var(--accent-2));
+  --color-success: hsl(var(--success));
+  --color-info: hsl(var(--info));
+  --color-held: hsl(var(--held));
+  --color-warning: hsl(var(--warning));
+
+  /* Widget-frame tones (widget-frame scope). The frame stacks four surfaces inside one panel — band,
+     strip, body, footer — and the two-step `--panel`/`--panel-2` pair ran out: the band sits on
+     `panel-2`, so a skeleton block drawn ON the band needed a third step (`--panel-3`) to be visible
+     at all. `--border-strong` is the hairline that has to read against the band rather than the page
+     (the EXT pill, a header divider). `--fg-2`/`--faint` are the two text steps BELOW `--fg` that the
+     frame's subtitle/footer/labels need — `--muted` alone flattened a title, its subtitle and its
+     footer note into one weight. Derived from the same navy/paper families as their neighbours. */
+  --color-panel-3: hsl(var(--panel-3));
+  --color-border-strong: hsl(var(--border-strong));
+  --color-fg-2: hsl(var(--fg-2));
+  --color-faint: hsl(var(--faint));
+  --color-on-solid: hsl(var(--on-solid));
+
+  /* Categorical ramp (chart + identity hues). Eight well-separated hues, tuned per mode in
+     `:root`/`.dark` below. Charts read them via `chartTheme.ts`; UI surfaces may use them for
+     *identity* color (a subsystem's icon tile, a series swatch) — never for state (state stays
+     success/warning/destructive/accent). */
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+  --color-chart-6: hsl(var(--chart-6));
+  --color-chart-7: hsl(var(--chart-7));
+  --color-chart-8: hsl(var(--chart-8));
+
+  /* Page-system keys (rubix-design skill, fix-plan step 1). Four type sizes the app wrote as arbitrary
+     values (`text-[10px]`, `text-[11px]`, …) get names, so `text-micro`/`text-caption`/`text-value-lg`/
+     `text-value-xl` exist; the stock Tailwind sizes (xs/sm/base/xl/2xl) keep their own keys. The
+     surface/ink/line colours are the ROLE aliases declared in the page-system `:root` block below —
+     registered here so `bg-surface-card`, `text-ink-muted`, `border-line` are real utilities. */
+  --text-micro: 10px;
+  --text-caption: 11px;
+  /* DETAIL — the reading size of an insight's expanded row and its case panel (Insights review
+     mock-up, 13px): a step between the table's 12px cells and 14px body text. */
+  --text-detail: 13px;
+  --text-value-lg: 28px;
+  --text-value-xl: 40px;
+  --color-surface-page: hsl(var(--surface-page));
+  --color-surface-card: hsl(var(--surface-card));
+  --color-surface-raised: hsl(var(--surface-raised));
+  --color-surface-inset: hsl(var(--surface-inset));
+  --color-surface-field: hsl(var(--surface-field));
+  --color-surface-scrim: hsl(var(--surface-scrim));
+  --color-ink-strong: hsl(var(--ink-strong));
+  --color-ink: hsl(var(--ink));
+  --color-ink-muted: hsl(var(--ink-muted));
+  --color-ink-faint: hsl(var(--ink-faint));
+  --color-ink-on-accent: hsl(var(--ink-on-accent));
+  --color-ink-on-solid: hsl(var(--ink-on-solid));
+  --color-line: hsl(var(--line));
+  --color-line-strong: hsl(var(--line-strong));
+
+  /* Font tokens (theme-appearance scope): Tailwind's `font-sans`/`font-mono` utilities resolve these,
+     and `theme-dom` writes the member's chosen family stack to `--font-sans`/`--font-mono` on <html>.
+     The `@theme` values here are the SYSTEM-STACK defaults, so text has a stack before any font is
+     chosen; a picked family overrides the token inline + lazy-loads its woff2 (`font-loader.ts`). */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Declare the FULL rounded scale in `@theme` so Tailwind GENERATES the `rounded-xs…rounded-3xl`
+     utilities (it only emits a utility whose theme key exists). The actual token *values* are
+     re-asserted in a trailing `:root` override at the bottom of this file — because `tw-animate-css`
+     re-imports Tailwind's default theme AFTER this block and would otherwise win the cascade with the
+     static `--radius-md:.375rem` etc., which is exactly the shipped "radius does nothing" bug. See the
+     `RADIUS SCALE` block at the end. */
+  --radius-xs: max(0px, calc(var(--radius) - 4px));
+  --radius-sm: max(0px, calc(var(--radius) - 4px));
+  --radius-DEFAULT: max(0px, calc(var(--radius) - 2px));
+  --radius-md: max(0px, calc(var(--radius) - 2px));
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 14px);
+  /* The widget frame's corner (14px at the default radius). It was a `rounded-[14px]` literal, so the
+     theme Radius control moved every corner except the panels'. */
+  --radius-panel: calc(var(--radius) + 6px);
+}
+
+/* Scoped utilities: every generated class is emitted UNDER `[data-ext-root]`.
+ *
+ * ⚠ This is the DESCENDANT form, `[data-ext-root] .p-4`: a utility on the element that CARRIES
+ * `data-ext-root` does not match. The SDK's mount puts the attribute on a wrapper above the page, so
+ * component roots are always descendants. */
+@layer utilities {
+  [data-ext-root] {
+    @tailwind utilities;
+  }
+}
+
+/* A glyph inside a `Button` takes the size its control dictates (14 in a 32px control, 16 otherwise)
+ * when it brought no size of its own (lucide's unsized default is 24). Same rule as the host's
+ * `globals.css`; `--icon-sm`/`--icon-md` are host variables. */
+[data-ext-root] [data-btn] svg:where([width="24"]) {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}
+[data-ext-root] [data-btn]:where([data-btn="sm"], [data-btn="icon-sm"]) svg:where([width="24"]) {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}

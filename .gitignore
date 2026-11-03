@@ -1,0 +1,5 @@
+node_modules/
+*.log
+.DS_Store
+# NOTE: `dist/` is NOT ignored. It is COMMITTED on purpose: consumers pin this repo with a
+# `github:NubeIO/rubix-ui#vX.Y.Z` dep, and a git dep installs the tree as-is with no build step.

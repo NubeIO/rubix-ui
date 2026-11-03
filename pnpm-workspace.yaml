@@ -1,0 +1,18 @@
+# `@nube/rubix-ui` is ONE package. A consumer pins the repo with a single
+# `github:NubeIO/rubix-ui#vX.Y.Z` dep, and a `github:` dep resolves exactly one `package.json`.
+# This file exists only to carry the install policy the family shares.
+
+# pnpm 11 blocks postinstall/build scripts by default. esbuild must be approved or vite install stalls.
+# TRAP: `pnpm install` re-appends a BROKEN `allowBuilds: {esbuild: set this to true or false}` stub —
+# if you see that, fix it back to `esbuild: true`.
+allowBuilds:
+  esbuild: true
+
+onlyBuiltDependencies:
+  - esbuild
+
+overrides:
+  # React types 18 across the tree, matching rubix-ai/ui. A dep whose peer range admits React 19
+  # otherwise hoists a second @types/react@19 that collides with the React 18 JSX types.
+  "@types/react": "18.3.31"
+  "@types/react-dom": "18.3.7"
