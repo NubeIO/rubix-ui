@@ -7,6 +7,7 @@
 import "./styles/scoped.css";
 
 export { cn } from "./lib/cn";
+export { RubixUiProvider, useOverlayContainer } from "./lib/overlay";
 
 export { Alert, AlertTitle, AlertDescription, alertVariants } from "./components/alert";
 export { Badge, badgeVariants } from "./components/badge";
@@ -28,3 +29,58 @@ export { Spinner } from "./components/spinner";
 export { Switch } from "./components/switch";
 export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "./components/table";
 export { Textarea } from "./components/textarea";
+export { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./components/collapsible";
+export { Combobox, type ComboboxOption } from "./components/combobox";
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+  DialogSurfaceContext,
+  useDialogSurface,
+} from "./components/dialog";
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuPortal,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from "./components/dropdown-menu";
+export {
+  Menubar,
+  MenubarPortal,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarContent,
+  MenubarGroup,
+  MenubarLabel,
+  MenubarItem,
+  MenubarCheckboxItem,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarSub,
+  MenubarSubTrigger,
+  MenubarSubContent,
+} from "./components/menubar";
+export { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "./components/popover";
+export { ScrollArea, ScrollBar } from "./components/scroll-area";
+export { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "./components/sheet";
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/tooltip";

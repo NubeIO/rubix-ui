@@ -13,6 +13,9 @@
  *      `rounded-md`, `text-caption`…), declared `inline` so a utility reads the host variable directly
  *      (`hsl(var(--fg))`) instead of declaring a `--color-*` of its own at `:root`. A theme or light/dark
  *      change in the host therefore reaches every component without a rebuild.
+ *   5. Tailwind's own theme is imported as `reference`, so it declares nothing either. The few utilities
+ *      that still read a theme variable at runtime (the popups' `slide-in-from-*-2` offsets read
+ *      `--spacing`) take the host's: its Tailwind already declares them at `:root`.
  *
  * The rubix-ai app does not load this file. It compiles the same class strings with its own Tailwind
  * (`@source` on this package), against the same keys, so both read identically.
@@ -22,7 +25,10 @@
 
 @layer theme, utilities;
 
-@import "tailwindcss/theme.css" layer(theme) theme(inline);
+@import "tailwindcss/theme.css" layer(theme) theme(inline reference);
+
+/* The `animate-in`/`fade-in-0`/`slide-in-from-right` classes the dialog, sheet, menus and tooltip use. */
+@import "tw-animate-css";
 
 @source "../components";
 

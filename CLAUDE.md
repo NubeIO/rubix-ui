@@ -15,7 +15,12 @@
 4. **Commit `dist/`.** A `github:` dep installs the tree as-is. Run `pnpm build` before every commit.
 5. **One component per file**, under `src/components/`; export it from `src/index.ts` and list it in
    `src/index.test.ts`.
-6. **No popups until both popup fixes land** (README, *Popups*).
+6. **Every Radix `Portal` takes `container` from `useOverlayContainer()`** (or a caller's explicit
+   `container`). A portal without it renders outside an extension's styles. `src/lib/overlay.test.tsx`
+   checks each popup lands in the provider's element.
+7. **Radix stays on the host's minor versions.** Peers are `~` ranges and dev deps are the host's exact
+   versions, because extensions share the host's `dismissable-layer`/`focus-scope`/`focus-guards`
+   (README, *Popups*). Bump Radix here and in rubix-ai together.
 
 ## Commands
 
