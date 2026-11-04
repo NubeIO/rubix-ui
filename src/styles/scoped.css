@@ -31,6 +31,9 @@
 @import "tw-animate-css";
 
 @source "../components";
+/* Never the built output: it is committed, so scanning it would carry a class removed from the source
+   into the next build (and CI, building from a clean checkout, would get a different file). */
+@source not "../../dist";
 
 /* The host's keys. Copied from rubix-ai's `globals.css` `@theme`, made `inline`. */
 @theme inline {
