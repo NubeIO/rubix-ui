@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const i=require("react/jsx-runtime"),r=require("lucide-react"),t=require("../lib/cn.cjs");function a({className:n,...e}){return i.jsx(r.Loader2,{"data-slot":"spinner","aria-hidden":e["aria-label"]?void 0:!0,className:t.cn("size-3.5 shrink-0 animate-spin",n),...e})}exports.Spinner=a;

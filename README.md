@@ -54,7 +54,7 @@ stylesheet to the extension's own `styles`:
 ```ts
 // remoteEntry.tsx
 import own from "@/styles/tokens.css?inline";
-import rubix from "@nube/rubix-ui/scoped.css?inline";
+import rubix from "@nube/rubix-ui/scoped.css?raw";
 import { defineRemote } from "@nube/ext-ui-sdk";
 import { App } from "@/App";
 
@@ -68,6 +68,11 @@ export const { mount, mountWidget } = defineRemote({
 ```tsx
 import { Button, Card, CardContent } from "@nube/rubix-ui";
 ```
+
+Import it with `?raw`, not `?inline`. The file is already built (with Tailwind v4); `?inline` sends it
+through the extension's own PostCSS, and a Tailwind v3 build stops on its native `@layer` blocks
+("`@layer utilities` is used but no matching `@tailwind utilities` directive"). Its rules sit in a cascade
+layer, so where the extension defines the same class, the extension's own definition wins.
 
 The stylesheet is pre-built, so the extension does not need Tailwind v4 or the host's class names in
 its own config. Every rule in it is under `[data-ext-root]`, and it declares no colours: a class such as
@@ -155,6 +160,11 @@ them in:
 
 Without them (an extension, a test) a panel simply appears and an item simply opens and closes, which is
 what the app does when a member turns motion off.
+
+## Bundle size
+
+Each component is its own file in `dist/` and the package declares no side effects (besides its CSS), so
+an extension's bundler keeps only the components it imports and the Radix packages they use.
 
 ## Develop
 

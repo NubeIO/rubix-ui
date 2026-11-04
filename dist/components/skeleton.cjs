@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const t=require("react/jsx-runtime"),r=require("../lib/cn.cjs");function o({className:e,...n}){return t.jsx("div",{className:r.cn("animate-pulse rounded-md bg-panel-3",e),...n})}exports.Skeleton=o;

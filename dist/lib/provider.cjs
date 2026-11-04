@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const r=require("react/jsx-runtime"),n=require("./motion.cjs"),t=require("./overlay.cjs"),u={};function c({portalContainer:e=null,motion:o=u,children:i}){return r.jsx(t.OverlayProvider,{container:e,children:r.jsx(n.MotionProvider,{motion:o,children:i})})}exports.RubixUiProvider=c;
