@@ -12,7 +12,7 @@ import {
 } from "../components/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/popover";
 import { Sheet, SheetContent, SheetTitle } from "../components/sheet";
-import { RubixUiProvider } from "./overlay";
+import { RubixUiProvider } from "./provider";
 
 // An extension's stylesheet applies only under its root, so every popup must land INSIDE the element
 // the provider names. Without a provider (the app) it lands in the body, as Radix does by default.

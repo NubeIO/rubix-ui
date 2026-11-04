@@ -10,21 +10,22 @@
 //
 // Without a provider (the app) the container is `undefined`, which Radix reads as "the body".
 //
-// One responsibility: carry the popup container down to the portals.
+// One responsibility: carry the popup container down to the portals. The public wrapper is
+// `RubixUiProvider` (provider.tsx).
 
 import * as React from "react";
 
 const OverlayContainerContext = React.createContext<HTMLElement | null>(null);
 
-interface RubixUiProviderProps {
-  /** The element popups render into. `null`/omitted ⇒ `document.body` (Radix's default). */
-  portalContainer?: HTMLElement | null;
+function OverlayProvider({
+  container,
+  children,
+}: {
+  container: HTMLElement | null;
   children: React.ReactNode;
-}
-
-function RubixUiProvider({ portalContainer = null, children }: RubixUiProviderProps) {
+}) {
   return (
-    <OverlayContainerContext.Provider value={portalContainer}>
+    <OverlayContainerContext.Provider value={container}>
       {children}
     </OverlayContainerContext.Provider>
   );
@@ -35,4 +36,4 @@ function useOverlayContainer(): HTMLElement | undefined {
   return React.useContext(OverlayContainerContext) ?? undefined;
 }
 
-export { RubixUiProvider, useOverlayContainer };
+export { OverlayProvider, useOverlayContainer };

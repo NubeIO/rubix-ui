@@ -14,6 +14,23 @@ import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { VariantProps } from 'class-variance-authority';
 
+export declare function Accordion({ className, defaultValue, children, ...props }: AccordionProps): React_2.JSX.Element;
+
+export declare function AccordionContent({ className, children, ...props }: React_2.ComponentProps<"div">): React_2.JSX.Element;
+
+export declare function AccordionItem({ value, className, children, ...props }: React_2.ComponentProps<"div"> & {
+    value: string;
+}): React_2.JSX.Element;
+
+declare interface AccordionProps extends Omit<React_2.ComponentProps<"div">, "onChange"> {
+    /** Only `single` (one open item) is implemented — the Customizer's shape. */
+    type?: "single";
+    collapsible?: boolean;
+    defaultValue?: string;
+}
+
+export declare function AccordionTrigger({ className, children, ...props }: React_2.ComponentProps<"button">): React_2.JSX.Element;
+
 export declare function Alert({ className, variant, ...props }: React_2.ComponentProps<"div"> & VariantProps<typeof alertVariants>): React_2.JSX.Element;
 
 export declare function AlertDescription({ className, ...props }: React_2.ComponentProps<"div">): React_2.JSX.Element;
@@ -32,6 +49,22 @@ export declare const badgeVariants: (props?: ({
     size?: "default" | "count" | null | undefined;
 } & ClassProp) | undefined) => string;
 
+export declare function Breadcrumb({ ...props }: React_2.ComponentProps<"nav">): React_2.JSX.Element;
+
+export declare function BreadcrumbEllipsis({ className, ...props }: React_2.ComponentProps<"span">): React_2.JSX.Element;
+
+export declare function BreadcrumbItem({ className, ...props }: React_2.ComponentProps<"li">): React_2.JSX.Element;
+
+export declare function BreadcrumbLink({ asChild, className, ...props }: React_2.ComponentProps<"a"> & {
+    asChild?: boolean;
+}): React_2.JSX.Element;
+
+export declare function BreadcrumbList({ className, ...props }: React_2.ComponentProps<"ol">): React_2.JSX.Element;
+
+export declare function BreadcrumbPage({ className, ...props }: React_2.ComponentProps<"span">): React_2.JSX.Element;
+
+export declare function BreadcrumbSeparator({ children, className, ...props }: React_2.ComponentProps<"li">): React_2.JSX.Element;
+
 export declare const Button: React_2.ForwardRefExoticComponent<Omit<React_2.ClassAttributes<HTMLButtonElement> & React_2.ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<(props?: ({
     variant?: "default" | "destructive" | "outline" | "solid" | "ghost" | null | undefined;
     size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | null | undefined;
@@ -43,6 +76,11 @@ export declare const buttonVariants: (props?: ({
     variant?: "default" | "destructive" | "outline" | "solid" | "ghost" | null | undefined;
     size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | null | undefined;
 } & ClassProp) | undefined) => string;
+
+/** Whether *some* clipboard strategy is available at all. Useful for hiding a copy affordance entirely
+ *  in a context where neither path can work (a non-DOM environment). Note this is deliberately NOT used
+ *  to gate on secure-context: an insecure page can still copy via the legacy path. */
+export declare function canWriteText(): boolean;
 
 export declare function Card({ className, ...props }: React_2.ComponentProps<"div">): React_2.JSX.Element;
 
@@ -58,13 +96,41 @@ export declare function CardTitle({ className, ...props }: React_2.ComponentProp
 
 export declare function Checkbox({ className, ...props }: React_2.ComponentProps<"input">): React_2.JSX.Element;
 
+declare interface Clipboard_2 {
+    /** True for ~`resetMs` after a successful copy (drives the "Copied" affordance). */
+    copied: boolean;
+    /** Set when the last copy failed (denied / no clipboard); cleared on the next attempt. */
+    error: string | null;
+    /** Copy `text`; resolves to whether it succeeded. Never throws. */
+    copy: (text: string) => Promise<boolean>;
+}
+export { Clipboard_2 as Clipboard }
+
 export declare function cn(...inputs: ClassValue[]): string;
+
+export declare interface CollapseProps {
+    open: boolean;
+    children: React_2.ReactNode;
+    className?: string;
+}
 
 export declare const Collapsible: ForwardRefExoticComponent<CollapsiblePrimitive.CollapsibleProps & RefAttributes<HTMLDivElement>>;
 
 export declare const CollapsibleContent: ForwardRefExoticComponent<CollapsiblePrimitive.CollapsibleContentProps & RefAttributes<HTMLDivElement>>;
 
 export declare const CollapsibleTrigger: ForwardRefExoticComponent<CollapsiblePrimitive.CollapsibleTriggerProps & RefAttributes<HTMLButtonElement>>;
+
+export declare function ColorSwatchPicker({ palette, value, onChange, "aria-label": ariaLabel, allowCustom, className, }: ColorSwatchPickerProps): React_2.JSX.Element;
+
+declare interface ColorSwatchPickerProps {
+    palette: Swatch[];
+    value: string;
+    onChange: (value: string) => void;
+    "aria-label": string;
+    /** Show a hex input to type a custom `#rrggbb` (committed on blur/Enter when valid). */
+    allowCustom?: boolean;
+    className?: string;
+}
 
 export declare function Combobox({ options, value, onChange, placeholder, "aria-label": ariaLabel, allowCustom, clearable, disabled, size, renderValue, className, }: ComboboxProps): React_2.JSX.Element;
 
@@ -101,6 +167,8 @@ declare interface ComboboxProps {
     renderValue?: (value: string, option: ComboboxOption | undefined) => React_2.ReactNode;
     className?: string;
 }
+
+export declare function CopyButton({ text, label, copiedLabel, variant, size, className, ariaLabel, }: Props): JSX_2.Element;
 
 export declare function Dialog({ ...props }: React_2.ComponentProps<typeof DialogPrimitive.Root>): React_2.JSX.Element;
 
@@ -214,17 +282,52 @@ export declare function PopoverContent({ className, align, sideOffset, ...props 
 
 export declare const PopoverTrigger: React_2.ForwardRefExoticComponent<Omit<PopoverPrimitive.PopoverTriggerProps & React_2.RefAttributes<HTMLButtonElement>, "ref"> & React_2.RefAttributes<HTMLButtonElement>>;
 
-export declare function RubixUiProvider({ portalContainer, children }: RubixUiProviderProps): React_2.JSX.Element;
+declare interface Props {
+    /** The text to copy. Disabled when empty. */
+    text: string;
+    /** Optional label beside the icon (e.g. "Copy JSON"). Omit for an icon-only button. */
+    label?: string;
+    /** Label shown for ~1.5s after a successful copy. Defaults to "Copied". */
+    copiedLabel?: string;
+    variant?: "default" | "solid" | "outline" | "ghost";
+    size?: "default" | "sm" | "icon";
+    className?: string;
+    /** aria-label for the icon-only form (defaults to "copy to clipboard"). */
+    ariaLabel?: string;
+}
+
+export declare interface RevealProps {
+    children: React_2.ReactNode;
+    className?: string;
+}
+
+export declare interface RubixUiMotion {
+    /** Wraps a tab panel each time it mounts (an entrance). */
+    Reveal?: React_2.ComponentType<RevealProps>;
+    /** Wraps an accordion item's body; shows it while `open`, hides it otherwise. */
+    Collapse?: React_2.ComponentType<CollapseProps>;
+}
+
+export declare function RubixUiProvider({ portalContainer, motion, children, }: RubixUiProviderProps): React_2.JSX.Element;
 
 declare interface RubixUiProviderProps {
     /** The element popups render into. `null`/omitted ⇒ `document.body` (Radix's default). */
     portalContainer?: HTMLElement | null;
+    /** Animation primitives for Tabs and Accordion. Omitted ⇒ no animation. */
+    motion?: RubixUiMotion;
     children: React_2.ReactNode;
 }
 
 export declare const ScrollArea: React_2.ForwardRefExoticComponent<Omit<ScrollAreaPrimitive.ScrollAreaProps & React_2.RefAttributes<HTMLDivElement>, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
 
 export declare const ScrollBar: React_2.ForwardRefExoticComponent<Omit<ScrollAreaPrimitive.ScrollAreaScrollbarProps & React_2.RefAttributes<HTMLDivElement>, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
+
+/** `md` (36px, 14px text) is the form size and matches `Input`; `sm` (32px, 12px) is the chrome size
+ *  for a toolbar or a dense row. The native numeric `size` attribute is not exposed: a list box is a
+ *  different control. */
+export declare function Select({ className, size, ...props }: Omit<React_2.ComponentProps<"select">, "size"> & {
+    size?: "md" | "sm";
+}): React_2.JSX.Element;
 
 export declare const Separator: React_2.ForwardRefExoticComponent<Omit<SeparatorProps, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
 
@@ -250,6 +353,16 @@ export declare function Skeleton({ className, ...props }: React.HTMLAttributes<H
 
 export declare function Spinner({ className, ...props }: React.ComponentProps<typeof Loader2>): JSX_2.Element;
 
+export declare interface Swatch {
+    /** The stored color value (a semantic name or a hex literal). */
+    value: string;
+    /** The CSS color painted on the swatch. */
+    css: string;
+    /** Human name for the tooltip/label — the stored `value` is a storage key ("accent"), not what an
+     *  author calls the color ("Theme accent"). Absent ⇒ the value reads well enough on its own. */
+    label?: string;
+}
+
 export declare const Switch: React_2.ForwardRefExoticComponent<Omit<SwitchProps, "ref"> & React_2.RefAttributes<HTMLButtonElement>>;
 
 declare interface SwitchProps extends Omit<React_2.ComponentProps<"button">, "onChange" | "type"> {
@@ -273,6 +386,27 @@ export declare function TableHeader({ className, sticky, ...props }: React_2.Com
 
 export declare function TableRow({ className, ...props }: React_2.ComponentProps<"tr">): React_2.JSX.Element;
 
+export declare function Tabs({ value, onValueChange, className, ...props }: TabsProps): React_2.JSX.Element;
+
+export declare function TabsContent({ value, className, children, ...props }: TabsContentProps): React_2.JSX.Element | null;
+
+declare interface TabsContentProps extends React_2.ComponentProps<"div"> {
+    value: string;
+}
+
+export declare function TabsList({ className, ...props }: React_2.ComponentProps<"div">): React_2.JSX.Element;
+
+declare interface TabsProps extends React_2.ComponentProps<"div"> {
+    value: string;
+    onValueChange: (v: string) => void;
+}
+
+export declare function TabsTrigger({ value, className, ...props }: TabsTriggerProps): React_2.JSX.Element;
+
+declare interface TabsTriggerProps extends React_2.ComponentProps<"button"> {
+    value: string;
+}
+
 export declare const Textarea: React_2.ForwardRefExoticComponent<Omit<React_2.DetailedHTMLProps<React_2.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>, "ref"> & React_2.RefAttributes<HTMLTextAreaElement>>;
 
 export declare function Tooltip({ ...props }: React_2.ComponentProps<typeof TooltipPrimitive.Root>): React_2.JSX.Element;
@@ -283,9 +417,28 @@ export declare function TooltipProvider({ delayDuration, ...props }: React_2.Com
 
 export declare const TooltipTrigger: React_2.ForwardRefExoticComponent<Omit<TooltipPrimitive.TooltipTriggerProps & React_2.RefAttributes<HTMLButtonElement>, "ref"> & React_2.RefAttributes<HTMLButtonElement>>;
 
+export declare function useClipboard(resetMs?: number): Clipboard_2;
+
 export declare function useDialogSurface(): HTMLElement | null;
 
 /** The container for a Radix `Portal`'s `container` prop: the provider's element, else `undefined`. */
 export declare function useOverlayContainer(): HTMLElement | undefined;
+
+/**
+ * Copy `text` to the system clipboard. Resolves to whether it succeeded; never throws.
+ *
+ * Works in a secure context (HTTPS / localhost / the Tauri webview) via the async Clipboard API, and in
+ * an insecure one (plain HTTP on a LAN address) via the legacy `execCommand` fallback.
+ *
+ * **Call it directly from the user-gesture handler.** The legacy fallback is only honoured inside the
+ * gesture's own task, so `await`-ing something else first will break copying for HTTP users while
+ * continuing to work for you on localhost:
+ *
+ * ```ts
+ * onClick={() => void writeText(text)}          // ✅
+ * onClick={async () => { await load(); writeText(text) }}   // ❌ gesture spent — HTTP users get nothing
+ * ```
+ */
+export declare function writeText(text: string): Promise<boolean>;
 
 export { }

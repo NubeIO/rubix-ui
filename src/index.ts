@@ -7,7 +7,10 @@
 import "./styles/scoped.css";
 
 export { cn } from "./lib/cn";
-export { RubixUiProvider, useOverlayContainer } from "./lib/overlay";
+export { RubixUiProvider } from "./lib/provider";
+export { useOverlayContainer } from "./lib/overlay";
+export type { RubixUiMotion, RevealProps, CollapseProps } from "./lib/motion";
+export { writeText, canWriteText, useClipboard, type Clipboard } from "./lib/clipboard";
 
 export { Alert, AlertTitle, AlertDescription, alertVariants } from "./components/alert";
 export { Badge, badgeVariants } from "./components/badge";
@@ -84,3 +87,22 @@ export { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "./compon
 export { ScrollArea, ScrollBar } from "./components/scroll-area";
 export { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "./components/sheet";
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/tooltip";
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "./components/accordion";
+export {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+} from "./components/breadcrumb";
+export { ColorSwatchPicker, type Swatch } from "./components/color-swatch";
+export { CopyButton } from "./components/copy-button";
+export { Select } from "./components/select";
+export { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/tabs";
