@@ -26,7 +26,7 @@ export default defineConfig({
       entry: fileURLToPath(new URL("./src/index.ts", import.meta.url)),
       name: "NubeRubixUi",
       formats: ["es", "cjs"],
-      fileName: (fmt) => `rubix-ui.${fmt === "es" ? "js" : "cjs"}`,
+      fileName: (fmt, entry) => `${entry}.${fmt === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
       external: [
@@ -43,6 +43,11 @@ export default defineConfig({
       output: {
         assetFileNames: "rubix-ui.[ext]",
         globals: { react: "React", "react-dom": "ReactDOM" },
+        // One output file per source file, so a consumer's bundler drops the components it never
+        // imports (with `"sideEffects"` in package.json). A single bundle keeps them all: every
+        // `forwardRef` call at its top level counts as a side effect.
+        preserveModules: true,
+        preserveModulesRoot: "src",
       },
     },
   },
