@@ -1,18 +1,19 @@
-import { clsx as J } from "clsx";
-import { extendTailwindMerge as Y } from "tailwind-merge";
-import { jsx as a, jsxs as c } from "react/jsx-runtime";
+import { clsx as fe } from "clsx";
+import { extendTailwindMerge as be } from "tailwind-merge";
+import { jsx as n, jsxs as u } from "react/jsx-runtime";
 import * as s from "react";
+import { useState as V, useRef as F, useEffect as me, useCallback as pe } from "react";
 import { cva as A } from "class-variance-authority";
-import { Slot as Z } from "@radix-ui/react-slot";
-import { Loader2 as ee, X as O, ChevronDown as te, Check as ae, CheckIcon as E, CircleIcon as F, ChevronRightIcon as U } from "lucide-react";
-import * as j from "@radix-ui/react-collapsible";
-import * as N from "@radix-ui/react-popover";
-import * as p from "@radix-ui/react-dialog";
-import * as m from "@radix-ui/react-dropdown-menu";
-import * as f from "@radix-ui/react-menubar";
-import * as z from "@radix-ui/react-scroll-area";
-import * as R from "@radix-ui/react-tooltip";
-const re = Y({
+import { Slot as W } from "@radix-ui/react-slot";
+import { Loader2 as ge, X as O, ChevronDown as K, Check as Q, CheckIcon as X, CircleIcon as q, ChevronRightIcon as J, MoreHorizontal as xe, ChevronRight as he, Copy as ve } from "lucide-react";
+import * as $ from "@radix-ui/react-collapsible";
+import * as C from "@radix-ui/react-popover";
+import * as v from "@radix-ui/react-dialog";
+import * as h from "@radix-ui/react-dropdown-menu";
+import * as g from "@radix-ui/react-menubar";
+import * as k from "@radix-ui/react-scroll-area";
+import * as D from "@radix-ui/react-tooltip";
+const we = be({
   extend: {
     theme: {
       text: ["micro", "caption", "detail", "value-lg", "value-xl"],
@@ -20,17 +21,106 @@ const re = Y({
     }
   }
 });
-function n(...e) {
-  return re(J(e));
+function a(...e) {
+  return we(fe(e));
 }
-const V = s.createContext(null);
-function Ce({ portalContainer: e = null, children: t }) {
-  return /* @__PURE__ */ a(V.Provider, { value: e, children: t });
+function ye({ children: e, className: t }) {
+  return /* @__PURE__ */ n("div", { className: t, children: e });
 }
-function C() {
-  return s.useContext(V) ?? void 0;
+function Ne({ open: e, children: t, className: r }) {
+  return e ? /* @__PURE__ */ n("div", { className: r, children: t }) : null;
 }
-const ne = A(
+const B = s.createContext({});
+function Ce({
+  motion: e,
+  children: t
+}) {
+  return /* @__PURE__ */ n(B.Provider, { value: e, children: t });
+}
+function Se() {
+  return s.useContext(B).Reveal ?? ye;
+}
+function ke() {
+  return s.useContext(B).Collapse ?? Ne;
+}
+const Y = s.createContext(null);
+function ze({
+  container: e,
+  children: t
+}) {
+  return /* @__PURE__ */ n(Y.Provider, { value: e, children: t });
+}
+function S() {
+  return s.useContext(Y) ?? void 0;
+}
+const Te = {};
+function qe({
+  portalContainer: e = null,
+  motion: t = Te,
+  children: r
+}) {
+  return /* @__PURE__ */ n(ze, { container: e, children: /* @__PURE__ */ n(Ce, { motion: t, children: r }) });
+}
+function Z() {
+  var e;
+  return typeof navigator < "u" && typeof ((e = navigator.clipboard) == null ? void 0 : e.writeText) == "function" && // `isSecureContext` is the spec's own gate. Some engines expose a `clipboard` object that throws
+  // on use in an insecure context rather than omitting it, so trust the flag over the shape.
+  (typeof isSecureContext > "u" || isSecureContext);
+}
+function ee() {
+  return typeof document < "u" && !!document.body && typeof document.createElement == "function";
+}
+function U(e) {
+  if (!ee()) return !1;
+  const t = document.getSelection(), r = [];
+  if (t)
+    for (let i = 0; i < t.rangeCount; i += 1)
+      r.push(t.getRangeAt(i).cloneRange());
+  const o = document.createElement("textarea");
+  o.value = e, o.setAttribute("readonly", ""), o.setAttribute("aria-hidden", "true"), o.tabIndex = -1, o.style.position = "fixed", o.style.top = "0", o.style.left = "0", o.style.width = "1px", o.style.height = "1px", o.style.padding = "0", o.style.border = "none", o.style.outline = "none", o.style.boxShadow = "none", o.style.background = "transparent", o.style.opacity = "0", document.body.appendChild(o);
+  let l = !1;
+  try {
+    o.focus({ preventScroll: !0 }), o.select(), o.setSelectionRange(0, e.length), l = document.execCommand("copy");
+  } catch {
+    l = !1;
+  } finally {
+    if (document.body.removeChild(o), r.length > 0) {
+      const i = document.getSelection();
+      if (i) {
+        i.removeAllRanges();
+        for (const c of r) i.addRange(c);
+      }
+    }
+  }
+  return l;
+}
+async function Re(e) {
+  if (Z())
+    try {
+      return await navigator.clipboard.writeText(e), !0;
+    } catch {
+      return U(e);
+    }
+  return U(e);
+}
+function Je() {
+  return Z() || ee();
+}
+function De(e = 1500) {
+  const [t, r] = V(!1), [o, l] = V(null), i = F(null), c = F(!0);
+  me(() => (c.current = !0, () => {
+    c.current = !1, i.current && clearTimeout(i.current);
+  }), []);
+  const p = pe(
+    async (x) => {
+      const b = await Re(x);
+      return c.current ? b ? (l(null), r(!0), i.current && clearTimeout(i.current), i.current = setTimeout(() => r(!1), e), !0) : (r(!1), l("Copy failed"), !1) : b;
+    },
+    [e]
+  );
+  return { copied: t, error: o, copy: p };
+}
+const Me = A(
   "relative flex w-full items-start gap-3 rounded-lg border px-4 py-3 text-sm [&>svg]:mt-0.5 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:shrink-0",
   {
     variants: {
@@ -44,42 +134,42 @@ const ne = A(
     }
   }
 );
-function ze({
+function Ye({
   className: e,
   variant: t,
   ...r
 }) {
-  return /* @__PURE__ */ a(
+  return /* @__PURE__ */ n(
     "div",
     {
       role: "alert",
       "data-slot": "alert",
-      className: n(ne({ variant: t }), e),
+      className: a(Me({ variant: t }), e),
       ...r
     }
   );
 }
-function Se({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function Ze({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "div",
     {
       "data-slot": "alert-title",
-      className: n("font-medium leading-relaxed tracking-tight", e),
+      className: a("font-medium leading-relaxed tracking-tight", e),
       ...t
     }
   );
 }
-function ke({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function et({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "div",
     {
       "data-slot": "alert-description",
-      className: n("text-sm leading-relaxed [&_p]:leading-relaxed", e),
+      className: a("text-sm leading-relaxed [&_p]:leading-relaxed", e),
       ...t
     }
   );
 }
-const oe = A(
+const Pe = A(
   "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium transition-colors",
   {
     variants: {
@@ -110,23 +200,23 @@ const oe = A(
     }
   }
 );
-function De({
+function tt({
   className: e,
   variant: t,
   pill: r,
   size: o,
-  ...u
+  ...l
 }) {
-  return /* @__PURE__ */ a(
+  return /* @__PURE__ */ n(
     "span",
     {
       "data-slot": "badge",
-      className: n(oe({ variant: t, pill: r, size: o }), e),
-      ...u
+      className: a(Pe({ variant: t, pill: r, size: o }), e),
+      ...l
     }
   );
 }
-const se = A(
+const Ie = A(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/25 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
@@ -152,64 +242,64 @@ const se = A(
       size: "default"
     }
   }
-), Re = s.forwardRef(function({ className: t, variant: r, size: o, asChild: u = !1, ...d }, g) {
-  return /* @__PURE__ */ a(
-    u ? Z : "button",
+), _e = s.forwardRef(function({ className: t, variant: r, size: o, asChild: l = !1, ...i }, c) {
+  return /* @__PURE__ */ n(
+    l ? W : "button",
     {
-      ref: g,
+      ref: c,
       "data-btn": o ?? "default",
-      className: n(se({ variant: r, size: o, className: t })),
-      ...d
+      className: a(Ie({ variant: r, size: o, className: t })),
+      ...i
     }
   );
 });
-function Te({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function nt({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "div",
     {
       "data-slot": "card",
       "data-panel": "",
-      className: n("flex flex-col rounded-lg border border-border bg-card text-fg", e),
+      className: a("flex flex-col rounded-lg border border-border bg-card text-fg", e),
       ...t
     }
   );
 }
-function Me({ className: e, ...t }) {
-  return /* @__PURE__ */ a("div", { "data-slot": "card-header", className: n("flex flex-col gap-1 p-4", e), ...t });
+function rt({ className: e, ...t }) {
+  return /* @__PURE__ */ n("div", { "data-slot": "card-header", className: a("flex flex-col gap-1 p-4", e), ...t });
 }
-function Pe({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function ot({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "div",
     {
       "data-slot": "card-title",
-      className: n("text-sm font-semibold leading-none", e),
+      className: a("text-sm font-semibold leading-none", e),
       ...t
     }
   );
 }
-function Ie({ className: e, ...t }) {
-  return /* @__PURE__ */ a("div", { "data-slot": "card-description", className: n("text-xs text-muted", e), ...t });
+function at({ className: e, ...t }) {
+  return /* @__PURE__ */ n("div", { "data-slot": "card-description", className: a("text-xs text-muted", e), ...t });
 }
-function _e({ className: e, ...t }) {
-  return /* @__PURE__ */ a("div", { "data-slot": "card-content", className: n("p-4 pt-0", e), ...t });
+function it({ className: e, ...t }) {
+  return /* @__PURE__ */ n("div", { "data-slot": "card-content", className: a("p-4 pt-0", e), ...t });
 }
-function Ae({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function st({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "div",
     {
       "data-slot": "card-footer",
-      className: n("flex items-center p-4 pt-0", e),
+      className: a("flex items-center p-4 pt-0", e),
       ...t
     }
   );
 }
-function Oe({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function lt({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "input",
     {
       type: "checkbox",
       "data-slot": "checkbox",
-      className: n(
+      className: a(
         "h-4 w-4 shrink-0 cursor-pointer rounded-md border-border accent-[hsl(var(--accent))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-50",
         e
       ),
@@ -217,14 +307,14 @@ function Oe({ className: e, ...t }) {
     }
   );
 }
-const ie = s.forwardRef(
-  ({ className: e, type: t, ...r }, o) => /* @__PURE__ */ a(
+const te = s.forwardRef(
+  ({ className: e, type: t, ...r }, o) => /* @__PURE__ */ n(
     "input",
     {
       ref: o,
       type: t,
       "data-slot": "input",
-      className: n(
+      className: a(
         "flex h-9 w-full min-w-0 rounded-md border border-border bg-bg px-2.5 py-1.5 text-sm text-fg transition-colors placeholder:text-muted/60 selection:bg-accent/20 selection:text-fg focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/20 disabled:cursor-not-allowed disabled:opacity-60",
         e
       ),
@@ -232,107 +322,107 @@ const ie = s.forwardRef(
     }
   )
 );
-ie.displayName = "Input";
-const je = s.forwardRef(function({ className: t, ...r }, o) {
-  return /* @__PURE__ */ a(
+te.displayName = "Input";
+const ct = s.forwardRef(function({ className: t, ...r }, o) {
+  return /* @__PURE__ */ n(
     "label",
     {
       ref: o,
       "data-slot": "label",
-      className: n(
+      className: a(
         "text-sm font-medium leading-none text-fg peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
         t
       ),
       ...r
     }
   );
-}), Ge = s.forwardRef(function({ className: t, orientation: r = "horizontal", decorative: o = !0, ...u }, d) {
-  return /* @__PURE__ */ a(
+}), dt = s.forwardRef(function({ className: t, orientation: r = "horizontal", decorative: o = !0, ...l }, i) {
+  return /* @__PURE__ */ n(
     "div",
     {
-      ref: d,
+      ref: i,
       "data-slot": "separator",
       role: o ? "none" : "separator",
       "aria-orientation": o ? void 0 : r,
-      className: n(
+      className: a(
         "shrink-0 bg-border",
         r === "horizontal" ? "h-px w-full" : "h-full w-px",
         t
       ),
-      ...u
+      ...l
     }
   );
 });
-function Le({ className: e, ...t }) {
-  return /* @__PURE__ */ a("div", { className: n("animate-pulse rounded-md bg-panel-3", e), ...t });
+function ut({ className: e, ...t }) {
+  return /* @__PURE__ */ n("div", { className: a("animate-pulse rounded-md bg-panel-3", e), ...t });
 }
-function Be({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
-    ee,
+function ft({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
+    ge,
     {
       "data-slot": "spinner",
       "aria-hidden": t["aria-label"] ? void 0 : !0,
-      className: n("size-3.5 shrink-0 animate-spin", e),
+      className: a("size-3.5 shrink-0 animate-spin", e),
       ...t
     }
   );
 }
-const He = s.forwardRef(function({ className: t, checked: r, defaultChecked: o, onCheckedChange: u, disabled: d, onClick: g, ...v }, x) {
-  const b = r !== void 0, [I, S] = s.useState(o ?? !1), h = b ? r : I;
-  return /* @__PURE__ */ a(
+const bt = s.forwardRef(function({ className: t, checked: r, defaultChecked: o, onCheckedChange: l, disabled: i, onClick: c, ...p }, x) {
+  const b = r !== void 0, [m, z] = s.useState(o ?? !1), w = b ? r : m;
+  return /* @__PURE__ */ n(
     "button",
     {
       ref: x,
       type: "button",
       role: "switch",
-      "aria-checked": h,
+      "aria-checked": w,
       "data-slot": "switch",
-      "data-state": h ? "checked" : "unchecked",
-      disabled: d,
-      onClick: (w) => {
-        g == null || g(w);
-        const k = !h;
-        b || S(k), u == null || u(k);
+      "data-state": w ? "checked" : "unchecked",
+      disabled: i,
+      onClick: (y) => {
+        c == null || c(y);
+        const T = !w;
+        b || z(T), l == null || l(T);
       },
-      className: n(
+      className: a(
         "peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-50",
-        h ? "bg-accent" : "bg-border",
+        w ? "bg-accent" : "bg-border",
         t
       ),
-      ...v,
-      children: /* @__PURE__ */ a(
+      ...p,
+      children: /* @__PURE__ */ n(
         "span",
         {
           "aria-hidden": !0,
-          className: n(
+          className: a(
             "pointer-events-none block h-4 w-4 rounded-full bg-bg shadow-sm ring-0 transition-transform",
-            h ? "translate-x-4" : "translate-x-0.5"
+            w ? "translate-x-4" : "translate-x-0.5"
           )
         }
       )
     }
   );
 });
-function Ee({ className: e, ...t }) {
-  return /* @__PURE__ */ a("div", { "data-slot": "table-container", className: "relative w-full overflow-x-auto", children: /* @__PURE__ */ a(
+function mt({ className: e, ...t }) {
+  return /* @__PURE__ */ n("div", { "data-slot": "table-container", className: "relative w-full overflow-x-auto", children: /* @__PURE__ */ n(
     "table",
     {
       "data-slot": "table",
-      className: n("w-full caption-bottom border-collapse text-sm text-fg", e),
+      className: a("w-full caption-bottom border-collapse text-sm text-fg", e),
       ...t
     }
   ) });
 }
-function Fe({
+function pt({
   className: e,
   sticky: t,
   ...r
 }) {
-  return /* @__PURE__ */ a(
+  return /* @__PURE__ */ n(
     "thead",
     {
       "data-slot": "table-header",
-      className: n(
+      className: a(
         "border-b border-border bg-card/40 [&_tr]:border-b",
         t && "sticky top-0 z-10 bg-panel shadow-[0_1px_0_hsl(var(--border))]",
         e
@@ -341,22 +431,22 @@ function Fe({
     }
   );
 }
-function Ue({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function gt({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "tbody",
     {
       "data-slot": "table-body",
-      className: n("[&_tr:last-child]:border-0", e),
+      className: a("[&_tr:last-child]:border-0", e),
       ...t
     }
   );
 }
-function Ve({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function xt({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "tr",
     {
       "data-slot": "table-row",
-      className: n(
+      className: a(
         "border-b border-border transition-colors hover:bg-bg/60 data-[state=selected]:bg-accent/10",
         e
       ),
@@ -364,12 +454,12 @@ function Ve({ className: e, ...t }) {
     }
   );
 }
-function $e({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function ht({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "th",
     {
       "data-slot": "table-head",
-      className: n(
+      className: a(
         "h-9 px-3 text-left align-middle text-caption font-semibold uppercase tracking-[0.06em] text-muted",
         e
       ),
@@ -377,24 +467,24 @@ function $e({ className: e, ...t }) {
     }
   );
 }
-function Ke({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function vt({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "td",
     {
       "data-slot": "table-cell",
-      className: n("px-3 py-2 align-middle text-xs text-fg", e),
+      className: a("px-3 py-2 align-middle text-xs text-fg", e),
       ...t
     }
   );
 }
-const Qe = s.forwardRef(
+const wt = s.forwardRef(
   function({ className: t, ...r }, o) {
-    return /* @__PURE__ */ a(
+    return /* @__PURE__ */ n(
       "textarea",
       {
         ref: o,
         "data-slot": "textarea",
-        className: n(
+        className: a(
           "flex w-full min-w-0 rounded-md border border-border bg-bg px-2.5 py-2 text-sm leading-5 font-mono text-fg transition-colors placeholder:text-muted/60 focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/20 disabled:cursor-not-allowed disabled:opacity-60",
           t
         ),
@@ -402,151 +492,151 @@ const Qe = s.forwardRef(
       }
     );
   }
-), We = j.Root, Xe = j.CollapsibleTrigger, qe = j.CollapsibleContent, G = s.createContext(null);
-function le() {
-  return s.useContext(G);
+), yt = $.Root, Nt = $.CollapsibleTrigger, Ct = $.CollapsibleContent, j = s.createContext(null);
+function Ae() {
+  return s.useContext(j);
 }
-function Je({ ...e }) {
-  return /* @__PURE__ */ a(p.Root, { ...e });
+function St({ ...e }) {
+  return /* @__PURE__ */ n(v.Root, { ...e });
 }
-function Ye({ ...e }) {
-  return /* @__PURE__ */ a(p.Trigger, { ...e });
+function kt({ ...e }) {
+  return /* @__PURE__ */ n(v.Trigger, { ...e });
 }
-function de({
+function Oe({
   container: e,
   ...t
 }) {
-  const r = C();
-  return /* @__PURE__ */ a(p.Portal, { container: e ?? r, ...t });
+  const r = S();
+  return /* @__PURE__ */ n(v.Portal, { container: e ?? r, ...t });
 }
-function Ze({ ...e }) {
-  return /* @__PURE__ */ a(p.Close, { ...e });
+function zt({ ...e }) {
+  return /* @__PURE__ */ n(v.Close, { ...e });
 }
-const ce = s.forwardRef(function({ className: t, ...r }, o) {
-  return /* @__PURE__ */ a(
-    p.Overlay,
+const $e = s.forwardRef(function({ className: t, ...r }, o) {
+  return /* @__PURE__ */ n(
+    v.Overlay,
     {
       ref: o,
-      className: n("fixed inset-0 z-50 bg-overlay/60 animate-in fade-in-0", t),
+      className: a("fixed inset-0 z-50 bg-overlay/60 animate-in fade-in-0", t),
       ...r
     }
   );
-}), et = s.forwardRef(function({ className: t, children: r, showClose: o = !0, ...u }, d) {
-  const [g, v] = s.useState(null), x = s.useCallback(
+}), Tt = s.forwardRef(function({ className: t, children: r, showClose: o = !0, ...l }, i) {
+  const [c, p] = s.useState(null), x = s.useCallback(
     (b) => {
-      v(b), typeof d == "function" ? d(b) : d && (d.current = b);
+      p(b), typeof i == "function" ? i(b) : i && (i.current = b);
     },
-    [d]
+    [i]
   );
-  return /* @__PURE__ */ c(de, { children: [
-    /* @__PURE__ */ a(ce, {}),
-    /* @__PURE__ */ c(
-      p.Content,
+  return /* @__PURE__ */ u(Oe, { children: [
+    /* @__PURE__ */ n($e, {}),
+    /* @__PURE__ */ u(
+      v.Content,
       {
         ref: x,
         "data-panel": "",
-        className: n(
+        className: a(
           "fixed left-1/2 top-1/2 z-50 flex max-h-[85vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-y-auto rounded-lg border border-border bg-panel p-4 text-fg shadow-(--elev-dialog) duration-200 animate-in fade-in-0 zoom-in-95",
           t
         ),
-        ...u,
+        ...l,
         children: [
-          /* @__PURE__ */ a(G.Provider, { value: g, children: r }),
-          o && /* @__PURE__ */ c(p.Close, { className: "absolute right-4 top-4 rounded-sm text-muted opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/25", children: [
-            /* @__PURE__ */ a(O, { className: "h-4 w-4" }),
-            /* @__PURE__ */ a("span", { className: "sr-only", children: "Close" })
+          /* @__PURE__ */ n(j.Provider, { value: c, children: r }),
+          o && /* @__PURE__ */ u(v.Close, { className: "absolute right-4 top-4 rounded-sm text-muted opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/25", children: [
+            /* @__PURE__ */ n(O, { className: "h-4 w-4" }),
+            /* @__PURE__ */ n("span", { className: "sr-only", children: "Close" })
           ] })
         ]
       }
     )
   ] });
 });
-function tt({ className: e, ...t }) {
-  return /* @__PURE__ */ a("div", { className: n("flex flex-col gap-1.5", e), ...t });
+function Rt({ className: e, ...t }) {
+  return /* @__PURE__ */ n("div", { className: a("flex flex-col gap-1.5", e), ...t });
 }
-function at({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function Dt({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "div",
     {
-      className: n("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", e),
+      className: a("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", e),
       ...t
     }
   );
 }
-const rt = s.forwardRef(function({ className: t, ...r }, o) {
-  return /* @__PURE__ */ a(
-    p.Title,
+const Mt = s.forwardRef(function({ className: t, ...r }, o) {
+  return /* @__PURE__ */ n(
+    v.Title,
     {
       ref: o,
-      className: n("text-sm font-semibold text-fg", t),
+      className: a("text-sm font-semibold text-fg", t),
       ...r
     }
   );
-}), nt = s.forwardRef(function({ className: t, ...r }, o) {
-  return /* @__PURE__ */ a(
-    p.Description,
+}), Pt = s.forwardRef(function({ className: t, ...r }, o) {
+  return /* @__PURE__ */ n(
+    v.Description,
     {
       ref: o,
-      className: n("text-xs text-muted", t),
+      className: a("text-xs text-muted", t),
       ...r
     }
   );
 });
-function ue(e, t) {
+function Be(e, t) {
   if (!t) return !0;
   const r = t.toLowerCase();
   return e.value.toLowerCase().includes(r) || (e.label ?? "").toLowerCase().includes(r) || (e.description ?? "").toLowerCase().includes(r);
 }
-function ot({
+function It({
   options: e,
   value: t,
   onChange: r,
   placeholder: o = "— select —",
-  "aria-label": u,
-  allowCustom: d = !1,
-  clearable: g = !1,
-  disabled: v = !1,
+  "aria-label": l,
+  allowCustom: i = !1,
+  clearable: c = !1,
+  disabled: p = !1,
   size: x = "md",
   renderValue: b,
-  className: I
+  className: m
 }) {
-  const [S, h] = s.useState(!1), [w, k] = s.useState(""), [L, T] = s.useState(0), B = s.useRef(null), K = le(), Q = C(), W = K ?? Q, D = e.filter((i) => ue(i, w)), y = e.find((i) => i.value === t);
+  const [z, w] = s.useState(!1), [y, T] = s.useState(""), [L, M] = s.useState(0), G = s.useRef(null), se = Ae(), le = S(), ce = se ?? le, R = e.filter((d) => Be(d, y)), N = e.find((d) => d.value === t);
   s.useEffect(() => {
-    S && (k(""), T(0));
-  }, [S]);
-  const M = (i) => {
-    r(i), h(!1);
-  }, X = (i) => {
-    if (i.key === "Escape") {
-      h(!1);
+    z && (T(""), M(0));
+  }, [z]);
+  const P = (d) => {
+    r(d), w(!1);
+  }, de = (d) => {
+    if (d.key === "Escape") {
+      w(!1);
       return;
     }
-    if (i.key === "ArrowDown")
-      i.preventDefault(), T((l) => Math.min(l + 1, D.length - 1));
-    else if (i.key === "ArrowUp")
-      i.preventDefault(), T((l) => Math.max(l - 1, 0));
-    else if (i.key === "Enter") {
-      i.preventDefault();
-      const l = D[L];
-      l ? M(l.value) : d && w.trim() && M(w.trim());
+    if (d.key === "ArrowDown")
+      d.preventDefault(), M((f) => Math.min(f + 1, R.length - 1));
+    else if (d.key === "ArrowUp")
+      d.preventDefault(), M((f) => Math.max(f - 1, 0));
+    else if (d.key === "Enter") {
+      d.preventDefault();
+      const f = R[L];
+      f ? P(f.value) : i && y.trim() && P(y.trim());
     }
   }, _ = [];
-  D.forEach((i, l) => {
-    const P = _.find((q) => q.name === i.group);
-    P ? P.items.push({ o: i, idx: l }) : _.push({ name: i.group, items: [{ o: i, idx: l }] });
+  R.forEach((d, f) => {
+    const I = _.find((ue) => ue.name === d.group);
+    I ? I.items.push({ o: d, idx: f }) : _.push({ name: d.group, items: [{ o: d, idx: f }] });
   });
-  const H = g && !v && t !== "";
-  return /* @__PURE__ */ a(N.Root, { open: S, onOpenChange: h, children: /* @__PURE__ */ c("div", { className: n("relative", I), children: [
-    /* @__PURE__ */ a(N.Trigger, { asChild: !0, children: /* @__PURE__ */ c(
+  const H = c && !p && t !== "";
+  return /* @__PURE__ */ n(C.Root, { open: z, onOpenChange: w, children: /* @__PURE__ */ u("div", { className: a("relative", m), children: [
+    /* @__PURE__ */ n(C.Trigger, { asChild: !0, children: /* @__PURE__ */ u(
       "button",
       {
         type: "button",
         role: "combobox",
-        "aria-expanded": S,
-        "aria-label": u,
-        disabled: v,
+        "aria-expanded": z,
+        "aria-label": l,
+        disabled: p,
         "data-slot": "combobox-trigger",
-        className: n(
+        className: a(
           // `pr-[9px]` plus the 1px border puts the chevron 10px from the field's OUTER right edge
           // at both heights (Rubix Chart Shading sheet §10, the combobox rule).
           // The field look Input and Select share (focus border + ring, disabled fade, the
@@ -555,12 +645,12 @@ function ot({
           x === "sm" ? "h-8 text-xs" : "h-9 text-sm"
         ),
         children: [
-          /* @__PURE__ */ c(
+          /* @__PURE__ */ u(
             "span",
             {
-              className: n(
+              className: a(
                 "flex min-w-0 items-center gap-1.5 truncate",
-                !y && "text-muted",
+                !N && "text-muted",
                 // Room for the clear button, which sits between the label and the chevron. Reserved on
                 // the LABEL rather than as trigger padding, so the chevron stays at the right edge
                 // whether or not there is a value to clear. The text stops 8px before the clear
@@ -569,19 +659,19 @@ function ot({
                 H && (x === "sm" ? "pr-[25px]" : "pr-[27px]")
               ),
               children: [
-                (y == null ? void 0 : y.swatch) && /* @__PURE__ */ a(
+                (N == null ? void 0 : N.swatch) && /* @__PURE__ */ n(
                   "span",
                   {
                     className: "inline-block h-3 w-3 shrink-0 rounded-full",
-                    style: { background: y.swatch },
+                    style: { background: N.swatch },
                     "aria-hidden": !0
                   }
                 ),
-                t !== "" && (b == null ? void 0 : b(t, y)) || (y ? y.label ?? y.value : t || o)
+                t !== "" && (b == null ? void 0 : b(t, N)) || (N ? N.label ?? N.value : t || o)
               ]
             }
           ),
-          /* @__PURE__ */ a(te, { size: 12, strokeWidth: 3, className: "shrink-0 text-faint", "aria-hidden": !0 })
+          /* @__PURE__ */ n(K, { size: 12, strokeWidth: 3, className: "shrink-0 text-faint", "aria-hidden": !0 })
         ]
       }
     ) }),
@@ -592,23 +682,23 @@ function ot({
     // reaches into the 5px gap and wins there; anywhere outside it opens the list.
     // Clears to "" (none) without opening the list.
     // eslint-disable-next-line no-restricted-syntax -- a tiny inline affordance, not a Button
-    /* @__PURE__ */ a(
+    /* @__PURE__ */ n(
       "button",
       {
         type: "button",
-        "aria-label": `clear ${u}`,
-        className: n(
+        "aria-label": `clear ${l}`,
+        className: a(
           "absolute top-1/2 flex -translate-y-1/2 items-center justify-center rounded-[4px] text-faint hover:bg-[hsl(var(--fg)/0.06)] hover:text-fg-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30",
           x === "sm" ? "right-[23px] h-5 w-5" : "right-[21px] h-6 w-6"
         ),
         onClick: () => {
-          r(""), h(!1);
+          r(""), w(!1);
         },
-        children: /* @__PURE__ */ a(O, { size: 12, "aria-hidden": !0 })
+        children: /* @__PURE__ */ n(O, { size: 12, "aria-hidden": !0 })
       }
     ),
-    /* @__PURE__ */ a(N.Portal, { container: W, children: /* @__PURE__ */ c(
-      N.Content,
+    /* @__PURE__ */ n(C.Portal, { container: ce, children: /* @__PURE__ */ u(
+      C.Content,
       {
         "data-slot": "combobox-list",
         side: "bottom",
@@ -616,111 +706,111 @@ function ot({
         sideOffset: 4,
         collisionPadding: 8,
         style: { width: "var(--radix-popover-trigger-width)", zIndex: "var(--z-popover)" },
-        onOpenAutoFocus: (i) => {
-          var l;
-          i.preventDefault(), (l = B.current) == null || l.focus();
+        onOpenAutoFocus: (d) => {
+          var f;
+          d.preventDefault(), (f = G.current) == null || f.focus();
         },
         className: "max-h-64 min-w-48 overflow-y-auto rounded-md border border-border bg-panel p-1 shadow-(--elev-popover)",
         children: [
-          /* @__PURE__ */ a(
+          /* @__PURE__ */ n(
             "input",
             {
-              ref: B,
-              "aria-label": `${u} search`,
+              ref: G,
+              "aria-label": `${l} search`,
               className: "mb-1 h-7 w-full rounded-md border border-border bg-bg px-2 text-xs text-fg focus-visible:outline-none",
-              placeholder: d ? "search or type…" : "search…",
-              value: w,
-              onChange: (i) => {
-                k(i.target.value), T(0);
+              placeholder: i ? "search or type…" : "search…",
+              value: y,
+              onChange: (d) => {
+                T(d.target.value), M(0);
               },
-              onKeyDown: X
+              onKeyDown: de
             }
           ),
-          /* @__PURE__ */ c("ul", { role: "listbox", "aria-label": `${u} options`, children: [
-            D.length === 0 && !d && /* @__PURE__ */ a("li", { className: "px-2 py-1.5 text-sm text-muted", children: "no matches" }),
-            D.length === 0 && d && w.trim() && /* @__PURE__ */ a("li", { children: /* @__PURE__ */ c(
+          /* @__PURE__ */ u("ul", { role: "listbox", "aria-label": `${l} options`, children: [
+            R.length === 0 && !i && /* @__PURE__ */ n("li", { className: "px-2 py-1.5 text-sm text-muted", children: "no matches" }),
+            R.length === 0 && i && y.trim() && /* @__PURE__ */ n("li", { children: /* @__PURE__ */ u(
               "button",
               {
                 type: "button",
                 className: "min-h-8 w-full rounded-md px-2 py-1.5 text-left text-sm text-fg hover:bg-(--hover-wash)",
-                onClick: () => M(w.trim()),
+                onClick: () => P(y.trim()),
                 children: [
                   "Use “",
-                  w.trim(),
+                  y.trim(),
                   "”"
                 ]
               }
             ) }),
-            _.map((i) => /* @__PURE__ */ c(s.Fragment, { children: [
-              i.name && /* @__PURE__ */ a(
+            _.map((d) => /* @__PURE__ */ u(s.Fragment, { children: [
+              d.name && /* @__PURE__ */ n(
                 "li",
                 {
                   className: "px-2 pb-0.5 pt-1.5 text-caption font-semibold uppercase tracking-[0.08em] text-faint",
                   "aria-hidden": !0,
-                  children: i.name
+                  children: d.name
                 }
               ),
-              i.items.map(({ o: l, idx: P }) => /* @__PURE__ */ a("li", { children: /* @__PURE__ */ c(
+              d.items.map(({ o: f, idx: I }) => /* @__PURE__ */ n("li", { children: /* @__PURE__ */ u(
                 "button",
                 {
                   type: "button",
                   role: "option",
-                  "aria-selected": l.value === t,
-                  className: n(
+                  "aria-selected": f.value === t,
+                  className: a(
                     "flex min-h-8 w-full items-start gap-1.5 rounded-md px-2 py-1.5 text-left text-sm text-fg hover:bg-(--hover-wash)",
-                    P === L && "bg-bg"
+                    I === L && "bg-bg"
                   ),
-                  onClick: () => M(l.value),
+                  onClick: () => P(f.value),
                   children: [
-                    l.swatch && /* @__PURE__ */ a(
+                    f.swatch && /* @__PURE__ */ n(
                       "span",
                       {
                         className: "mt-0.5 inline-block h-3 w-3 shrink-0 rounded-full",
-                        style: { background: l.swatch },
+                        style: { background: f.swatch },
                         "aria-hidden": !0
                       }
                     ),
-                    /* @__PURE__ */ c("span", { className: "min-w-0 flex-1", children: [
-                      /* @__PURE__ */ a("span", { className: "block truncate", children: l.label ?? l.value }),
-                      l.description && /* @__PURE__ */ a("span", { className: "block truncate text-caption text-muted", children: l.description })
+                    /* @__PURE__ */ u("span", { className: "min-w-0 flex-1", children: [
+                      /* @__PURE__ */ n("span", { className: "block truncate", children: f.label ?? f.value }),
+                      f.description && /* @__PURE__ */ n("span", { className: "block truncate text-caption text-muted", children: f.description })
                     ] }),
-                    l.value === t && /* @__PURE__ */ a(ae, { size: 12, className: "mt-0.5 shrink-0 text-accent", "aria-hidden": !0 })
+                    f.value === t && /* @__PURE__ */ n(Q, { size: 12, className: "mt-0.5 shrink-0 text-accent", "aria-hidden": !0 })
                   ]
                 }
-              ) }, l.value))
-            ] }, i.name ?? "__ungrouped__"))
+              ) }, f.value))
+            ] }, d.name ?? "__ungrouped__"))
           ] })
         ]
       }
     ) })
   ] }) });
 }
-function st({ ...e }) {
-  return /* @__PURE__ */ a(m.Root, { "data-slot": "dropdown-menu", ...e });
+function _t({ ...e }) {
+  return /* @__PURE__ */ n(h.Root, { "data-slot": "dropdown-menu", ...e });
 }
-function it({
+function At({
   ...e
 }) {
-  return /* @__PURE__ */ a(m.Trigger, { "data-slot": "dropdown-menu-trigger", ...e });
+  return /* @__PURE__ */ n(h.Trigger, { "data-slot": "dropdown-menu-trigger", ...e });
 }
-function lt({
+function Ot({
   container: e,
   ...t
 }) {
-  const r = C();
-  return /* @__PURE__ */ a(m.Portal, { container: e ?? r, ...t });
+  const r = S();
+  return /* @__PURE__ */ n(h.Portal, { container: e ?? r, ...t });
 }
-function dt({
+function $t({
   className: e,
   sideOffset: t = 4,
   ...r
 }) {
-  return /* @__PURE__ */ a(m.Portal, { container: C(), children: /* @__PURE__ */ a(
-    m.Content,
+  return /* @__PURE__ */ n(h.Portal, { container: S(), children: /* @__PURE__ */ n(
+    h.Content,
     {
       "data-slot": "dropdown-menu-content",
       sideOffset: t,
-      className: n(
+      className: a(
         "bg-panel text-fg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-(--z-popover) max-h-(--radix-dropdown-menu-content-available-height) min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border border-border p-1 shadow-(--elev-popover)",
         e
       ),
@@ -728,22 +818,22 @@ function dt({
     }
   ) });
 }
-function ct({ ...e }) {
-  return /* @__PURE__ */ a(m.Group, { "data-slot": "dropdown-menu-group", ...e });
+function Bt({ ...e }) {
+  return /* @__PURE__ */ n(h.Group, { "data-slot": "dropdown-menu-group", ...e });
 }
-function ut({
+function jt({
   className: e,
   inset: t,
   variant: r = "default",
   ...o
 }) {
-  return /* @__PURE__ */ a(
-    m.Item,
+  return /* @__PURE__ */ n(
+    h.Item,
     {
       "data-slot": "dropdown-menu-item",
       "data-inset": t,
       "data-variant": r,
-      className: n(
+      className: a(
         "focus:bg-(--hover-wash) data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[inset]:pl-8 relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg]:inline-flex",
         e
       ),
@@ -751,126 +841,126 @@ function ut({
     }
   );
 }
-function ft({
+function Et({
   className: e,
   children: t,
   checked: r,
   ...o
 }) {
-  return /* @__PURE__ */ c(
-    m.CheckboxItem,
+  return /* @__PURE__ */ u(
+    h.CheckboxItem,
     {
       "data-slot": "dropdown-menu-checkbox-item",
-      className: n(
+      className: a(
         "focus:bg-(--hover-wash) relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg]:inline-flex",
         e
       ),
       checked: r,
       ...o,
       children: [
-        /* @__PURE__ */ a("span", { className: "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center", children: /* @__PURE__ */ a(m.ItemIndicator, { children: /* @__PURE__ */ a(E, { className: "size-4" }) }) }),
+        /* @__PURE__ */ n("span", { className: "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center", children: /* @__PURE__ */ n(h.ItemIndicator, { children: /* @__PURE__ */ n(X, { className: "size-4" }) }) }),
         t
       ]
     }
   );
 }
-function mt({
+function Lt({
   ...e
 }) {
-  return /* @__PURE__ */ a(m.RadioGroup, { ...e });
+  return /* @__PURE__ */ n(h.RadioGroup, { ...e });
 }
-function pt({
+function Gt({
   className: e,
   children: t,
   ...r
 }) {
-  return /* @__PURE__ */ c(
-    m.RadioItem,
+  return /* @__PURE__ */ u(
+    h.RadioItem,
     {
-      className: n(
+      className: a(
         "focus:bg-(--hover-wash) relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg]:inline-flex",
         e
       ),
       ...r,
       children: [
-        /* @__PURE__ */ a("span", { className: "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center", children: /* @__PURE__ */ a(m.ItemIndicator, { children: /* @__PURE__ */ a(F, { className: "size-2 fill-current" }) }) }),
+        /* @__PURE__ */ n("span", { className: "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center", children: /* @__PURE__ */ n(h.ItemIndicator, { children: /* @__PURE__ */ n(q, { className: "size-2 fill-current" }) }) }),
         t
       ]
     }
   );
 }
-function bt({
+function Ht({
   className: e,
   inset: t,
   ...r
 }) {
-  return /* @__PURE__ */ a(
-    m.Label,
+  return /* @__PURE__ */ n(
+    h.Label,
     {
       "data-slot": "dropdown-menu-label",
       "data-inset": t,
-      className: n("px-2 py-1.5 text-xs text-muted data-[inset]:pl-8", e),
+      className: a("px-2 py-1.5 text-xs text-muted data-[inset]:pl-8", e),
       ...r
     }
   );
 }
-function gt({
+function Vt({
   className: e,
   ...t
 }) {
-  return /* @__PURE__ */ a(
-    m.Separator,
+  return /* @__PURE__ */ n(
+    h.Separator,
     {
       "data-slot": "dropdown-menu-separator",
-      className: n("bg-border -mx-1 my-1 h-px", e),
+      className: a("bg-border -mx-1 my-1 h-px", e),
       ...t
     }
   );
 }
-function ht({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function Ft({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "span",
     {
       "data-slot": "dropdown-menu-shortcut",
-      className: n("text-muted ml-auto text-xs tracking-widest", e),
+      className: a("text-muted ml-auto text-xs tracking-widest", e),
       ...t
     }
   );
 }
-function vt({ ...e }) {
-  return /* @__PURE__ */ a(m.Sub, { ...e });
+function Ut({ ...e }) {
+  return /* @__PURE__ */ n(h.Sub, { ...e });
 }
-function xt({
+function Wt({
   className: e,
   inset: t,
   children: r,
   ...o
 }) {
-  return /* @__PURE__ */ c(
-    m.SubTrigger,
+  return /* @__PURE__ */ u(
+    h.SubTrigger,
     {
       "data-slot": "dropdown-menu-sub-trigger",
       "data-inset": t,
-      className: n(
+      className: a(
         "focus:bg-(--hover-wash) data-[inset]:pl-8 data-[state=open]:bg-(--hover-wash) flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none",
         e
       ),
       ...o,
       children: [
         r,
-        /* @__PURE__ */ a(U, { className: "ml-auto size-3.5" })
+        /* @__PURE__ */ n(J, { className: "ml-auto size-3.5" })
       ]
     }
   );
 }
-function wt({
+function Kt({
   className: e,
   ...t
 }) {
-  return /* @__PURE__ */ a(
-    m.SubContent,
+  return /* @__PURE__ */ n(
+    h.SubContent,
     {
-      className: n(
+      className: a(
         "bg-panel text-fg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-(--z-popover) min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-md border border-border p-1 shadow-(--elev-popover)",
         e
       ),
@@ -878,12 +968,12 @@ function wt({
     }
   );
 }
-function yt({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
-    f.Root,
+function Qt({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
+    g.Root,
     {
       "data-slot": "menubar",
-      className: n(
+      className: a(
         "bg-panel flex h-9 items-center gap-1 rounded-md border border-border p-1 shadow-sm",
         e
       ),
@@ -891,15 +981,15 @@ function yt({ className: e, ...t }) {
     }
   );
 }
-function Nt({
+function Xt({
   className: e,
   ...t
 }) {
-  return /* @__PURE__ */ a(
-    f.Trigger,
+  return /* @__PURE__ */ n(
+    g.Trigger,
     {
       "data-slot": "menubar-trigger",
-      className: n(
+      className: a(
         "focus:bg-(--hover-wash) data-[state=open]:bg-(--hover-wash) hover:bg-(--hover-wash) flex cursor-default items-center rounded-sm px-2 py-1 text-sm outline-hidden select-none",
         e
       ),
@@ -907,54 +997,54 @@ function Nt({
     }
   );
 }
-function Ct({ ...e }) {
-  return /* @__PURE__ */ a(f.Menu, { "data-slot": "menubar-menu", ...e });
+function qt({ ...e }) {
+  return /* @__PURE__ */ n(g.Menu, { "data-slot": "menubar-menu", ...e });
 }
-function zt({
+function Jt({
   container: e,
   ...t
 }) {
-  const r = C();
-  return /* @__PURE__ */ a(f.Portal, { container: e ?? r, ...t });
+  const r = S();
+  return /* @__PURE__ */ n(g.Portal, { container: e ?? r, ...t });
 }
-function St({
+function Yt({
   className: e,
   align: t = "start",
   alignOffset: r = -4,
   sideOffset: o = 8,
-  ...u
+  ...l
 }) {
-  return /* @__PURE__ */ a(f.Portal, { container: C(), children: /* @__PURE__ */ a(
-    f.Content,
+  return /* @__PURE__ */ n(g.Portal, { container: S(), children: /* @__PURE__ */ n(
+    g.Content,
     {
       "data-slot": "menubar-content",
       align: t,
       alignOffset: r,
       sideOffset: o,
-      className: n(
+      className: a(
         "bg-panel text-fg data-[state=open]:animate-in data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-(--z-popover) max-h-(--radix-menubar-content-available-height) min-w-[12rem] origin-(--radix-menubar-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border border-border p-1 shadow-(--elev-popover)",
         e
       ),
-      ...u
+      ...l
     }
   ) });
 }
-function kt({ ...e }) {
-  return /* @__PURE__ */ a(f.Group, { "data-slot": "menubar-group", ...e });
+function Zt({ ...e }) {
+  return /* @__PURE__ */ n(g.Group, { "data-slot": "menubar-group", ...e });
 }
-function Dt({
+function en({
   className: e,
   inset: t,
   variant: r = "default",
   ...o
 }) {
-  return /* @__PURE__ */ a(
-    f.Item,
+  return /* @__PURE__ */ n(
+    g.Item,
     {
       "data-slot": "menubar-item",
       "data-inset": t,
       "data-variant": r,
-      className: n(
+      className: a(
         "focus:bg-(--hover-wash) data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[inset]:pl-8 relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         e
       ),
@@ -962,125 +1052,125 @@ function Dt({
     }
   );
 }
-function Rt({
+function tn({
   className: e,
   children: t,
   checked: r,
   ...o
 }) {
-  return /* @__PURE__ */ c(
-    f.CheckboxItem,
+  return /* @__PURE__ */ u(
+    g.CheckboxItem,
     {
       "data-slot": "menubar-checkbox-item",
-      className: n(
+      className: a(
         "focus:bg-(--hover-wash) relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         e
       ),
       checked: r,
       ...o,
       children: [
-        /* @__PURE__ */ a("span", { className: "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center", children: /* @__PURE__ */ a(f.ItemIndicator, { children: /* @__PURE__ */ a(E, { className: "size-4" }) }) }),
+        /* @__PURE__ */ n("span", { className: "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center", children: /* @__PURE__ */ n(g.ItemIndicator, { children: /* @__PURE__ */ n(X, { className: "size-4" }) }) }),
         t
       ]
     }
   );
 }
-function Tt({ ...e }) {
-  return /* @__PURE__ */ a(f.RadioGroup, { ...e });
+function nn({ ...e }) {
+  return /* @__PURE__ */ n(g.RadioGroup, { ...e });
 }
-function Mt({
+function rn({
   className: e,
   children: t,
   ...r
 }) {
-  return /* @__PURE__ */ c(
-    f.RadioItem,
+  return /* @__PURE__ */ u(
+    g.RadioItem,
     {
-      className: n(
+      className: a(
         "focus:bg-(--hover-wash) relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         e
       ),
       ...r,
       children: [
-        /* @__PURE__ */ a("span", { className: "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center", children: /* @__PURE__ */ a(f.ItemIndicator, { children: /* @__PURE__ */ a(F, { className: "size-2 fill-current" }) }) }),
+        /* @__PURE__ */ n("span", { className: "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center", children: /* @__PURE__ */ n(g.ItemIndicator, { children: /* @__PURE__ */ n(q, { className: "size-2 fill-current" }) }) }),
         t
       ]
     }
   );
 }
-function Pt({
+function on({
   className: e,
   inset: t,
   ...r
 }) {
-  return /* @__PURE__ */ a(
-    f.Label,
+  return /* @__PURE__ */ n(
+    g.Label,
     {
       "data-slot": "menubar-label",
       "data-inset": t,
-      className: n("px-2 py-1.5 text-xs text-muted data-[inset]:pl-8", e),
+      className: a("px-2 py-1.5 text-xs text-muted data-[inset]:pl-8", e),
       ...r
     }
   );
 }
-function It({
+function an({
   className: e,
   ...t
 }) {
-  return /* @__PURE__ */ a(
-    f.Separator,
+  return /* @__PURE__ */ n(
+    g.Separator,
     {
       "data-slot": "menubar-separator",
-      className: n("bg-border -mx-1 my-1 h-px", e),
+      className: a("bg-border -mx-1 my-1 h-px", e),
       ...t
     }
   );
 }
-function _t({ className: e, ...t }) {
-  return /* @__PURE__ */ a(
+function sn({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
     "span",
     {
       "data-slot": "menubar-shortcut",
-      className: n("text-muted ml-auto text-xs tracking-widest", e),
+      className: a("text-muted ml-auto text-xs tracking-widest", e),
       ...t
     }
   );
 }
-function At({ ...e }) {
-  return /* @__PURE__ */ a(f.Sub, { "data-slot": "menubar-sub", ...e });
+function ln({ ...e }) {
+  return /* @__PURE__ */ n(g.Sub, { "data-slot": "menubar-sub", ...e });
 }
-function Ot({
+function cn({
   className: e,
   inset: t,
   children: r,
   ...o
 }) {
-  return /* @__PURE__ */ c(
-    f.SubTrigger,
+  return /* @__PURE__ */ u(
+    g.SubTrigger,
     {
       "data-slot": "menubar-sub-trigger",
       "data-inset": t,
-      className: n(
+      className: a(
         "focus:bg-(--hover-wash) data-[inset]:pl-8 data-[state=open]:bg-(--hover-wash) flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none",
         e
       ),
       ...o,
       children: [
         r,
-        /* @__PURE__ */ a(U, { className: "ml-auto size-3.5" })
+        /* @__PURE__ */ n(J, { className: "ml-auto size-3.5" })
       ]
     }
   );
 }
-function jt({
+function dn({
   className: e,
   ...t
 }) {
-  return /* @__PURE__ */ a(
-    f.SubContent,
+  return /* @__PURE__ */ n(
+    g.SubContent,
     {
       "data-slot": "menubar-sub-content",
-      className: n(
+      className: a(
         "bg-panel text-fg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-(--z-popover) min-w-[8rem] origin-(--radix-menubar-content-transform-origin) overflow-hidden rounded-md border border-border p-1 shadow-(--elev-popover)",
         e
       ),
@@ -1088,15 +1178,15 @@ function jt({
     }
   );
 }
-function Gt({ ...e }) {
-  return /* @__PURE__ */ a(N.Root, { "data-slot": "popover", ...e });
+function un({ ...e }) {
+  return /* @__PURE__ */ n(C.Root, { "data-slot": "popover", ...e });
 }
-const fe = s.forwardRef((e, t) => /* @__PURE__ */ a(N.Trigger, { ref: t, "data-slot": "popover-trigger", ...e }));
-fe.displayName = "PopoverTrigger";
-function Lt({ ...e }) {
-  return /* @__PURE__ */ a(N.Anchor, { "data-slot": "popover-anchor", ...e });
+const je = s.forwardRef((e, t) => /* @__PURE__ */ n(C.Trigger, { ref: t, "data-slot": "popover-trigger", ...e }));
+je.displayName = "PopoverTrigger";
+function fn({ ...e }) {
+  return /* @__PURE__ */ n(C.Anchor, { "data-slot": "popover-anchor", ...e });
 }
-function Bt({
+function bn({
   className: e,
   align: t = "center",
   sideOffset: r = 4,
@@ -1106,13 +1196,13 @@ function Bt({
     // Portalled to the body: `z-50` only orders WITHIN the nearest stacking context, so an ancestor
     // pairing `overflow-hidden` with a radius would clip an in-flow panel no matter its z-index.
     // Leaving the subtree is the only thing that wins — the same reasoning `combobox.tsx` documents.
-    /* @__PURE__ */ a(N.Portal, { container: C(), children: /* @__PURE__ */ a(
-      N.Content,
+    /* @__PURE__ */ n(C.Portal, { container: S(), children: /* @__PURE__ */ n(
+      C.Content,
       {
         "data-slot": "popover-content",
         align: t,
         sideOffset: r,
-        className: n(
+        className: a(
           "z-(--z-popover) w-72 rounded-md border border-border bg-panel p-1 text-fg shadow-(--elev-popover) outline-none",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
@@ -1126,67 +1216,67 @@ function Bt({
     ) })
   );
 }
-const me = s.forwardRef(({ className: e, children: t, ...r }, o) => /* @__PURE__ */ c(
-  z.Root,
+const Ee = s.forwardRef(({ className: e, children: t, ...r }, o) => /* @__PURE__ */ u(
+  k.Root,
   {
     ref: o,
-    className: n("relative overflow-hidden", e),
+    className: a("relative overflow-hidden", e),
     ...r,
     children: [
-      /* @__PURE__ */ a(z.Viewport, { className: "size-full rounded-[inherit] [&>div]:block! [&>div]:h-full", children: t }),
-      /* @__PURE__ */ a($, {}),
-      /* @__PURE__ */ a(z.Corner, {})
+      /* @__PURE__ */ n(k.Viewport, { className: "size-full rounded-[inherit] [&>div]:block! [&>div]:h-full", children: t }),
+      /* @__PURE__ */ n(ne, {}),
+      /* @__PURE__ */ n(k.Corner, {})
     ]
   }
 ));
-me.displayName = z.Root.displayName;
-const $ = s.forwardRef(({ className: e, orientation: t = "vertical", ...r }, o) => /* @__PURE__ */ a(
-  z.ScrollAreaScrollbar,
+Ee.displayName = k.Root.displayName;
+const ne = s.forwardRef(({ className: e, orientation: t = "vertical", ...r }, o) => /* @__PURE__ */ n(
+  k.ScrollAreaScrollbar,
   {
     ref: o,
     orientation: t,
-    className: n(
+    className: a(
       "z-20 flex touch-none select-none p-px transition-colors",
       t === "vertical" && "h-full w-2 border-l border-l-transparent",
       t === "horizontal" && "h-2 flex-col border-t border-t-transparent",
       e
     ),
     ...r,
-    children: /* @__PURE__ */ a(z.ScrollAreaThumb, { className: "relative flex-1 rounded-full bg-border" })
+    children: /* @__PURE__ */ n(k.ScrollAreaThumb, { className: "relative flex-1 rounded-full bg-border" })
   }
 ));
-$.displayName = z.ScrollAreaScrollbar.displayName;
-function Ht({ ...e }) {
-  return /* @__PURE__ */ a(p.Root, { ...e });
+ne.displayName = k.ScrollAreaScrollbar.displayName;
+function mn({ ...e }) {
+  return /* @__PURE__ */ n(v.Root, { ...e });
 }
-function pe({ container: e, ...t }) {
-  const r = C();
-  return /* @__PURE__ */ a(p.Portal, { container: e ?? r, ...t });
+function Le({ container: e, ...t }) {
+  const r = S();
+  return /* @__PURE__ */ n(v.Portal, { container: e ?? r, ...t });
 }
-const be = s.forwardRef(function({ className: t, ...r }, o) {
-  return /* @__PURE__ */ a(
-    p.Overlay,
+const Ge = s.forwardRef(function({ className: t, ...r }, o) {
+  return /* @__PURE__ */ n(
+    v.Overlay,
     {
       ref: o,
-      className: n("fixed inset-0 z-50 bg-overlay/60 animate-in fade-in-0", t),
+      className: a("fixed inset-0 z-50 bg-overlay/60 animate-in fade-in-0", t),
       ...r
     }
   );
-}), Et = s.forwardRef(function({ className: t, children: r, side: o = "right", ...u }, d) {
-  const [g, v] = s.useState(null), x = s.useCallback(
+}), pn = s.forwardRef(function({ className: t, children: r, side: o = "right", ...l }, i) {
+  const [c, p] = s.useState(null), x = s.useCallback(
     (b) => {
-      v(b), typeof d == "function" ? d(b) : d && (d.current = b);
+      p(b), typeof i == "function" ? i(b) : i && (i.current = b);
     },
-    [d]
+    [i]
   );
-  return /* @__PURE__ */ c(pe, { children: [
-    /* @__PURE__ */ a(be, {}),
-    /* @__PURE__ */ c(
-      p.Content,
+  return /* @__PURE__ */ u(Le, { children: [
+    /* @__PURE__ */ n(Ge, {}),
+    /* @__PURE__ */ u(
+      v.Content,
       {
         ref: x,
         "data-panel": "",
-        className: n(
+        className: a(
           "fixed z-50 flex flex-col gap-4 bg-panel shadow-(--elev-dialog) transition ease-in-out animate-in",
           o === "right" && "inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm",
           o === "left" && "inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm",
@@ -1194,54 +1284,54 @@ const be = s.forwardRef(function({ className: t, ...r }, o) {
           o === "bottom" && "inset-x-0 bottom-0 h-auto border-t",
           t
         ),
-        ...u,
+        ...l,
         children: [
-          /* @__PURE__ */ a(G.Provider, { value: g, children: r }),
-          /* @__PURE__ */ c(p.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/25", children: [
-            /* @__PURE__ */ a(O, { className: "h-4 w-4" }),
-            /* @__PURE__ */ a("span", { className: "sr-only", children: "Close" })
+          /* @__PURE__ */ n(j.Provider, { value: c, children: r }),
+          /* @__PURE__ */ u(v.Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/25", children: [
+            /* @__PURE__ */ n(O, { className: "h-4 w-4" }),
+            /* @__PURE__ */ n("span", { className: "sr-only", children: "Close" })
           ] })
         ]
       }
     )
   ] });
 });
-function Ft({ className: e, ...t }) {
-  return /* @__PURE__ */ a("div", { className: n("flex flex-col gap-1.5 p-4", e), ...t });
+function gn({ className: e, ...t }) {
+  return /* @__PURE__ */ n("div", { className: a("flex flex-col gap-1.5 p-4", e), ...t });
 }
-const Ut = s.forwardRef(function({ className: t, ...r }, o) {
-  return /* @__PURE__ */ a(p.Title, { ref: o, className: n("font-semibold text-fg", t), ...r });
-}), Vt = s.forwardRef(function({ className: t, ...r }, o) {
-  return /* @__PURE__ */ a(
-    p.Description,
+const xn = s.forwardRef(function({ className: t, ...r }, o) {
+  return /* @__PURE__ */ n(v.Title, { ref: o, className: a("font-semibold text-fg", t), ...r });
+}), hn = s.forwardRef(function({ className: t, ...r }, o) {
+  return /* @__PURE__ */ n(
+    v.Description,
     {
       ref: o,
-      className: n("text-sm text-muted", t),
+      className: a("text-sm text-muted", t),
       ...r
     }
   );
 });
-function $t({
+function vn({
   delayDuration: e = 0,
   ...t
 }) {
-  return /* @__PURE__ */ a(R.Provider, { delayDuration: e, ...t });
+  return /* @__PURE__ */ n(D.Provider, { delayDuration: e, ...t });
 }
-function Kt({ ...e }) {
-  return /* @__PURE__ */ a(R.Root, { ...e });
+function wn({ ...e }) {
+  return /* @__PURE__ */ n(D.Root, { ...e });
 }
-const ge = s.forwardRef((e, t) => /* @__PURE__ */ a(R.Trigger, { ref: t, ...e }));
-ge.displayName = "TooltipTrigger";
-function Qt({
+const He = s.forwardRef((e, t) => /* @__PURE__ */ n(D.Trigger, { ref: t, ...e }));
+He.displayName = "TooltipTrigger";
+function yn({
   className: e,
   sideOffset: t = 6,
   ...r
 }) {
-  return /* @__PURE__ */ a(R.Portal, { container: C(), children: /* @__PURE__ */ a(
-    R.Content,
+  return /* @__PURE__ */ n(D.Portal, { container: S(), children: /* @__PURE__ */ n(
+    D.Content,
     {
       sideOffset: t,
-      className: n(
+      className: a(
         "z-(--z-tooltip) overflow-hidden rounded-md border border-border bg-panel px-2.5 py-1.5 text-xs text-fg shadow-(--elev-popover) animate-in fade-in-0 zoom-in-95",
         e
       ),
@@ -1249,98 +1339,433 @@ function Qt({
     }
   ) });
 }
+const re = s.createContext(null);
+function Nn({ className: e, defaultValue: t, children: r, ...o }) {
+  const [l, i] = s.useState(t ?? null), c = s.useCallback((p) => {
+    i((x) => x === p ? null : p);
+  }, []);
+  return /* @__PURE__ */ n(re.Provider, { value: { openValue: l, toggle: c }, children: /* @__PURE__ */ n("div", { "data-slot": "accordion", className: e, ...o, children: r }) });
+}
+const E = s.createContext("");
+function Cn({
+  value: e,
+  className: t,
+  children: r,
+  ...o
+}) {
+  return /* @__PURE__ */ n(E.Provider, { value: e, children: /* @__PURE__ */ n("div", { "data-slot": "accordion-item", className: t, ...o, children: r }) });
+}
+function oe() {
+  const e = s.useContext(re);
+  if (!e) throw new Error("Accordion parts must be used within <Accordion>.");
+  return e;
+}
+function Sn({ className: e, children: t, ...r }) {
+  const { openValue: o, toggle: l } = oe(), i = s.useContext(E), c = o === i;
+  return /* @__PURE__ */ u(
+    "button",
+    {
+      type: "button",
+      "data-slot": "accordion-trigger",
+      "aria-expanded": c,
+      onClick: () => l(i),
+      className: a(
+        "flex w-full items-center justify-between gap-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/25",
+        e
+      ),
+      ...r,
+      children: [
+        t,
+        /* @__PURE__ */ n(
+          K,
+          {
+            "aria-hidden": !0,
+            className: a("h-4 w-4 shrink-0 text-muted transition-transform", c && "rotate-180")
+          }
+        )
+      ]
+    }
+  );
+}
+function kn({ className: e, children: t, ...r }) {
+  const { openValue: o } = oe(), l = s.useContext(E), i = o === l, c = ke();
+  return /* @__PURE__ */ n(c, { open: i, children: /* @__PURE__ */ n("div", { "data-slot": "accordion-content", role: "region", className: e, ...r, children: t }) });
+}
+function zn({ ...e }) {
+  return /* @__PURE__ */ n("nav", { "aria-label": "breadcrumb", "data-slot": "breadcrumb", ...e });
+}
+function Tn({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
+    "ol",
+    {
+      "data-slot": "breadcrumb-list",
+      className: a(
+        "text-muted flex flex-wrap items-center gap-1.5 text-sm break-words",
+        e
+      ),
+      ...t
+    }
+  );
+}
+function Rn({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
+    "li",
+    {
+      "data-slot": "breadcrumb-item",
+      className: a("inline-flex items-center gap-1.5", e),
+      ...t
+    }
+  );
+}
+function Dn({
+  asChild: e,
+  className: t,
+  ...r
+}) {
+  return /* @__PURE__ */ n(
+    e ? W : "a",
+    {
+      "data-slot": "breadcrumb-link",
+      className: a("hover:text-fg transition-colors", t),
+      ...r
+    }
+  );
+}
+function Mn({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
+    "span",
+    {
+      "data-slot": "breadcrumb-page",
+      role: "link",
+      "aria-current": "page",
+      className: a("text-fg font-medium", e),
+      ...t
+    }
+  );
+}
+function Pn({ children: e, className: t, ...r }) {
+  return /* @__PURE__ */ n(
+    "li",
+    {
+      "data-slot": "breadcrumb-separator",
+      role: "presentation",
+      "aria-hidden": "true",
+      className: a("text-muted inline-flex items-center", t),
+      ...r,
+      children: e ?? /* @__PURE__ */ n(he, { className: "size-3.5" })
+    }
+  );
+}
+function In({ className: e, ...t }) {
+  return /* @__PURE__ */ u(
+    "span",
+    {
+      "data-slot": "breadcrumb-ellipsis",
+      role: "presentation",
+      "aria-hidden": "true",
+      className: a("text-muted flex size-9 items-center justify-center", e),
+      ...t,
+      children: [
+        /* @__PURE__ */ n(xe, { className: "size-4" }),
+        /* @__PURE__ */ n("span", { className: "sr-only", children: "More" })
+      ]
+    }
+  );
+}
+function _n({
+  palette: e,
+  value: t,
+  onChange: r,
+  "aria-label": o,
+  allowCustom: l = !0,
+  className: i
+}) {
+  const c = !!t && !e.some((m) => m.value === t), [p, x] = s.useState(c ? t : ""), b = () => {
+    const m = p.trim();
+    /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(m) && r(m);
+  };
+  return /* @__PURE__ */ u(
+    "div",
+    {
+      className: a("flex flex-wrap items-center gap-1", i),
+      role: "group",
+      "aria-label": o,
+      children: [
+        e.map((m) => /* @__PURE__ */ n(
+          "button",
+          {
+            type: "button",
+            "aria-label": `${o} ${m.value}`,
+            "aria-pressed": m.value === t,
+            title: m.label ?? m.value,
+            className: a(
+              "h-5 w-5 rounded-full border transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
+              m.value === t ? "border-fg ring-2 ring-accent/40" : "border-border"
+            ),
+            style: { background: m.css },
+            onClick: () => r(m.value)
+          },
+          m.value
+        )),
+        l && /* @__PURE__ */ u("span", { className: "flex items-center gap-1", children: [
+          c && /* @__PURE__ */ n(
+            "span",
+            {
+              className: "inline-block h-5 w-5 rounded-full border border-fg",
+              style: { background: t },
+              "aria-hidden": !0
+            }
+          ),
+          /* @__PURE__ */ n(
+            te,
+            {
+              "aria-label": `${o} custom hex`,
+              className: "h-6 w-20 px-1.5 text-[11px]",
+              placeholder: "#22c55e",
+              value: p,
+              onChange: (m) => x(m.target.value),
+              onBlur: b,
+              onKeyDown: (m) => {
+                m.key === "Enter" && b();
+              }
+            }
+          )
+        ] })
+      ]
+    }
+  );
+}
+function An({
+  text: e,
+  label: t,
+  copiedLabel: r = "Copied",
+  variant: o = "ghost",
+  size: l = "sm",
+  className: i,
+  ariaLabel: c = "copy to clipboard"
+}) {
+  const { copied: p, copy: x } = De(), b = !t && l === "icon";
+  return /* @__PURE__ */ u(
+    _e,
+    {
+      type: "button",
+      variant: o,
+      size: l,
+      "aria-label": t ? void 0 : c,
+      title: "Copy to the clipboard",
+      disabled: e.length === 0,
+      onClick: () => void x(e),
+      className: a(!b && "gap-1 text-xs", i),
+      children: [
+        p ? /* @__PURE__ */ n(Q, { size: 13, className: "text-accent" }) : /* @__PURE__ */ n(ve, { size: 13 }),
+        t ? p ? r : t : null
+      ]
+    }
+  );
+}
+function On({
+  className: e,
+  size: t = "md",
+  ...r
+}) {
+  return /* @__PURE__ */ n(
+    "select",
+    {
+      "data-slot": "select",
+      "data-size": t,
+      className: a(
+        // The field look Input and Textarea share: same inset, focus border + ring, disabled fade. The
+        // browser's own arrow is turned off (it brings its own inner padding, so the text sat further in
+        // than an Input's); the chevron is the `--field-chevron` token, placed as the Combobox's is: 12px,
+        // 10px from the outer right edge at both heights (Rubix Chart Shading §10).
+        "w-full appearance-none rounded-md border border-border bg-bg bg-(image:--field-chevron) bg-no-repeat pl-2.5 text-fg transition-colors focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/20 disabled:cursor-not-allowed disabled:opacity-60",
+        t === "sm" ? "h-8 bg-size-[12px] bg-position-[right_9px_center] pr-7 text-xs" : "h-9 bg-size-[12px] bg-position-[right_9px_center] pr-8 text-sm",
+        e
+      ),
+      ...r
+    }
+  );
+}
+const ae = s.createContext(null);
+function ie(e) {
+  const t = s.useContext(ae);
+  if (!t) throw new Error(`<${e}> must be used inside <Tabs>`);
+  return t;
+}
+function $n({ value: e, onValueChange: t, className: r, ...o }) {
+  const l = s.useId(), i = s.useMemo(
+    () => ({ value: e, setValue: t, baseId: l }),
+    [e, t, l]
+  );
+  return /* @__PURE__ */ n(ae.Provider, { value: i, children: /* @__PURE__ */ n("div", { "data-slot": "tabs", className: a("flex flex-col gap-3", r), ...o }) });
+}
+function Bn({ className: e, ...t }) {
+  return /* @__PURE__ */ n(
+    "div",
+    {
+      role: "tablist",
+      "data-slot": "tabs-list",
+      className: a(
+        // Track + active-pill colors come from the `--tab-*` vars (globals.css) so the look's
+        // `data-buttons` axis can swap the house tint for stock shadcn's flat pill on a muted track.
+        "flex flex-wrap items-center gap-1 rounded-lg border border-border bg-(--tab-track) p-1",
+        e
+      ),
+      ...t
+    }
+  );
+}
+function jn({ value: e, className: t, ...r }) {
+  const { value: o, setValue: l, baseId: i } = ie("TabsTrigger"), c = o === e;
+  return /* @__PURE__ */ n(
+    "button",
+    {
+      type: "button",
+      role: "tab",
+      id: `${i}-tab-${e}`,
+      "aria-selected": c,
+      "aria-controls": `${i}-panel-${e}`,
+      "data-slot": "tabs-trigger",
+      tabIndex: c ? 0 : -1,
+      onClick: () => l(e),
+      className: a(
+        "inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 disabled:pointer-events-none disabled:opacity-50",
+        c ? "bg-(--tab-active-bg) text-(--tab-active-fg) shadow-(--tab-active-shadow)" : "text-muted hover:bg-bg hover:text-fg",
+        t
+      ),
+      ...r
+    }
+  );
+}
+function En({ value: e, className: t, children: r, ...o }) {
+  const { value: l, baseId: i } = ie("TabsContent"), c = Se();
+  return l !== e ? null : /* @__PURE__ */ n(
+    "div",
+    {
+      role: "tabpanel",
+      id: `${i}-panel-${e}`,
+      "aria-labelledby": `${i}-tab-${e}`,
+      "data-slot": "tabs-content",
+      className: a("flex min-h-0 flex-col focus-visible:outline-none", t),
+      tabIndex: 0,
+      ...o,
+      children: /* @__PURE__ */ n(c, { className: "flex min-h-0 flex-1 flex-col", children: r }, e)
+    }
+  );
+}
 export {
-  ze as Alert,
-  ke as AlertDescription,
-  Se as AlertTitle,
-  De as Badge,
-  Re as Button,
-  Te as Card,
-  _e as CardContent,
-  Ie as CardDescription,
-  Ae as CardFooter,
-  Me as CardHeader,
-  Pe as CardTitle,
-  Oe as Checkbox,
-  We as Collapsible,
-  qe as CollapsibleContent,
-  Xe as CollapsibleTrigger,
-  ot as Combobox,
-  Je as Dialog,
-  Ze as DialogClose,
-  et as DialogContent,
-  nt as DialogDescription,
-  at as DialogFooter,
-  tt as DialogHeader,
-  ce as DialogOverlay,
-  de as DialogPortal,
-  G as DialogSurfaceContext,
-  rt as DialogTitle,
-  Ye as DialogTrigger,
-  st as DropdownMenu,
-  ft as DropdownMenuCheckboxItem,
-  dt as DropdownMenuContent,
-  ct as DropdownMenuGroup,
-  ut as DropdownMenuItem,
-  bt as DropdownMenuLabel,
-  lt as DropdownMenuPortal,
-  mt as DropdownMenuRadioGroup,
-  pt as DropdownMenuRadioItem,
-  gt as DropdownMenuSeparator,
-  ht as DropdownMenuShortcut,
-  vt as DropdownMenuSub,
-  wt as DropdownMenuSubContent,
-  xt as DropdownMenuSubTrigger,
-  it as DropdownMenuTrigger,
-  ie as Input,
-  je as Label,
-  yt as Menubar,
-  Rt as MenubarCheckboxItem,
-  St as MenubarContent,
-  kt as MenubarGroup,
-  Dt as MenubarItem,
-  Pt as MenubarLabel,
-  Ct as MenubarMenu,
-  zt as MenubarPortal,
-  Tt as MenubarRadioGroup,
-  Mt as MenubarRadioItem,
-  It as MenubarSeparator,
-  _t as MenubarShortcut,
-  At as MenubarSub,
-  jt as MenubarSubContent,
-  Ot as MenubarSubTrigger,
-  Nt as MenubarTrigger,
-  Gt as Popover,
-  Lt as PopoverAnchor,
-  Bt as PopoverContent,
-  fe as PopoverTrigger,
-  Ce as RubixUiProvider,
-  me as ScrollArea,
-  $ as ScrollBar,
-  Ge as Separator,
-  Ht as Sheet,
-  Et as SheetContent,
-  Vt as SheetDescription,
-  Ft as SheetHeader,
-  Ut as SheetTitle,
-  Le as Skeleton,
-  Be as Spinner,
-  He as Switch,
-  Ee as Table,
-  Ue as TableBody,
-  Ke as TableCell,
-  $e as TableHead,
-  Fe as TableHeader,
-  Ve as TableRow,
-  Qe as Textarea,
-  Kt as Tooltip,
-  Qt as TooltipContent,
-  $t as TooltipProvider,
-  ge as TooltipTrigger,
-  ne as alertVariants,
-  oe as badgeVariants,
-  se as buttonVariants,
-  n as cn,
-  le as useDialogSurface,
-  C as useOverlayContainer
+  Nn as Accordion,
+  kn as AccordionContent,
+  Cn as AccordionItem,
+  Sn as AccordionTrigger,
+  Ye as Alert,
+  et as AlertDescription,
+  Ze as AlertTitle,
+  tt as Badge,
+  zn as Breadcrumb,
+  In as BreadcrumbEllipsis,
+  Rn as BreadcrumbItem,
+  Dn as BreadcrumbLink,
+  Tn as BreadcrumbList,
+  Mn as BreadcrumbPage,
+  Pn as BreadcrumbSeparator,
+  _e as Button,
+  nt as Card,
+  it as CardContent,
+  at as CardDescription,
+  st as CardFooter,
+  rt as CardHeader,
+  ot as CardTitle,
+  lt as Checkbox,
+  yt as Collapsible,
+  Ct as CollapsibleContent,
+  Nt as CollapsibleTrigger,
+  _n as ColorSwatchPicker,
+  It as Combobox,
+  An as CopyButton,
+  St as Dialog,
+  zt as DialogClose,
+  Tt as DialogContent,
+  Pt as DialogDescription,
+  Dt as DialogFooter,
+  Rt as DialogHeader,
+  $e as DialogOverlay,
+  Oe as DialogPortal,
+  j as DialogSurfaceContext,
+  Mt as DialogTitle,
+  kt as DialogTrigger,
+  _t as DropdownMenu,
+  Et as DropdownMenuCheckboxItem,
+  $t as DropdownMenuContent,
+  Bt as DropdownMenuGroup,
+  jt as DropdownMenuItem,
+  Ht as DropdownMenuLabel,
+  Ot as DropdownMenuPortal,
+  Lt as DropdownMenuRadioGroup,
+  Gt as DropdownMenuRadioItem,
+  Vt as DropdownMenuSeparator,
+  Ft as DropdownMenuShortcut,
+  Ut as DropdownMenuSub,
+  Kt as DropdownMenuSubContent,
+  Wt as DropdownMenuSubTrigger,
+  At as DropdownMenuTrigger,
+  te as Input,
+  ct as Label,
+  Qt as Menubar,
+  tn as MenubarCheckboxItem,
+  Yt as MenubarContent,
+  Zt as MenubarGroup,
+  en as MenubarItem,
+  on as MenubarLabel,
+  qt as MenubarMenu,
+  Jt as MenubarPortal,
+  nn as MenubarRadioGroup,
+  rn as MenubarRadioItem,
+  an as MenubarSeparator,
+  sn as MenubarShortcut,
+  ln as MenubarSub,
+  dn as MenubarSubContent,
+  cn as MenubarSubTrigger,
+  Xt as MenubarTrigger,
+  un as Popover,
+  fn as PopoverAnchor,
+  bn as PopoverContent,
+  je as PopoverTrigger,
+  qe as RubixUiProvider,
+  Ee as ScrollArea,
+  ne as ScrollBar,
+  On as Select,
+  dt as Separator,
+  mn as Sheet,
+  pn as SheetContent,
+  hn as SheetDescription,
+  gn as SheetHeader,
+  xn as SheetTitle,
+  ut as Skeleton,
+  ft as Spinner,
+  bt as Switch,
+  mt as Table,
+  gt as TableBody,
+  vt as TableCell,
+  ht as TableHead,
+  pt as TableHeader,
+  xt as TableRow,
+  $n as Tabs,
+  En as TabsContent,
+  Bn as TabsList,
+  jn as TabsTrigger,
+  wt as Textarea,
+  wn as Tooltip,
+  yn as TooltipContent,
+  vn as TooltipProvider,
+  He as TooltipTrigger,
+  Me as alertVariants,
+  Pe as badgeVariants,
+  Ie as buttonVariants,
+  Je as canWriteText,
+  a as cn,
+  De as useClipboard,
+  Ae as useDialogSurface,
+  S as useOverlayContainer,
+  Re as writeText
 };

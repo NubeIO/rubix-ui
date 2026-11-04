@@ -21,6 +21,8 @@
 7. **Radix stays on the host's minor versions.** Peers are `~` ranges and dev deps are the host's exact
    versions, because extensions share the host's `dismissable-layer`/`focus-scope`/`focus-guards`
    (README, *Popups*). Bump Radix here and in rubix-ai together.
+8. **No motion library here.** Tabs and Accordion take `Reveal`/`Collapse` from `RubixUiProvider
+   motion` (`src/lib/motion.tsx`) and render statically without them.
 
 ## Commands
 

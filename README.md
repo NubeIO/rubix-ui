@@ -15,6 +15,11 @@ to look like the app, and each copy drifted.
 | `Alert` (+ `Title`, `Description`) | an inline message |
 | `Table` (+ `Header`, `Body`, `Row`, `Head`, `Cell`) | styled native table |
 | `Separator`, `Skeleton`, `Spinner` | small pieces |
+| `Select` | the styled native select (prefer `Combobox` for a searchable list) |
+| `Tabs` (+ `List`, `Trigger`, `Content`), `Accordion` (+ `Item`, `Trigger`, `Content`) | controlled tabs; a single-open disclosure (see *Animation*) |
+| `Breadcrumb` (+ `List`, `Item`, `Link`, `Page`, `Separator`, `Ellipsis`) | a trail |
+| `CopyButton`, `useClipboard`, `writeText`, `canWriteText` | copy with a "Copied" state; works on plain http too |
+| `ColorSwatchPicker`, `Swatch` | a row of colour swatches plus a hex field |
 | `cn` | `clsx` + `tailwind-merge`, taught the host's custom type and radius keys |
 
 
@@ -30,10 +35,7 @@ Popups and overlays:
 | `Menubar` (+ the same parts) | a row of menus |
 | `Tooltip` (+ `Provider`, `Trigger`, `Content`) | a hover hint |
 | `ScrollArea`, `ScrollBar`, `Collapsible` (+ `Trigger`, `Content`) | small pieces |
-| `RubixUiProvider`, `useOverlayContainer` | where popups render (see *Popups*) |
-
-Not here yet: `Tabs` and `Accordion`. Their panels animate with the app's motion preference, which
-lives in the app.
+| `RubixUiProvider`, `useOverlayContainer` | where popups render (see *Popups*) and how Tabs/Accordion animate |
 
 ## Install
 
@@ -140,6 +142,19 @@ Two things make popups work inside an extension. Both are needed.
    true; a newer Radix minor (for example `react-dialog` 1.3) imports names the host's `focus-scope` does
    not have, and the extension fails to load. Move the host and this package to a new Radix minor
    together.
+
+## Animation
+
+A tab panel's entrance and an accordion item's open/close animate with the rubix-ai app's own motion
+primitives, gated by each member's motion preference. The package does not carry them; the app passes
+them in:
+
+```tsx
+<RubixUiProvider motion={{ Reveal, Collapse }}>…</RubixUiProvider>
+```
+
+Without them (an extension, a test) a panel simply appears and an item simply opens and closes, which is
+what the app does when a member turns motion off.
 
 ## Develop
 
