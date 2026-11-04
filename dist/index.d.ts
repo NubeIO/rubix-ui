@@ -6,9 +6,11 @@ import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { ForwardRefExoticComponent } from 'react';
 import { JSX as JSX_2 } from 'react';
 import { Loader2 } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 import * as MenubarPrimitive from '@radix-ui/react-menubar';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import * as React_2 from 'react';
+import { ReactNode } from 'react';
 import { RefAttributes } from 'react';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
@@ -38,13 +40,13 @@ export declare function AlertDescription({ className, ...props }: React_2.Compon
 export declare function AlertTitle({ className, ...props }: React_2.ComponentProps<"div">): React_2.JSX.Element;
 
 export declare const alertVariants: (props?: ({
-    variant?: "default" | "destructive" | null | undefined;
+    variant?: "default" | "destructive" | "info" | "success" | "warning" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 export declare function Badge({ className, variant, pill, size, ...props }: React_2.ComponentProps<"span"> & VariantProps<typeof badgeVariants>): React_2.JSX.Element;
 
 export declare const badgeVariants: (props?: ({
-    variant?: "default" | "destructive" | "secondary" | "outline" | "success" | "warning" | "info" | "accent2" | null | undefined;
+    variant?: "default" | "destructive" | "info" | "success" | "warning" | "outline" | "secondary" | "accent2" | null | undefined;
     pill?: boolean | null | undefined;
     size?: "default" | "count" | null | undefined;
 } & ClassProp) | undefined) => string;
@@ -66,14 +68,14 @@ export declare function BreadcrumbPage({ className, ...props }: React_2.Componen
 export declare function BreadcrumbSeparator({ children, className, ...props }: React_2.ComponentProps<"li">): React_2.JSX.Element;
 
 export declare const Button: React_2.ForwardRefExoticComponent<Omit<React_2.ClassAttributes<HTMLButtonElement> & React_2.ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<(props?: ({
-    variant?: "default" | "destructive" | "outline" | "solid" | "ghost" | null | undefined;
+    variant?: "default" | "destructive" | "solid" | "outline" | "ghost" | null | undefined;
     size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | null | undefined;
 } & ClassProp) | undefined) => string> & {
     asChild?: boolean;
 }, "ref"> & React_2.RefAttributes<HTMLButtonElement>>;
 
 export declare const buttonVariants: (props?: ({
-    variant?: "default" | "destructive" | "outline" | "solid" | "ghost" | null | undefined;
+    variant?: "default" | "destructive" | "solid" | "outline" | "ghost" | null | undefined;
     size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | null | undefined;
 } & ClassProp) | undefined) => string;
 
@@ -132,7 +134,7 @@ declare interface ColorSwatchPickerProps {
     className?: string;
 }
 
-export declare function Combobox({ options, value, onChange, placeholder, "aria-label": ariaLabel, allowCustom, clearable, disabled, size, renderValue, className, }: ComboboxProps): React_2.JSX.Element;
+export declare function Combobox({ options, value, onChange, placeholder, "aria-label": ariaLabel, allowCustom, clearable, disabled, size, renderValue, searchable, chip, className, }: ComboboxProps): React_2.JSX.Element;
 
 export declare interface ComboboxOption {
     value: string;
@@ -165,10 +167,45 @@ declare interface ComboboxProps {
      *  while a value is set, with the option it matches when there is one. Return nothing to keep the
      *  default text. */
     renderValue?: (value: string, option: ComboboxOption | undefined) => React_2.ReactNode;
+    /** Show the search box at the top of the list (default). Off for a short, fixed list that reads
+     *  better as a plain menu; the arrow keys and Enter still work. */
+    searchable?: boolean;
+    /** Draw the trigger as a filter chip named `chip`: "⊕ Site" (dashed) while the value is `""`, then
+     *  "Site · Adelaide Depot" (accent) with a clear button that sets it back to `""`. `renderValue`
+     *  draws the part after the dot (a shorter name than the list shows, say). */
+    chip?: string;
     className?: string;
 }
 
 export declare function CopyButton({ text, label, copiedLabel, variant, size, className, ariaLabel, }: Props): JSX_2.Element;
+
+export declare function DatePicker({ value, onChange, min, max, placeholder, weekStart, format, size, disabled, "aria-label": ariaLabel, className, }: DatePickerProps): React_2.JSX.Element;
+
+declare interface DatePickerProps {
+    /** "YYYY-MM-DD", or "" for none. */
+    value: string;
+    onChange: (value: string) => void;
+    /** The first day that can be picked ("YYYY-MM-DD"). */
+    min?: string;
+    /** The last day that can be picked ("YYYY-MM-DD"). */
+    max?: string;
+    placeholder?: string;
+    /** The week's first day: 1 = Monday (default), 0 = Sunday. */
+    weekStart?: number;
+    /** How the field shows a picked day; "31 Oct 2026" by default. */
+    format?: (iso: string) => string;
+    /** `md` (36px) matches `Input`; `sm` (32px) is the dense size for a toolbar or a row. */
+    size?: "md" | "sm";
+    disabled?: boolean;
+    "aria-label"?: string;
+    className?: string;
+}
+
+/** Minutes in a day. "24:00" (the end of the day) is this. */
+export declare const DAY_MINS = 1440;
+
+/** What a table starts with. */
+export declare const DEFAULT_PAGE_SIZE = 25;
 
 export declare function Dialog({ ...props }: React_2.ComponentProps<typeof DialogPrimitive.Root>): React_2.JSX.Element;
 
@@ -231,9 +268,30 @@ export declare function DropdownMenuSubTrigger({ className, inset, children, ...
 
 export declare function DropdownMenuTrigger({ ...props }: React_2.ComponentProps<typeof DropdownMenuPrimitive.Trigger>): React_2.JSX.Element;
 
+export declare function EmptyState({ icon: Icon, title, description, action, className }: EmptyStateProps): JSX_2.Element;
+
+declare interface EmptyStateProps {
+    icon: LucideIcon;
+    title: string;
+    /** The hint under the title. */
+    description?: ReactNode;
+    /** The teaching action, usually ONE `<Button>`. Omit when the caller may not create anything. */
+    action?: ReactNode;
+    className?: string;
+}
+
+/** "31 Oct 2026": the default way a picked day is shown. */
+export declare function formatDay(iso: string): string;
+
+/** Minutes → "HH:MM". */
+export declare function hhmm(mins: number): string;
+
 export declare const Input: React_2.ForwardRefExoticComponent<Omit<React_2.DetailedHTMLProps<React_2.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & React_2.RefAttributes<HTMLInputElement>>;
 
 export declare const Label: React_2.ForwardRefExoticComponent<Omit<React_2.DetailedHTMLProps<React_2.LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>, "ref"> & React_2.RefAttributes<HTMLLabelElement>>;
+
+/** Today in the browser's own zone, as "YYYY-MM-DD". */
+export declare function localToday(): string;
 
 export declare function Menubar({ className, ...props }: React_2.ComponentProps<typeof MenubarPrimitive.Root>): React_2.JSX.Element;
 
@@ -274,6 +332,29 @@ export declare function MenubarSubTrigger({ className, inset, children, ...props
 
 export declare function MenubarTrigger({ className, ...props }: React_2.ComponentProps<typeof MenubarPrimitive.Trigger>): React_2.JSX.Element;
 
+export declare const PAGE_SIZES: number[];
+
+export declare function Pager({ page, size, total, onPage, onSize, sizes, className }: PagerProps): JSX_2.Element | null;
+
+declare interface PagerProps {
+    /** The page shown, from 0. */
+    page: number;
+    /** Rows to a page. */
+    size: number;
+    /** Rows in the whole table (after its filter). */
+    total: number;
+    onPage: (page: number) => void;
+    /** A new size starts again at the first page. */
+    onSize: (size: number) => void;
+    /** The sizes offered; `PAGE_SIZES` by default. */
+    sizes?: number[];
+    className?: string;
+}
+
+/** A time typed any usual way → minutes: "13:05", "13.05", "1305", "105" (= 01:05), "13" (= 13:00) or
+ *  "24:00". `undefined` when it is none of those. */
+export declare function parseTime(s: string): number | undefined;
+
 export declare function Popover({ ...props }: React_2.ComponentProps<typeof PopoverPrimitive.Root>): React_2.JSX.Element;
 
 export declare function PopoverAnchor({ ...props }: React_2.ComponentProps<typeof PopoverPrimitive.Anchor>): React_2.JSX.Element;
@@ -295,6 +376,8 @@ declare interface Props {
     /** aria-label for the icon-only form (defaults to "copy to clipboard"). */
     ariaLabel?: string;
 }
+
+export declare function Radio({ className, ...props }: React_2.ComponentProps<"input">): React_2.JSX.Element;
 
 export declare interface RevealProps {
     children: React_2.ReactNode;
@@ -408,6 +491,13 @@ declare interface TabsTriggerProps extends React_2.ComponentProps<"button"> {
 }
 
 export declare const Textarea: React_2.ForwardRefExoticComponent<Omit<React_2.DetailedHTMLProps<React_2.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>, "ref"> & React_2.RefAttributes<HTMLTextAreaElement>>;
+
+export declare function TimeField({ value, onChange, className, onKeyDown, onBlur, ...props }: TimeFieldProps): React_2.JSX.Element;
+
+declare interface TimeFieldProps extends Omit<React_2.ComponentProps<"input">, "value" | "onChange"> {
+    value: string;
+    onChange: (text: string) => void;
+}
 
 export declare function Tooltip({ ...props }: React_2.ComponentProps<typeof TooltipPrimitive.Root>): React_2.JSX.Element;
 

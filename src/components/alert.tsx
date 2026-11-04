@@ -16,6 +16,11 @@ const alertVariants = cva(
         default: "border-border bg-card/60 text-fg [&>svg]:text-muted",
         destructive:
           "border-destructive/25 bg-destructive/10 text-destructive [&>svg]:text-destructive",
+        // A message, not an error: a tinted card in the tone's hue with the text in the normal ink, so a
+        // line of actions beside it still reads as the page's own controls.
+        info: "border-info/30 bg-info/10 text-fg [&>svg]:text-info",
+        success: "border-success/30 bg-success/10 text-fg [&>svg]:text-success",
+        warning: "border-warning/50 bg-warning/10 text-fg [&>svg]:text-warning",
       },
     },
     defaultVariants: {
