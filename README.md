@@ -12,7 +12,7 @@ to look like the app, and each copy drifted.
 | `Input`, `Textarea`, `Label`, `Checkbox`, `Switch` | form fields |
 | `Card` (+ `Header`, `Title`, `Description`, `Content`, `Footer`) | a bordered surface |
 | `Badge`, `badgeVariants` | status and count pills |
-| `Alert` (+ `Title`, `Description`) | an inline message |
+| `Alert` (+ `Title`, `Description`) | an inline message: `default`, `destructive`, `info`, `success`, `warning` |
 | `Table` (+ `Header`, `Body`, `Row`, `Head`, `Cell`) | styled native table |
 | `Separator`, `Skeleton`, `Spinner` | small pieces |
 | `Select` | the styled native select (prefer `Combobox` for a searchable list) |
@@ -20,6 +20,11 @@ to look like the app, and each copy drifted.
 | `Breadcrumb` (+ `List`, `Item`, `Link`, `Page`, `Separator`, `Ellipsis`) | a trail |
 | `CopyButton`, `useClipboard`, `writeText`, `canWriteText` | copy with a "Copied" state; works on plain http too |
 | `ColorSwatchPicker`, `Swatch` | a row of colour swatches plus a hex field |
+| `Radio` | a styled native radio (group with a shared `name`) |
+| `DatePicker` | a date field with a month popover; `min`/`max`, `weekStart`, keyboard |
+| `TimeField`, `parseTime`, `hhmm`, `DAY_MINS` | a time typed "13:05", "1305" or "13", nudged with ↑/↓ |
+| `EmptyState` | the app's empty state: icon, title, hint, one action |
+| `Pager`, `PAGE_SIZES`, `DEFAULT_PAGE_SIZE` | a paged table's foot: rows shown, page size, previous/next |
 | `cn` | `clsx` + `tailwind-merge`, taught the host's custom type and radius keys |
 
 
@@ -28,7 +33,7 @@ Popups and overlays:
 | Export | What it is |
 |---|---|
 | `Popover` (+ `Trigger`, `Content`, `Anchor`) | a floating panel |
-| `Combobox`, `ComboboxOption` | the searchable select (use it, not a native `<select>`) |
+| `Combobox`, `ComboboxOption` | the select (use it, not a native `<select>`): searchable by default, `searchable={false}` for a short list, `chip="Site"` for a filter chip |
 | `Dialog` (+ `Trigger`, `Content`, `Header`, `Footer`, `Title`, `Description`, `Close`, …) | a centred modal |
 | `Sheet` (+ `Content`, `Header`, `Title`, `Description`) | a drawer from the side |
 | `DropdownMenu` (+ items, groups, radio, checkbox, sub-menus) | an action menu |

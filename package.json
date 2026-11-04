@@ -1,6 +1,6 @@
 {
   "name": "@nube/rubix-ui",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "The Rubix design system's components \u2014 the buttons, fields, cards and tables the rubix-ai app is built from \u2014 published so an extension UI renders with the same pieces instead of re-creating them.",
   "license": "UNLICENSED",
   "type": "module",
