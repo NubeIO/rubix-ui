@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Inbox } from "lucide-react";
 
@@ -162,6 +162,16 @@ describe("DatePicker", () => {
     expect(screen.getByRole("gridcell", { name: "10 Nov 2026" })).toHaveFocus();
     await userEvent.keyboard("{ArrowRight}{Enter}");
     expect(screen.getByRole("button", { name: "from: 11 Nov 2026" })).toBeInTheDocument();
+  });
+
+  it("lays the month out as rows a screen reader can walk", async () => {
+    render(<Day />);
+    await userEvent.click(screen.getByRole("button", { name: /^from/ }));
+    const grid = screen.getByRole("grid", { name: "November 2026" });
+    const rows = within(grid).getAllByRole("row");
+    expect(rows).toHaveLength(7); // the weekday header, then six weeks
+    expect(within(rows[0]).getAllByRole("columnheader")).toHaveLength(7);
+    for (const r of rows.slice(1)) expect(within(r).getAllByRole("gridcell")).toHaveLength(7);
   });
 
   it("will not pick a day before min", async () => {

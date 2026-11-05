@@ -105,6 +105,7 @@ function DatePicker({
   };
 
   const days = monthGrid(focus, weekStart);
+  const weeks = Array.from({ length: 6 }, (_, w) => days.slice(w * 7, w * 7 + 7));
   const month = focus.slice(0, 7);
   const heads = Array.from({ length: 7 }, (_, i) => WEEKDAYS[(i + weekStart) % 7]);
 
@@ -165,47 +166,60 @@ function DatePicker({
               <ChevronRight aria-hidden />
             </Button>
           </div>
-          <div ref={grid} role="grid" className="grid grid-cols-7 gap-0.5">
-            {heads.map((w) => (
-              <span
-                key={w}
-                role="columnheader"
-                className="grid h-7 place-items-center text-caption font-semibold text-muted"
-              >
-                {w}
-              </span>
-            ))}
-            {days.map((iso) => {
-              const chosen = iso === value;
-              const off = blocked(iso);
-              const outside = iso.slice(0, 7) !== month;
-              return (
-                // eslint-disable-next-line no-restricted-syntax -- a calendar cell, not a Button
-                <button
-                  key={iso}
-                  type="button"
-                  role="gridcell"
-                  data-day={iso}
-                  tabIndex={iso === focus ? 0 : -1}
-                  aria-selected={chosen}
-                  aria-disabled={off || undefined}
-                  aria-label={formatDay(iso)}
-                  onClick={() => pick(iso)}
-                  className={cn(
-                    "grid h-8 place-items-center rounded-md tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
-                    chosen
-                      ? "bg-accent font-semibold text-on-solid"
-                      : off
-                        ? "cursor-not-allowed text-faint opacity-50"
-                        : "hover:bg-(--hover-wash)",
-                    !chosen && !off && (outside ? "text-faint" : "text-fg"),
-                    !chosen && iso === today && "ring-1 ring-inset ring-accent",
-                  )}
+          {/* A grid of rows (a header row, then one per week), so a screen reader can move through it by
+              row and column. The rows are `display: contents`: the CSS grid still lays out the cells. */}
+          <div
+            ref={grid}
+            role="grid"
+            aria-label={monthLabel(focus)}
+            className="grid grid-cols-7 gap-0.5"
+          >
+            <div role="row" className="contents">
+              {heads.map((w) => (
+                <span
+                  key={w}
+                  role="columnheader"
+                  className="grid h-7 place-items-center text-caption font-semibold text-muted"
                 >
-                  {Number(iso.slice(8))}
-                </button>
-              );
-            })}
+                  {w}
+                </span>
+              ))}
+            </div>
+            {weeks.map((week) => (
+              <div key={week[0]} role="row" className="contents">
+                {week.map((iso) => {
+                  const chosen = iso === value;
+                  const off = blocked(iso);
+                  const outside = iso.slice(0, 7) !== month;
+                  return (
+                    // eslint-disable-next-line no-restricted-syntax -- a calendar cell, not a Button
+                    <button
+                      key={iso}
+                      type="button"
+                      role="gridcell"
+                      data-day={iso}
+                      tabIndex={iso === focus ? 0 : -1}
+                      aria-selected={chosen}
+                      aria-disabled={off || undefined}
+                      aria-label={formatDay(iso)}
+                      onClick={() => pick(iso)}
+                      className={cn(
+                        "grid h-8 place-items-center rounded-md tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
+                        chosen
+                          ? "bg-accent font-semibold text-on-solid"
+                          : off
+                            ? "cursor-not-allowed text-faint opacity-50"
+                            : "hover:bg-(--hover-wash)",
+                        !chosen && !off && (outside ? "text-faint" : "text-fg"),
+                        !chosen && iso === today && "ring-1 ring-inset ring-accent",
+                      )}
+                    >
+                      {Number(iso.slice(8))}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
           </div>
           <div className="flex justify-between border-t border-border pt-2">
             <Button variant="ghost" size="sm" disabled={blocked(today)} onClick={() => pick(today)}>

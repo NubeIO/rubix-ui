@@ -1,65 +1,39 @@
 # @nube/rubix-ui
 
-The Rubix design system's components, published as one package so the rubix-ai app and its extensions
-render with the same pieces. Before this, an extension re-created a button, a panel and a drawer by hand
-to look like the app, and each copy drifted.
+The Rubix design system's React components, shared by the rubix-ai app and its extensions, so an
+extension's page looks and behaves like the app's without re-creating its buttons, fields, dialogs and
+tables by hand.
 
-## What is in it
-
-| Export | What it is |
-|---|---|
-| `Button`, `buttonVariants` | variants `default` · `solid` · `outline` · `ghost` · `destructive`; sizes `default` · `sm` · `lg` · `icon` · `icon-sm`; `asChild` |
-| `Input`, `Textarea`, `Label`, `Checkbox`, `Switch` | form fields |
-| `Card` (+ `Header`, `Title`, `Description`, `Content`, `Footer`) | a bordered surface |
-| `Badge`, `badgeVariants` | status and count pills |
-| `Alert` (+ `Title`, `Description`) | an inline message: `default`, `destructive`, `info`, `success`, `warning` |
-| `Table` (+ `Header`, `Body`, `Row`, `Head`, `Cell`) | styled native table |
-| `Separator`, `Skeleton`, `Spinner` | small pieces |
-| `Select` | the styled native select (prefer `Combobox` for a searchable list) |
-| `Tabs` (+ `List`, `Trigger`, `Content`), `Accordion` (+ `Item`, `Trigger`, `Content`) | controlled tabs; a single-open disclosure (see *Animation*) |
-| `Breadcrumb` (+ `List`, `Item`, `Link`, `Page`, `Separator`, `Ellipsis`) | a trail |
-| `CopyButton`, `useClipboard`, `writeText`, `canWriteText` | copy with a "Copied" state; works on plain http too |
-| `ColorSwatchPicker`, `Swatch` | a row of colour swatches plus a hex field |
-| `Radio` | a styled native radio (group with a shared `name`) |
-| `DatePicker` | a date field with a month popover; `min`/`max`, `weekStart`, keyboard |
-| `TimeField`, `parseTime`, `hhmm`, `DAY_MINS` | a time typed "13:05", "1305" or "13", nudged with ↑/↓ |
-| `EmptyState` | the app's empty state: icon, title, hint, one action |
-| `Pager`, `PAGE_SIZES`, `DEFAULT_PAGE_SIZE` | a paged table's foot: rows shown, page size, previous/next |
-| `cn` | `clsx` + `tailwind-merge`, taught the host's custom type and radius keys |
-
-
-Popups and overlays:
-
-| Export | What it is |
-|---|---|
-| `Popover` (+ `Trigger`, `Content`, `Anchor`) | a floating panel |
-| `Combobox`, `ComboboxOption` | the select (use it, not a native `<select>`): searchable by default, `searchable={false}` for a short list, `chip="Site"` for a filter chip |
-| `Dialog` (+ `Trigger`, `Content`, `Header`, `Footer`, `Title`, `Description`, `Close`, …) | a centred modal |
-| `Sheet` (+ `Content`, `Header`, `Title`, `Description`) | a drawer from the side |
-| `DropdownMenu` (+ items, groups, radio, checkbox, sub-menus) | an action menu |
-| `Menubar` (+ the same parts) | a row of menus |
-| `Tooltip` (+ `Provider`, `Trigger`, `Content`) | a hover hint |
-| `ScrollArea`, `ScrollBar`, `Collapsible` (+ `Trigger`, `Content`) | small pieces |
-| `RubixUiProvider`, `useOverlayContainer` | where popups render (see *Popups*) and how Tabs/Accordion animate |
+- **One source.** The rubix-ai app re-exports these components; an extension imports the same ones.
+- **Works inside an extension.** A pre-built stylesheet scoped to `[data-ext-root]`, and popups that
+  render inside the extension's root, so they are styled and stack correctly with the host's own.
+- **Follows the host's theme.** No colours are baked in: every class reads the host's CSS variables, so
+  the app's theme and light/dark mode reach an extension with no rebuild.
 
 ## Install
 
 ```jsonc
 // package.json
-"@nube/rubix-ui": "github:NubeIO/rubix-ui#v0.1.0"
+"dependencies": {
+  "@nube/rubix-ui": "github:NubeIO/rubix-ui#v0.4.1"
+}
 ```
 
-Peers: `react`, `react-dom`, `@radix-ui/react-slot`, `lucide-react`.
+The repo is public, so this installs with no credential. Pin a tag; [CHANGELOG.md](CHANGELOG.md) lists
+them.
 
-## In an extension
+Peers (install them in the consumer): `react` and `react-dom` 18+, `lucide-react`, `@radix-ui/react-slot`,
+and the Radix packages the popups use: `react-collapsible ~1.1`, `react-dialog ~1.1`,
+`react-dropdown-menu ~2.1`, `react-menubar ~1.1`, `react-popover ~1.1`, `react-scroll-area ~1.2`,
+`react-tooltip ~1.2`. pnpm and npm install missing peers for you. The `~` ranges are deliberate; see
+[docs/extensions.md](docs/extensions.md#3b-share-the-hosts-popup-stack).
 
-An extension's UI is mounted by `@nube/ext-ui-sdk` inside `<div data-ext-root>`. Add the package's
-stylesheet to the extension's own `styles`:
+## Quick start in an extension
 
-```ts
+```tsx
 // remoteEntry.tsx
+import rubix from "@nube/rubix-ui/scoped.css?raw"; // ?raw, not ?inline
 import own from "@/styles/tokens.css?inline";
-import rubix from "@nube/rubix-ui/scoped.css?raw";
 import { defineRemote } from "@nube/ext-ui-sdk";
 import { App } from "@/App";
 
@@ -71,105 +45,46 @@ export const { mount, mountWidget } = defineRemote({
 ```
 
 ```tsx
-import { Button, Card, CardContent } from "@nube/rubix-ui";
+// App.tsx
+import { usePortalContainer } from "@nube/ext-ui-sdk";
+import { Button, RubixUiProvider } from "@nube/rubix-ui";
+
+export function App() {
+  return (
+    <RubixUiProvider portalContainer={usePortalContainer()}>
+      <Button variant="solid">New schedule</Button>
+    </RubixUiProvider>
+  );
+}
 ```
 
-Import it with `?raw`, not `?inline`. The file is already built (with Tailwind v4); `?inline` sends it
-through the extension's own PostCSS, and a Tailwind v3 build stops on its native `@layer` blocks
-("`@layer utilities` is used but no matching `@tailwind utilities` directive"). Its rules sit in a cascade
-layer, so where the extension defines the same class, the extension's own definition wins.
+Then mark three Radix packages external in `vite.config.ts`. The full steps, and what goes wrong when
+one is missed, are in **[docs/extensions.md](docs/extensions.md)**.
 
-The stylesheet is pre-built, so the extension does not need Tailwind v4 or the host's class names in
-its own config. Every rule in it is under `[data-ext-root]`, and it declares no colours: a class such as
-`text-fg` compiles to `color: hsl(var(--fg))`, the host's own variable, so the host's theme and
-light/dark mode reach the extension without a rebuild.
+## What is in it
 
-## In the rubix-ai app
+| Group | Components |
+|---|---|
+| Actions | `Button`, `CopyButton` |
+| Form fields | `Input`, `Textarea`, `Label`, `Checkbox`, `Radio`, `Switch`, `Select`, `Combobox`, `DatePicker`, `TimeField`, `ColorSwatchPicker` |
+| Surfaces | `Card`, `Table`, `Tabs`, `Accordion`, `Collapsible`, `ScrollArea`, `Separator` |
+| Feedback | `Alert`, `Badge`, `EmptyState`, `Skeleton`, `Spinner` |
+| Navigation | `Breadcrumb`, `Pager` |
+| Popups | `Dialog`, `Sheet`, `Popover`, `DropdownMenu`, `Menubar`, `Tooltip` |
+| Setup | `RubixUiProvider`, `useOverlayContainer` |
+| Helpers | `cn`, `useClipboard`, `writeText`, `canWriteText`, `parseTime`, `hhmm`, `formatDay`, `localToday` |
 
-The app does not load `scoped.css`. It compiles the same classes with its own Tailwind; point its
-`globals.css` at the package:
+Props, variants and examples: **[docs/components.md](docs/components.md)**.
 
-```css
-@source "../../node_modules/@nube/rubix-ui/dist";
-```
+## Guides
 
-## The CSS rules (enforced)
-
-`scripts/assert-scoped-css.mjs` fails the build when `dist/rubix-ui.css`
-
-- has a `:root`/`:host` rule or a `.dark` selector (it would repaint the host app), or
-- has a class or attribute rule outside `[data-ext-root]` (it would match host elements).
-
-The `animate-in`/`fade-in`/`slide-in` classes the popups use come from `tw-animate-css`, compiled under
-the same scope.
-
-The host keys (`bg-bg`, `text-fg`, `border-border`, `rounded-md`, `text-caption`, …) are copied from
-rubix-ai's `ui/src/styles/globals.css` `@theme` into `src/styles/scoped.css`. Keep the two in step.
-
-## Popups
-
-Two things make popups work inside an extension. Both are needed.
-
-1. **Render inside the extension's root.** Radix renders popups at the end of `document.body`, outside
-   `[data-ext-root]`, where `scoped.css` does not apply: the popup would show unstyled. Wrap the page
-   in `RubixUiProvider` with the SDK's container, and every popup here renders inside the root:
-
-   ```tsx
-   import { usePortalContainer } from "@nube/ext-ui-sdk";
-   import { RubixUiProvider } from "@nube/rubix-ui";
-
-   export function App(props) {
-     return (
-       <RubixUiProvider portalContainer={usePortalContainer()}>
-         <Page {...props} />
-       </RubixUiProvider>
-     );
-   }
-   ```
-
-   Nothing above the root traps `position: fixed`, so a dialog's overlay still covers the whole window,
-   the host's sidebar and top bar included. In the app there is no provider and popups go to the body.
-
-2. **Share the host's popup stack.** Radix keeps the stack of open popups, the focus trap and the focus
-   sentinels in three packages. With its own copy, an extension's popups cannot see the host's: Escape
-   or an outside click reaches the wrong one, and a popover inside a modal stops taking clicks. The
-   rubix-ai app shares its copy through its import map, as it shares React. Mark the three external:
-
-   ```ts
-   // vite.config.ts
-   defineExtConfig({
-     entry: "src/remoteEntry.tsx",
-     externals: [
-       "@radix-ui/react-dismissable-layer",
-       "@radix-ui/react-focus-scope",
-       "@radix-ui/react-focus-guards",
-     ],
-   });
-   ```
-
-   The extension then runs against the host's versions of those three, so its own Radix packages must be
-   ones that work with them. This package's peer ranges (`~` on the host's minor versions) keep that
-   true; a newer Radix minor (for example `react-dialog` 1.3) imports names the host's `focus-scope` does
-   not have, and the extension fails to load. Move the host and this package to a new Radix minor
-   together.
-
-## Animation
-
-A tab panel's entrance and an accordion item's open/close animate with the rubix-ai app's own motion
-primitives, gated by each member's motion preference. The package does not carry them; the app passes
-them in:
-
-```tsx
-<RubixUiProvider motion={{ Reveal, Collapse }}>…</RubixUiProvider>
-```
-
-Without them (an extension, a test) a panel simply appears and an item simply opens and closes, which is
-what the app does when a member turns motion off.
-
-## Bundle size
-
-Each component is its own file in `dist/` and the package declares no side effects (besides its CSS), so
-an extension's bundler keeps only the components it imports and the Radix packages they use.
+| Guide | For |
+|---|---|
+| [docs/extensions.md](docs/extensions.md) | Using the package in an extension, step by step, plus troubleshooting |
+| [docs/components.md](docs/components.md) | Every component: what it is for, its props, an example |
+| [docs/rubix-ai.md](docs/rubix-ai.md) | How the rubix-ai app consumes the package, and how to bump it there |
+| [docs/contributing.md](docs/contributing.md) | Changing or adding a component, the rules CI enforces, and releasing |
+| [CHANGELOG.md](CHANGELOG.md) | What each tag changed |
 
 ## Develop
 
@@ -178,24 +93,14 @@ pnpm install
 pnpm check      # typecheck, tests, build, CSS guard
 ```
 
-`dist/` is **committed**: a `github:` dep installs the tree as-is, with no build step. Run `pnpm build`
-and commit `dist/` with every change; CI fails when it is stale.
-
-To try an unreleased change in rubix-ai or an extension, `pnpm link` this checkout there, and drop the
-link once the change is tagged.
-
-## Release
-
-1. PR to `main` (CI green, `dist/` rebuilt).
-2. Tag `vX.Y.Z` on the merge commit and push the tag.
-3. Bump the pin in each consumer.
+`dist/` is committed: a `github:` dep installs the tree as-is, with no build step. Run `pnpm build` and
+commit `dist/` with every change; CI fails when it is stale. See
+[docs/contributing.md](docs/contributing.md).
 
 ## Licence
 
-`UNLICENSED`: proprietary NubeIO code. The repo is public so a `github:` dep installs with no credential
-(the rubix-ai frontend builds on its deploy servers, an extension's CI, a contractor's machine), the same
-choice as `NubeDev/lb-ui-kit` and `NubeDev/lb-ext-ui-sdk`. Public visibility grants **no** licence to
-use it.
-
+`UNLICENSED`: proprietary NubeIO code. The repo is public only so a `github:` dep installs with no
+credential (deploy servers, an extension's CI, a contractor's machine), the same choice as
+`NubeDev/lb-ui-kit` and `NubeDev/lb-ext-ui-sdk`. Public visibility grants **no** licence to use it.
 Keep anything that must stay private (unreleased product screens, customer-specific code) out of this
 repo.
