@@ -34,6 +34,10 @@
 /* Never the built output: it is committed, so scanning it would carry a class removed from the source
    into the next build (and CI, building from a clean checkout, would get a different file). */
 @source not "../../dist";
+/* Nor the docs: their examples name classes no component uses (`sm:max-w-[420px]`), which would ship
+   in every extension's stylesheet. Only `src/components` decides what is in it. */
+@source not "../../docs";
+@source not "../../*.md";
 
 /* The host's keys. Copied from rubix-ai's `globals.css` `@theme`, made `inline`. */
 @theme inline {

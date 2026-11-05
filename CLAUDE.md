@@ -1,7 +1,9 @@
 # CLAUDE.md — rubix-ui
 
 `@nube/rubix-ui`: the Rubix design system's components, shared by the rubix-ai app (`NubeIO/rubix-ai`,
-`ui/`) and its extensions. Read `README.md` first.
+`ui/`) and its extensions. Read `README.md` first, then the guide for the task in `docs/`
+(`extensions.md`, `components.md`, `rubix-ai.md`, `contributing.md`). Every release adds an entry to
+`CHANGELOG.md`, and a new or changed component updates `docs/components.md`.
 
 ## Rules
 
