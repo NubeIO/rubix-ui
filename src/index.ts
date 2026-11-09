@@ -113,3 +113,8 @@ export { ColorSwatchPicker, type Swatch } from "./components/color-swatch";
 export { CopyButton } from "./components/copy-button";
 export { Select } from "./components/select";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/tabs";
+export * from "./lib/schedule";
+export { NodeScheduleEditor, type NodeScheduleEditorProps } from "./components/node-schedule-editor";
+export { AllSchedulesCalendar, type AllSchedulesCalendarProps } from "./components/all-schedules-calendar";
+export { WeekStrip } from "./components/week-strip";
+export { NameSwatch } from "./components/name-swatch";

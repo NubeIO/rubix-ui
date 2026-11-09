@@ -8,7 +8,8 @@
 // The rules, on dist/rubix-ui.css:
 //   • no `:root` / `:host` rule at all: the host keys are declared `inline`, so nothing needs one;
 //   • no `.dark` selector: the host owns the mode;
-//   • every rule that targets a class or an attribute sits under `[data-ext-root]`.
+//   • every rule that targets a class or an attribute sits under `[data-ext-root]`;
+//   • the schedule colour classes the helpers in `src/lib/schedule` hand out are there.
 // The one allowed global is Tailwind's `*,:before,:after,::backdrop { --tw-*: … }` property block (inert
 // `--tw-` defaults nothing reads outside a scoped utility), plus `@keyframes`.
 //
@@ -64,6 +65,24 @@ for (const m of text.matchAll(/([^{}@;]+)\{/g)) {
       problems.push(`unscoped rule (would match HOST elements): ${part.trim().slice(0, 120)}`);
     }
   }
+}
+
+// Classes that reach a component from `src/lib/schedule` (the name and schedule colours) rather than
+// from a component's own source: they exist only because `scoped.css` scans that folder too.
+const REQUIRED = [
+  "bg-chart-1",
+  "bg-chart-2",
+  "bg-chart-3",
+  "bg-chart-4",
+  "bg-chart-5",
+  "bg-chart-7",
+  "bg-chart-8",
+  "border-chart-8",
+  "text-on-solid",
+  "bg-surface-inset",
+];
+for (const c of REQUIRED) {
+  if (!text.includes(`${SCOPE} .${c}{`)) problems.push(`missing class \`.${c}\``);
 }
 
 if (problems.length) {
