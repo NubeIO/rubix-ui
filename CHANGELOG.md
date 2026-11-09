@@ -2,6 +2,38 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
+## v0.6.0
+
+- New: **FilterTiles** (count tiles that filter a list, the UART Units page's) and **FacetChip** (the
+  Insights toolbar's dashed filter chip), for the Schedules and Schedule Groups lists.
+- **AllSchedulesView** takes `search` / `onSearch` and an optional `noun` ("group" / "groups"): a search
+  box in its toolbar; past `CHIP_LIMIT` (12, exported) matching schedules the chips give way to a count,
+  so hundreds of schedules keep the calendar on screen.
+- Wording: lb's dated entries read "Closures & holidays" ("Closures & holidays this week / in Nov").
+- Hour scales, block times and filter counts use the sans font with even digits.
+- The month grid draws at most three dots on an entry and the dated list three schedule names, then
+  "+N more".
+- **Breaking:** the package keeps visual building blocks only. **NodeScheduleEditor**, the data-reading
+  **AllSchedulesCalendar** and all schedule logic moved out: `readNodeSchedule`, `writeNodeSchedule`,
+  `resolveDay`, `nowAndNext`, `wallAt`, `nameIndex`, `valueOf`, `OFF`, `MAX_NAMES`, `toSaveError`,
+  `ChangedElsewhere`, `BackendNeedsUpgrade`, `Unreadable` and lb's schedule record types. The rubix-ai
+  app and the Schedule Groups extension each keep their own editor and logic; the `v0.5.0` tag has the
+  source to copy.
+- New: plain-data calendar primitives, fed days the app has already resolved: **ScheduleWeekCalendar**
+  (one schedule's week, the editor's Calendar tab), **ScheduleWeekRows** and **ScheduleMonthGrid** (every
+  schedule's week and month), and **AllSchedulesView**, their frame (Week / Month, previous / next /
+  Today, schedule chips, legend, dated entries). Types: `ScheduleSpan`, `ScheduleDay`, `ScheduleNote`,
+  `ScheduleMoment`, `ScheduleRef`, `ScheduleWeekRow`, `ScheduleChip`, `ScheduleMonthDay`,
+  `ScheduleListEntry`, `ScheduleLegendItem`, `ScheduleEntryKind`.
+- **Breaking:** `WeekStrip` takes `week` (seven arrays of `{ start, end, nameIndex }`) instead of a
+  schedule `doc`.
+- `nameColour`, `SCHEDULE_COLOURS`, `scheduleColourClass` and `NameSwatch` stay, unchanged.
+- The dated entries list puts the schedules in their own middle column (date, label, schedules, kind),
+  and the month view says "Nov 2026" and "Closures & holidays in Nov".
+- ScheduleWeekCalendar draws a block too short for its words (a 30 minute strip) as a plain strip, and
+  one with room for one line shows only the label; the tooltip still names it.
+- The stylesheet reads `src/lib/colour` for the colour classes instead of `src/lib/schedule`.
+
 ## v0.5.0
 
 - New: **NodeScheduleEditor** (weekly hours, dated entries, calendar, settings, the save and conflict

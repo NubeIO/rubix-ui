@@ -15,7 +15,7 @@ tables by hand.
 ```jsonc
 // package.json
 "dependencies": {
-  "@nube/rubix-ui": "github:NubeIO/rubix-ui#v0.5.0"
+  "@nube/rubix-ui": "github:NubeIO/rubix-ui#v0.6.0"
 }
 ```
 
@@ -69,9 +69,10 @@ one is missed, are in **[docs/extensions.md](docs/extensions.md)**.
 | Form fields | `Input`, `Textarea`, `Label`, `Checkbox`, `Radio`, `Switch`, `Select`, `Combobox`, `DatePicker`, `TimeField`, `ColorSwatchPicker` |
 | Surfaces | `Card`, `Table`, `Tabs`, `Accordion`, `Collapsible`, `ScrollArea`, `Separator` |
 | Feedback | `Alert`, `Badge`, `EmptyState`, `Skeleton`, `Spinner` |
+| Filters | `FilterTiles` (count tiles that filter a list), `FacetChip` (a dashed filter chip) |
 | Navigation | `Breadcrumb`, `Pager` |
 | Popups | `Dialog`, `Sheet`, `Popover`, `DropdownMenu`, `Menubar`, `Tooltip` |
-| Schedules | `NodeScheduleEditor`, `AllSchedulesCalendar`, `WeekStrip`, `NameSwatch`, and the node schedule helpers (`readNodeSchedule`, `writeNodeSchedule`, `resolveDay`, `nowAndNext`, `nameColour`, `toSaveError`, the record types) |
+| Schedules | `ScheduleWeekCalendar`, `AllSchedulesView`, `ScheduleWeekRows`, `ScheduleMonthGrid`, `WeekStrip`, `NameSwatch`, `nameColour`, `scheduleColourClass` (visual only; each app keeps its schedule editor and logic) |
 | Setup | `RubixUiProvider`, `useOverlayContainer` |
 | Helpers | `cn`, `useClipboard`, `writeText`, `canWriteText`, `parseTime`, `hhmm`, `formatDay`, `localToday` |
 

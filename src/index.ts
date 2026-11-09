@@ -113,8 +113,31 @@ export { ColorSwatchPicker, type Swatch } from "./components/color-swatch";
 export { CopyButton } from "./components/copy-button";
 export { Select } from "./components/select";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/tabs";
-export * from "./lib/schedule";
-export { NodeScheduleEditor, type NodeScheduleEditorProps } from "./components/node-schedule-editor";
-export { AllSchedulesCalendar, type AllSchedulesCalendarProps } from "./components/all-schedules-calendar";
-export { WeekStrip } from "./components/week-strip";
+export { nameColour, type NameTone } from "./lib/colour/nameColour";
+export { SCHEDULE_COLOURS, scheduleColourClass, type ScheduleColour } from "./lib/colour/scheduleColour";
+export type {
+  ScheduleEntryKind,
+  ScheduleSpan,
+  ScheduleNote,
+  ScheduleDay,
+  ScheduleMoment,
+  ScheduleRef,
+  ScheduleWeekRow,
+  ScheduleChip,
+  ScheduleMonthDay,
+  ScheduleListEntry,
+  ScheduleLegendItem,
+} from "./components/schedule-calendar-types";
+export { ScheduleWeekCalendar, type ScheduleWeekCalendarProps } from "./components/schedule-week-calendar";
+export { ScheduleWeekRows, type ScheduleWeekRowsProps } from "./components/schedule-week-rows";
+export { ScheduleMonthGrid, type ScheduleMonthGridProps } from "./components/schedule-month-grid";
+export {
+  AllSchedulesView,
+  CHIP_LIMIT,
+  type AllSchedulesViewProps,
+  type AllSchedulesViewMode,
+} from "./components/all-schedules-view";
+export { WeekStrip, type WeekStripSegment } from "./components/week-strip";
 export { NameSwatch } from "./components/name-swatch";
+export { FilterTiles, type FilterTile, type FilterTilesProps } from "./components/filter-tiles";
+export { FacetChip, type FacetChipProps } from "./components/facet-chip";

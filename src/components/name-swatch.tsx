@@ -6,7 +6,7 @@
 
 import { cn } from "../lib/cn";
 
-import { nameColour } from "../lib/schedule/nameColour";
+import { nameColour } from "../lib/colour/nameColour";
 
 export function NameSwatch({ index, className }: { index: number; className?: string }) {
   const tone = nameColour(index);

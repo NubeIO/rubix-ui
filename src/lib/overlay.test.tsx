@@ -11,11 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "../components/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/popover";
-import { NodeScheduleEditor } from "../components/node-schedule-editor";
 import { Sheet, SheetContent, SheetTitle } from "../components/sheet";
 import { RubixUiProvider } from "./provider";
-import { readNodeSchedule } from "./schedule/readNodeSchedule";
-import { buildingHours } from "./schedule/scheduleRecord.fixtures";
 
 // An extension's stylesheet applies only under its root, so every popup must land INSIDE the element
 // the provider names. Without a provider (the app) it lands in the body, as Radix does by default.
@@ -87,14 +84,6 @@ describe("popups follow the provider's container", () => {
     );
     await userEvent.click(screen.getByLabelText("type"));
     expect(root.contains(await screen.findByText("Holiday"))).toBe(true);
-  });
-
-  it("node schedule editor's sheets", async () => {
-    const root = inExtension(
-      <NodeScheduleEditor schedule={readNodeSchedule(buildingHours())} onSave={async () => ({ rev: 2 })} />,
-    );
-    await userEvent.click(screen.getByRole("button", { name: /Names 3\/6/ }));
-    expect(root.contains(await screen.findByLabelText("Occupied value"))).toBe(true);
   });
 
   it("lands in the body without a provider", async () => {

@@ -1,6 +1,6 @@
 import { jsx as n } from "react/jsx-runtime";
 import { cn as t } from "../lib/cn.js";
-import { nameColour as m } from "../lib/schedule/nameColour.js";
+import { nameColour as m } from "../lib/colour/nameColour.js";
 function d({ index: o, className: e }) {
   const r = m(o);
   return /* @__PURE__ */ n(
