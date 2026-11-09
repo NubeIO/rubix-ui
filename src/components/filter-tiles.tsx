@@ -49,13 +49,15 @@ export function FilterTiles({ tiles, active, onPick, label }: FilterTilesProps) 
             type="button"
             aria-pressed={on}
             onClick={() => onPick(on || t.key === all ? all : t.key)}
-            // Height inline: an extension's own unlayered `h-*` utility beats this package's layered one.
-            style={{ height: 120 }}
+            // Height and shadow inline: an extension's own unlayered utilities beat this package's layered
+            // ones, and a comma inside a class name trips the scoped-CSS guard.
+            style={{
+              height: 120,
+              boxShadow: on ? "0 0 0 1px hsl(var(--accent) / .4), var(--elev-panel)" : "var(--elev-panel)",
+            }}
             className={cn(
               "flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-panel border bg-surface-card p-0 text-left text-inherit",
-              on
-                ? "border-accent/60 shadow-[0_0_0_1px_hsl(var(--accent)/.4),var(--elev-panel)]"
-                : "border-line shadow-[var(--elev-panel)]",
+              on ? "border-accent/60" : "border-line",
             )}
           >
             <span className="flex h-8 flex-none items-center gap-[7px] px-2.5">
