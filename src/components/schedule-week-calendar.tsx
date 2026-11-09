@@ -82,7 +82,7 @@ export function ScheduleWeekCalendar({ days, now, actions, legend, ...nav }: Sch
             h ? (
               <span
                 key={h}
-                className="absolute right-1.5 -translate-y-1/2 font-mono text-caption text-ink-faint"
+                className="absolute right-1.5 -translate-y-1/2 tabular-nums text-caption text-ink-faint"
                 style={{ top: pct(h * 60) }}
               >
                 {String(h).padStart(2, "0")}
@@ -117,7 +117,7 @@ export function ScheduleWeekCalendar({ days, now, actions, legend, ...nav }: Sch
                       `${s.label ? `${s.label} · ` : ""}${s.name} · ${hhmm(s.start)} until ${untilText(s.end)}`
                     }
                     className={cn(
-                      "absolute inset-x-1 min-h-3.5 overflow-hidden rounded-sm px-1.5 py-1 font-mono text-caption leading-tight",
+                      "absolute inset-x-1 min-h-3.5 overflow-hidden rounded-sm px-1.5 py-1 tabular-nums text-caption leading-tight",
                       tone.bg,
                       tone.text,
                       s.kind === "extra" && "border-[1.5px] border-dashed border-ink-strong",

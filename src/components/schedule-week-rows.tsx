@@ -46,7 +46,7 @@ export function ScheduleWeekRows({ dates, rows, today, onOpen }: ScheduleWeekRow
           <span className={cn("truncate text-xs font-semibold", d === today ? "text-accent" : "text-ink")}>
             {columnText(d, i === 0)}
           </span>
-          <span className="flex justify-between font-mono text-caption text-ink-faint">
+          <span className="flex justify-between tabular-nums text-caption text-ink-faint">
             <span>00</span>
             <span>12</span>
             <span>24</span>

@@ -2,10 +2,10 @@ import { jsxs as s, jsx as r } from "react/jsx-runtime";
 import { cn as i } from "../lib/cn.js";
 import { nameColour as N } from "../lib/colour/nameColour.js";
 import { scheduleColourClass as k } from "../lib/colour/scheduleColour.js";
-import { columnText as f, spanText as v } from "./schedule-calendar-words.js";
+import { columnText as h, spanText as v } from "./schedule-calendar-words.js";
 import { KINDS as w, HATCH as $, noteText as C } from "./schedule-kinds.js";
-const d = (l) => `${l / 1440 * 100}%`;
-function A({ dates: l, rows: h, today: c, onOpen: m }) {
+const d = (o) => `${o / 1440 * 100}%`;
+function A({ dates: o, rows: f, today: c, onOpen: m }) {
   return /* @__PURE__ */ s(
     "div",
     {
@@ -14,7 +14,7 @@ function A({ dates: l, rows: h, today: c, onOpen: m }) {
       className: "grid grid-cols-[minmax(9rem,13rem)_repeat(7,minmax(0,1fr))] overflow-hidden rounded-lg border border-line",
       children: [
         /* @__PURE__ */ r("span", { className: "border-b border-line bg-surface-raised" }),
-        l.map((e, n) => /* @__PURE__ */ s(
+        o.map((e, n) => /* @__PURE__ */ s(
           "div",
           {
             className: i(
@@ -22,8 +22,8 @@ function A({ dates: l, rows: h, today: c, onOpen: m }) {
               e === c ? "bg-accent/8" : "bg-surface-raised"
             ),
             children: [
-              /* @__PURE__ */ r("span", { className: i("truncate text-xs font-semibold", e === c ? "text-accent" : "text-ink"), children: f(e, n === 0) }),
-              /* @__PURE__ */ s("span", { className: "flex justify-between font-mono text-caption text-ink-faint", children: [
+              /* @__PURE__ */ r("span", { className: i("truncate text-xs font-semibold", e === c ? "text-accent" : "text-ink"), children: h(e, n === 0) }),
+              /* @__PURE__ */ s("span", { className: "flex justify-between tabular-nums text-caption text-ink-faint", children: [
                 /* @__PURE__ */ r("span", { children: "00" }),
                 /* @__PURE__ */ r("span", { children: "12" }),
                 /* @__PURE__ */ r("span", { children: "24" })
@@ -32,7 +32,7 @@ function A({ dates: l, rows: h, today: c, onOpen: m }) {
           },
           e
         )),
-        h.map((e) => /* @__PURE__ */ s("div", { role: "row", className: "contents", children: [
+        f.map((e) => /* @__PURE__ */ s("div", { role: "row", className: "contents", children: [
           /* @__PURE__ */ s("div", { className: "grid content-center gap-0.5 border-b border-line px-3 py-2.5", children: [
             /* @__PURE__ */ s("span", { className: "flex min-w-0 items-center gap-2", children: [
               /* @__PURE__ */ r("span", { "aria-hidden": !0, className: i("size-2 flex-none rounded-full", k(e.colour)) }),
@@ -50,11 +50,11 @@ function A({ dates: l, rows: h, today: c, onOpen: m }) {
           ] }),
           e.days.map((n) => {
             var b, u;
-            const a = ((b = e.now) == null ? void 0 : b.date) === n.date ? e.now.minute : void 0, o = n.closed ?? ((u = n.entries) == null ? void 0 : u[0]), p = o ? w[o.kind].icon : null, x = n.closed ? `${n.closed.label || "Closed"}, closed all day` : n.spans.length ? n.spans.map((t) => `${t.name} ${v(t.start, t.end)}`).join(", ") : "Off all day";
+            const a = ((b = e.now) == null ? void 0 : b.date) === n.date ? e.now.minute : void 0, l = n.closed ?? ((u = n.entries) == null ? void 0 : u[0]), p = l ? w[l.kind].icon : null, x = n.closed ? `${n.closed.label || "Closed"}, closed all day` : n.spans.length ? n.spans.map((t) => `${t.name} ${v(t.start, t.end)}`).join(", ") : "Off all day";
             return /* @__PURE__ */ s(
               "div",
               {
-                title: `${e.name}, ${f(n.date, !0)}: ${x}`,
+                title: `${e.name}, ${h(n.date, !0)}: ${x}`,
                 className: i(
                   "grid content-center gap-1 border-b border-l border-line px-2 py-2.5",
                   n.date === c && "bg-accent/3"
@@ -81,9 +81,9 @@ function A({ dates: l, rows: h, today: c, onOpen: m }) {
                     }),
                     a !== void 0 && /* @__PURE__ */ r("span", { className: "absolute inset-y-0 z-10 w-0.5 bg-destructive", style: { left: d(a) } })
                   ] }),
-                  o && p && /* @__PURE__ */ s("span", { className: "flex min-w-0 items-center gap-1 text-caption text-ink-muted", children: [
+                  l && p && /* @__PURE__ */ s("span", { className: "flex min-w-0 items-center gap-1 text-caption text-ink-muted", children: [
                     /* @__PURE__ */ r(p, { className: "size-3 flex-none" }),
-                    /* @__PURE__ */ r("span", { className: "truncate", children: C(o) })
+                    /* @__PURE__ */ r("span", { className: "truncate", children: C(l) })
                   ] })
                 ]
               },

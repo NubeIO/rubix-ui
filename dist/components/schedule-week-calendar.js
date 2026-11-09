@@ -2,7 +2,7 @@ import { jsxs as n, jsx as a } from "react/jsx-runtime";
 import { cn as m } from "../lib/cn.js";
 import { hhmm as b } from "../lib/time.js";
 import { nameColour as v } from "../lib/colour/nameColour.js";
-import { weekText as y, columnText as $, untilText as u } from "./schedule-calendar-words.js";
+import { weekText as y, columnText as $, untilText as x } from "./schedule-calendar-words.js";
 import { KINDS as g, HATCH as S, noteText as I } from "./schedule-kinds.js";
 import { NameSwatch as T } from "./name-swatch.js";
 import { ScheduleCalendarNav as C } from "./schedule-calendar-nav.js";
@@ -35,7 +35,7 @@ function O({ days: r, now: l, actions: p, legend: h, ...N }) {
         (e) => e ? /* @__PURE__ */ a(
           "span",
           {
-            className: "absolute right-1.5 -translate-y-1/2 font-mono text-caption text-ink-faint",
+            className: "absolute right-1.5 -translate-y-1/2 tabular-nums text-caption text-ink-faint",
             style: { top: d(e * 60) },
             children: String(e).padStart(2, "0")
           },
@@ -53,14 +53,14 @@ function O({ days: r, now: l, actions: p, legend: h, ...N }) {
             children: [
               f.map((t) => /* @__PURE__ */ a("span", { className: "absolute inset-x-0 h-px bg-line/60", style: { top: d(t * 60) } }, t)),
               e.spans.map((t) => {
-                const o = v(t.nameIndex), c = i && t.start <= l.minute && l.minute <= t.end, k = t.label || t.name, x = X(t);
+                const o = v(t.nameIndex), c = i && t.start <= l.minute && l.minute <= t.end, k = t.label || t.name, u = X(t);
                 return /* @__PURE__ */ n(
                   "div",
                   {
                     "data-running": c || void 0,
-                    title: t.title ?? `${t.label ? `${t.label} · ` : ""}${t.name} · ${b(t.start)} until ${u(t.end)}`,
+                    title: t.title ?? `${t.label ? `${t.label} · ` : ""}${t.name} · ${b(t.start)} until ${x(t.end)}`,
                     className: m(
-                      "absolute inset-x-1 min-h-3.5 overflow-hidden rounded-sm px-1.5 py-1 font-mono text-caption leading-tight",
+                      "absolute inset-x-1 min-h-3.5 overflow-hidden rounded-sm px-1.5 py-1 tabular-nums text-caption leading-tight",
                       o.bg,
                       o.text,
                       t.kind === "extra" && "border-[1.5px] border-dashed border-ink-strong",
@@ -69,11 +69,11 @@ function O({ days: r, now: l, actions: p, legend: h, ...N }) {
                     ),
                     style: { top: d(t.start), height: d(t.end + 1 - t.start) },
                     children: [
-                      x >= 1 && /* @__PURE__ */ a("span", { className: "block truncate font-sans font-semibold", children: k }),
-                      x >= 2 && /* @__PURE__ */ n("span", { className: "block truncate", children: [
+                      u >= 1 && /* @__PURE__ */ a("span", { className: "block truncate font-sans font-semibold", children: k }),
+                      u >= 2 && /* @__PURE__ */ n("span", { className: "block truncate", children: [
                         b(t.start),
                         "–",
-                        u(t.end)
+                        x(t.end)
                       ] })
                     ]
                   },

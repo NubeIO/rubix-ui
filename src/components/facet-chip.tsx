@@ -64,7 +64,7 @@ export function FacetChip({ label, values, selected, onChange, render = (v) => v
                     />
                     <span className="truncate">{render(v)}</span>
                     {counts && v in counts ? (
-                      <span className="ml-auto font-mono text-caption tabular-nums text-muted">
+                      <span className="ml-auto text-caption tabular-nums text-muted">
                         {counts[v].toLocaleString()}
                       </span>
                     ) : null}
