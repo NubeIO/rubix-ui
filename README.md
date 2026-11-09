@@ -15,7 +15,7 @@ tables by hand.
 ```jsonc
 // package.json
 "dependencies": {
-  "@nube/rubix-ui": "github:NubeIO/rubix-ui#v0.4.1"
+  "@nube/rubix-ui": "github:NubeIO/rubix-ui#v0.5.0"
 }
 ```
 
@@ -71,6 +71,7 @@ one is missed, are in **[docs/extensions.md](docs/extensions.md)**.
 | Feedback | `Alert`, `Badge`, `EmptyState`, `Skeleton`, `Spinner` |
 | Navigation | `Breadcrumb`, `Pager` |
 | Popups | `Dialog`, `Sheet`, `Popover`, `DropdownMenu`, `Menubar`, `Tooltip` |
+| Schedules | `NodeScheduleEditor`, `AllSchedulesCalendar`, `WeekStrip`, `NameSwatch`, and the node schedule helpers (`readNodeSchedule`, `writeNodeSchedule`, `resolveDay`, `nowAndNext`, `nameColour`, `toSaveError`, the record types) |
 | Setup | `RubixUiProvider`, `useOverlayContainer` |
 | Helpers | `cn`, `useClipboard`, `writeText`, `canWriteText`, `parseTime`, `hhmm`, `formatDay`, `localToday` |
 

@@ -259,6 +259,61 @@ Radix primitives with the app's look. `DropdownMenu` and `Menubar` include items
 items, groups, labels, separators, shortcuts and sub-menus. Wrap the page once in `TooltipProvider` to
 share tooltip delays.
 
+## Schedules
+
+The node schedule editor and the all-schedules calendar, shared by the rubix-ai Schedules page and the
+Schedule Groups extension. Data in, events out: they take schedules as `NodeSchedule`s and hand edits
+back through callbacks. The page owns the API (`schedule.get` / `schedule.save`); nothing here calls it.
+Colours read the host's `--chart-*`, `--surface-inset`, `--ink-muted`, `--sheet-w-md` and
+`--elev-popover`.
+
+### NodeScheduleEditor
+
+Weekly hours (paint, day sheet, names), dated entries, a calendar, settings and the page's own last
+tab, with the save bar, the "changed elsewhere" flow and the unreadable and needs-upgrade states.
+Below `md` it is view only.
+
+| Prop | |
+|---|---|
+| `schedule` | the schedule, from `readNodeSchedule(record)`; `null` while it loads |
+| `onSave(doc)` | save `writeNodeSchedule(doc)`; resolve `{ rev }`, reject with the error (`toSaveError` sorts it) |
+| `onReload()` | the latest saved version, for "Reload, keep my edit" |
+| `onDelete`, `onRecreate(id, name)`, `onClose`, `onDirtyChange(dirty)` | the page's actions |
+| `unreadable` | `{ id, name }`: the record is in the old format; shows Recreate |
+| `backendNeedsUpgrade` | editing works, Save is off with the reason |
+| `extraTab` | `{ label, render }`: the page's own last tab (Used by, Boxes) |
+| `readOnly`, `hideSettings`, `title`, `subtitle`, `saveLabel`, `host` | |
+| `now` | the instant (epoch ms); omitted, it follows the clock |
+
+```tsx
+const record = await getSchedule(id);
+<NodeScheduleEditor
+  schedule={readNodeSchedule(record)}
+  onSave={async (doc) => ({ rev: (await saveSchedule(writeNodeSchedule(doc))).rev })}
+  onReload={async () => readNodeSchedule(await getSchedule(id))}
+/>
+```
+
+### AllSchedulesCalendar, WeekStrip, NameSwatch
+
+`AllSchedulesCalendar` shows every schedule at once: a week (a row per schedule) or a month of dated
+entries, with schedule chips to hide one. Props: `schedules`, `onOpen?(id)`, `now?`. `WeekStrip` is
+the one-line week of a schedule's names for a list row: `doc`, `className?`. `NameSwatch` is one name's colour
+square (`index`: 0 is the default, outlined), for a legend or a list's now column.
+
+### Schedule helpers
+
+- Record types (lb's `schedule.*` shape): `ScheduleRecord`, `ScheduleDocument`, `WeeklyEntry`,
+  `DatedEntry`, `DateWindow`, `DatedKind`.
+- The model: `NodeSchedule`, `NameValue`, `Seg`, `DatedItem`, `BoxOutput`, `OFF`, `MAX_NAMES`,
+  `nameIndex`, `valueOf`; `readNodeSchedule(record)` and `writeNodeSchedule(doc)` convert both ways.
+- `resolveDay(doc, date)`: what a date runs, minute by minute, dated entries applied.
+  `nowAndNext(doc, instant)` and `wallAt(instant, zone)`: what runs now and the next change.
+- `nameColour(index)`: a name's colour by position (0 is the default). `SCHEDULE_COLOURS` and
+  `scheduleColourClass(value)`: a schedule's own colour.
+- `toSaveError(e)` sorts a failed save into `ChangedElsewhere`, `BackendNeedsUpgrade`, `Unreadable` or
+  the error as it came.
+
 ## Setup
 
 ### RubixUiProvider

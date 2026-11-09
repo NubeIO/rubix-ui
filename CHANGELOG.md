@@ -2,6 +2,21 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
+## v0.5.0
+
+- New: **NodeScheduleEditor** (weekly hours, dated entries, calendar, settings, the save and conflict
+  flow), **AllSchedulesCalendar**, **WeekStrip** and **NameSwatch**, moved from the rubix-ai Schedules
+  page so the Schedule Groups extension uses the same ones. Data in, events out; the page keeps the
+  API.
+- New: the node schedule helpers they run on: `readNodeSchedule`, `writeNodeSchedule`, `resolveDay`,
+  `nowAndNext`, `wallAt`, `nameColour`, `SCHEDULE_COLOURS`, `scheduleColourClass`, `nameIndex`,
+  `valueOf`, `OFF`, `MAX_NAMES`, `toSaveError` with `ChangedElsewhere`, `BackendNeedsUpgrade` and
+  `Unreadable`, and lb's schedule record types (`ScheduleRecord`, `ScheduleDocument`, `WeeklyEntry`,
+  `DatedEntry`, `DateWindow`, `DatedKind`) as plain types.
+- A block that runs all day reads "00:00–24:00".
+- The stylesheet also reads `src/lib/schedule`, for the name and schedule colour classes; the CSS guard
+  checks they are there.
+
 ## v0.4.1
 
 - **Combobox** reads correctly to a screen reader: the trigger points at its list, the search box (or

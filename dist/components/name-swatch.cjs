@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const o=require("react/jsx-runtime"),t=require("../lib/cn.cjs"),a=require("../lib/schedule/nameColour.cjs");function s({index:r,className:n}){const e=a.nameColour(r);return o.jsx("span",{"aria-hidden":!0,className:t.cn("size-2.5 flex-none rounded-xs border",e.bg,e.border,n)})}exports.NameSwatch=s;

@@ -17,7 +17,8 @@ src/
   index.ts              the one entry: everything public is exported here
   index.test.ts         lists every export; a new one must be added
   components/<name>.tsx one component per file (a big one splits into <name>-<part>.tsx)
-  lib/                  cn, the provider, overlay container, motion, clipboard, date and time helpers
+  lib/                  cn, the provider, overlay container, motion, clipboard, date and time helpers,
+                        and the node schedule helpers (lib/schedule)
   styles/scoped.css     the extension stylesheet's source
 scripts/assert-scoped-css.mjs   the CSS guard
 dist/                   the build, COMMITTED
