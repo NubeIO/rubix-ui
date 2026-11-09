@@ -349,7 +349,8 @@ chip per schedule, the body you put in, a legend and "Closures & holidays this w
 | `start` | the period's first day: the week's Monday, or the month's 1st. Heads "2 Nov – 8 Nov 2026" or "Nov 2026" |
 | `onPrev`, `onNext`, `onToday`, `atToday` | as above |
 | `schedules`, `hidden`, `onToggle(id)` | the schedules the search matches, a chip each; a hidden id draws its chip off. Past 12 the chips give way to a count |
-| `search`, `onSearch(q)` | the search box's text; the app matches it and passes the matches as `schedules` |
+| `search`, `onSearch(q)` | the search box's text; the app matches it and passes the matches as `schedules`. `CHIP_LIMIT` (12) is exported so the app can apply `hidden` only while chips show |
+| `noun?` | `{ one, many }` for the search and the count; default `schedule` / `schedules` |
 | `legend` | `ScheduleLegendItem[]`: `{ nameIndex: 1, label: "1st name", detail: "Occupied · Trading" }` |
 | `entries` | `ScheduleListEntry[]`: one row each, date \| label and hours \| schedules \| kind chip |
 | `today` | today in the viewer's zone |

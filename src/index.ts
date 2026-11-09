@@ -133,6 +133,7 @@ export { ScheduleWeekRows, type ScheduleWeekRowsProps } from "./components/sched
 export { ScheduleMonthGrid, type ScheduleMonthGridProps } from "./components/schedule-month-grid";
 export {
   AllSchedulesView,
+  CHIP_LIMIT,
   type AllSchedulesViewProps,
   type AllSchedulesViewMode,
 } from "./components/all-schedules-view";

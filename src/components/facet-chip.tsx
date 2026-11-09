@@ -31,7 +31,7 @@ export function FacetChip({ label, values, selected, onChange, render = (v) => v
     // The × is a sibling of the trigger (a button inside a button is invalid); this div carries the
     // chip's one-control look so the two buttons read as one chip.
     <div
-      className={`inline-flex h-8 items-center gap-0.5 rounded-md border pr-1 text-xs text-fg transition-colors ${active ? "border-solid border-accent/45 bg-accent/10 has-[[data-facet]:hover]:bg-accent/15" : "border-dashed border-border bg-bg has-[[data-facet]:hover]:bg-panel"}`}
+      className={`inline-flex h-8 min-w-0 max-w-full items-center gap-0.5 rounded-md border pr-1 text-xs text-fg transition-colors ${active ? "border-solid border-accent/45 bg-accent/10 has-[[data-facet]:hover]:bg-accent/15" : "border-dashed border-border bg-bg has-[[data-facet]:hover]:bg-panel"}`}
     >
       <Popover>
         <PopoverTrigger asChild>
@@ -39,20 +39,21 @@ export function FacetChip({ label, values, selected, onChange, render = (v) => v
             ref={triggerRef}
             type="button"
             variant="ghost"
-            className="h-full gap-1.5 rounded-md px-2.5 text-xs hover:bg-transparent"
-            aria-label={`filter by ${label.toLowerCase()}`}
+            className="h-full min-w-0 gap-1.5 rounded-md px-2.5 text-xs hover:bg-transparent"
+            aria-label={`filter by ${label.toLowerCase()}${active ? `: ${selected.map(render).join(", ")}` : ""}`}
             data-facet={label}
           >
             {active ? null : <CirclePlus size={14} className="shrink-0 opacity-70" />}
             {label}
-            {active ? <span className="max-w-[200px] truncate text-muted">· {selected.map(render).join(", ")}</span> : null}
+            {active ? <span className="min-w-0 max-w-[200px] truncate text-muted">· {selected.map(render).join(", ")}</span> : null}
           </Button>
         </PopoverTrigger>
         <PopoverContent align="start" className="w-56 p-1.5">
+          <p className="px-2 pb-1 pt-0.5 text-micro font-semibold uppercase tracking-wide text-muted">{label}</p>
           {values.length === 0 ? (
             <p className="px-2 py-1.5 text-xs text-muted">Nothing to filter on</p>
           ) : (
-            <ul role="listbox" aria-label={`${label} values`} aria-multiselectable className="flex flex-col">
+            <ul aria-label={`${label} values`} className="flex flex-col">
               {values.map((v) => (
                 <li key={v}>
                   <label className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-xs hover:bg-fg/[0.05]">

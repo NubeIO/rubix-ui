@@ -43,7 +43,7 @@ export declare const alertVariants: (props?: ({
     variant?: "default" | "destructive" | "info" | "success" | "warning" | null | undefined;
 } & ClassProp) | undefined) => string;
 
-export declare function AllSchedulesView({ view, onViewChange, start, schedules, search, onSearch, hidden, onToggle, legend, entries, today, children, ...nav }: AllSchedulesViewProps): JSX_2.Element;
+export declare function AllSchedulesView({ view, onViewChange, start, schedules, search, onSearch, noun, hidden, onToggle, legend, entries, today, children, ...nav }: AllSchedulesViewProps): JSX_2.Element;
 
 export declare type AllSchedulesViewMode = "week" | "month";
 
@@ -62,6 +62,11 @@ export declare interface AllSchedulesViewProps {
     /** The search over schedules; the app matches it and passes the matches as `schedules`. */
     search: string;
     onSearch: (q: string) => void;
+    /** What the app calls a schedule, for the search and the count ("group", "groups"). */
+    noun?: {
+        one: string;
+        many: string;
+    };
     /** Ids of the schedules switched off by their chip. */
     hidden: string[];
     onToggle: (id: string) => void;
@@ -129,6 +134,9 @@ export declare function CardHeader({ className, ...props }: React_2.ComponentPro
 export declare function CardTitle({ className, ...props }: React_2.ComponentProps<"div">): React_2.JSX.Element;
 
 export declare function Checkbox({ className, ...props }: React_2.ComponentProps<"input">): React_2.JSX.Element;
+
+/** More matching schedules than this and the chips give way to a count: search to narrow. */
+export declare const CHIP_LIMIT = 12;
 
 declare interface Clipboard_2 {
     /** True for ~`resetMs` after a successful copy (drives the "Copied" affordance). */

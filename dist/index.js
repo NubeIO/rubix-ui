@@ -5,13 +5,13 @@ import { useOverlayContainer as i } from "./lib/overlay.js";
 import { Alert as m, AlertDescription as u, AlertTitle as x, alertVariants as d } from "./components/alert.js";
 import { DatePicker as f } from "./components/date-picker.js";
 import { EmptyState as C } from "./components/empty-state.js";
-import { DEFAULT_PAGE_SIZE as g, PAGE_SIZES as D, Pager as T } from "./components/pager.js";
+import { DEFAULT_PAGE_SIZE as T, PAGE_SIZES as g, Pager as D } from "./components/pager.js";
 import { Radio as s } from "./components/radio.js";
 import { TimeField as w } from "./components/time-field.js";
-import { DAY_MINS as A, hhmm as B, parseTime as I } from "./lib/time.js";
-import { formatDay as E, localToday as L } from "./lib/date.js";
+import { DAY_MINS as I, hhmm as A, parseTime as B } from "./lib/time.js";
+import { formatDay as L, localToday as E } from "./lib/date.js";
 import { Badge as v, badgeVariants as y } from "./components/badge.js";
-import { Button as F, buttonVariants as H } from "./components/button.js";
+import { Button as H, buttonVariants as F } from "./components/button.js";
 import { Card as O, CardContent as U, CardDescription as V, CardFooter as W, CardHeader as N, CardTitle as Z } from "./components/card.js";
 import { Checkbox as j } from "./components/checkbox.js";
 import { Input as z } from "./components/input.js";
@@ -23,15 +23,15 @@ import { Switch as ar } from "./components/switch.js";
 import { Table as pr, TableBody as ir, TableCell as lr, TableHead as mr, TableHeader as ur, TableRow as xr } from "./components/table.js";
 import { Textarea as br } from "./components/textarea.js";
 import { Collapsible as cr, CollapsibleContent as Cr, CollapsibleTrigger as Sr } from "./components/collapsible.js";
-import { Combobox as Dr } from "./components/combobox.js";
-import { Dialog as Mr, DialogClose as sr, DialogContent as hr, DialogDescription as wr, DialogFooter as Pr, DialogHeader as Ar, DialogOverlay as Br, DialogPortal as Ir, DialogSurfaceContext as kr, DialogTitle as Er, DialogTrigger as Lr, useDialogSurface as Rr } from "./components/dialog.js";
-import { DropdownMenu as yr, DropdownMenuCheckboxItem as Gr, DropdownMenuContent as Fr, DropdownMenuGroup as Hr, DropdownMenuItem as _r, DropdownMenuLabel as Or, DropdownMenuPortal as Ur, DropdownMenuRadioGroup as Vr, DropdownMenuRadioItem as Wr, DropdownMenuSeparator as Nr, DropdownMenuShortcut as Zr, DropdownMenuSub as Yr, DropdownMenuSubContent as jr, DropdownMenuSubTrigger as qr, DropdownMenuTrigger as zr } from "./components/dropdown-menu.js";
+import { Combobox as gr } from "./components/combobox.js";
+import { Dialog as Mr, DialogClose as sr, DialogContent as hr, DialogDescription as wr, DialogFooter as Pr, DialogHeader as Ir, DialogOverlay as Ar, DialogPortal as Br, DialogSurfaceContext as kr, DialogTitle as Lr, DialogTrigger as Er, useDialogSurface as Rr } from "./components/dialog.js";
+import { DropdownMenu as yr, DropdownMenuCheckboxItem as Gr, DropdownMenuContent as Hr, DropdownMenuGroup as Fr, DropdownMenuItem as _r, DropdownMenuLabel as Or, DropdownMenuPortal as Ur, DropdownMenuRadioGroup as Vr, DropdownMenuRadioItem as Wr, DropdownMenuSeparator as Nr, DropdownMenuShortcut as Zr, DropdownMenuSub as Yr, DropdownMenuSubContent as jr, DropdownMenuSubTrigger as qr, DropdownMenuTrigger as zr } from "./components/dropdown-menu.js";
 import { Menubar as Kr, MenubarCheckboxItem as Qr, MenubarContent as Xr, MenubarGroup as $r, MenubarItem as ro, MenubarLabel as oo, MenubarMenu as eo, MenubarPortal as to, MenubarRadioGroup as ao, MenubarRadioItem as no, MenubarSeparator as po, MenubarShortcut as io, MenubarSub as lo, MenubarSubContent as mo, MenubarSubTrigger as uo, MenubarTrigger as xo } from "./components/menubar.js";
 import { Popover as fo, PopoverAnchor as co, PopoverContent as Co, PopoverTrigger as So } from "./components/popover.js";
-import { ScrollArea as Do, ScrollBar as To } from "./components/scroll-area.js";
-import { Sheet as so, SheetContent as ho, SheetDescription as wo, SheetHeader as Po, SheetTitle as Ao } from "./components/sheet.js";
-import { Tooltip as Io, TooltipContent as ko, TooltipProvider as Eo, TooltipTrigger as Lo } from "./components/tooltip.js";
-import { Accordion as vo, AccordionContent as yo, AccordionItem as Go, AccordionTrigger as Fo } from "./components/accordion.js";
+import { ScrollArea as go, ScrollBar as Do } from "./components/scroll-area.js";
+import { Sheet as so, SheetContent as ho, SheetDescription as wo, SheetHeader as Po, SheetTitle as Io } from "./components/sheet.js";
+import { Tooltip as Bo, TooltipContent as ko, TooltipProvider as Lo, TooltipTrigger as Eo } from "./components/tooltip.js";
+import { Accordion as vo, AccordionContent as yo, AccordionItem as Go, AccordionTrigger as Ho } from "./components/accordion.js";
 import { Breadcrumb as _o, BreadcrumbEllipsis as Oo, BreadcrumbItem as Uo, BreadcrumbLink as Vo, BreadcrumbList as Wo, BreadcrumbPage as No, BreadcrumbSeparator as Zo } from "./components/breadcrumb.js";
 import { ColorSwatchPicker as jo } from "./components/color-swatch.js";
 import { CopyButton as zo } from "./components/copy-button.js";
@@ -42,18 +42,18 @@ import { SCHEDULE_COLOURS as ne, scheduleColourClass as pe } from "./lib/colour/
 import { ScheduleWeekCalendar as le } from "./components/schedule-week-calendar.js";
 import { ScheduleWeekRows as ue } from "./components/schedule-week-rows.js";
 import { ScheduleMonthGrid as de } from "./components/schedule-month-grid.js";
-import { AllSchedulesView as fe } from "./components/all-schedules-view.js";
-import { WeekStrip as Ce } from "./components/week-strip.js";
+import { AllSchedulesView as fe, CHIP_LIMIT as ce } from "./components/all-schedules-view.js";
+import { WeekStrip as Se } from "./components/week-strip.js";
 import { NameSwatch as ge } from "./components/name-swatch.js";
-import { FilterTiles as Te } from "./components/filter-tiles.js";
-import { FacetChip as se } from "./components/facet-chip.js";
-import { canWriteText as we, writeText as Pe } from "./lib/clipboard/writeText.js";
+import { FilterTiles as Me } from "./components/filter-tiles.js";
+import { FacetChip as he } from "./components/facet-chip.js";
+import { canWriteText as Pe, writeText as Ie } from "./lib/clipboard/writeText.js";
 import { useClipboard as Be } from "./lib/clipboard/useClipboard.js";
 export {
   vo as Accordion,
   yo as AccordionContent,
   Go as AccordionItem,
-  Fo as AccordionTrigger,
+  Ho as AccordionTrigger,
   m as Alert,
   u as AlertDescription,
   x as AlertTitle,
@@ -66,7 +66,8 @@ export {
   Wo as BreadcrumbList,
   No as BreadcrumbPage,
   Zo as BreadcrumbSeparator,
-  F as Button,
+  H as Button,
+  ce as CHIP_LIMIT,
   O as Card,
   U as CardContent,
   V as CardDescription,
@@ -78,26 +79,26 @@ export {
   Cr as CollapsibleContent,
   Sr as CollapsibleTrigger,
   jo as ColorSwatchPicker,
-  Dr as Combobox,
+  gr as Combobox,
   zo as CopyButton,
-  A as DAY_MINS,
-  g as DEFAULT_PAGE_SIZE,
+  I as DAY_MINS,
+  T as DEFAULT_PAGE_SIZE,
   f as DatePicker,
   Mr as Dialog,
   sr as DialogClose,
   hr as DialogContent,
   wr as DialogDescription,
   Pr as DialogFooter,
-  Ar as DialogHeader,
-  Br as DialogOverlay,
-  Ir as DialogPortal,
+  Ir as DialogHeader,
+  Ar as DialogOverlay,
+  Br as DialogPortal,
   kr as DialogSurfaceContext,
-  Er as DialogTitle,
-  Lr as DialogTrigger,
+  Lr as DialogTitle,
+  Er as DialogTrigger,
   yr as DropdownMenu,
   Gr as DropdownMenuCheckboxItem,
-  Fr as DropdownMenuContent,
-  Hr as DropdownMenuGroup,
+  Hr as DropdownMenuContent,
+  Fr as DropdownMenuGroup,
   _r as DropdownMenuItem,
   Or as DropdownMenuLabel,
   Ur as DropdownMenuPortal,
@@ -110,8 +111,8 @@ export {
   qr as DropdownMenuSubTrigger,
   zr as DropdownMenuTrigger,
   C as EmptyState,
-  se as FacetChip,
-  Te as FilterTiles,
+  he as FacetChip,
+  Me as FilterTiles,
   z as Input,
   K as Label,
   Kr as Menubar,
@@ -131,8 +132,8 @@ export {
   uo as MenubarSubTrigger,
   xo as MenubarTrigger,
   ge as NameSwatch,
-  D as PAGE_SIZES,
-  T as Pager,
+  g as PAGE_SIZES,
+  D as Pager,
   fo as Popover,
   co as PopoverAnchor,
   Co as PopoverContent,
@@ -143,15 +144,15 @@ export {
   de as ScheduleMonthGrid,
   le as ScheduleWeekCalendar,
   ue as ScheduleWeekRows,
-  Do as ScrollArea,
-  To as ScrollBar,
+  go as ScrollArea,
+  Do as ScrollBar,
   Ko as Select,
   X as Separator,
   so as Sheet,
   ho as SheetContent,
   wo as SheetDescription,
   Po as SheetHeader,
-  Ao as SheetTitle,
+  Io as SheetTitle,
   rr as Skeleton,
   er as Spinner,
   ar as Switch,
@@ -167,24 +168,24 @@ export {
   oe as TabsTrigger,
   br as Textarea,
   w as TimeField,
-  Io as Tooltip,
+  Bo as Tooltip,
   ko as TooltipContent,
-  Eo as TooltipProvider,
-  Lo as TooltipTrigger,
-  Ce as WeekStrip,
+  Lo as TooltipProvider,
+  Eo as TooltipTrigger,
+  Se as WeekStrip,
   d as alertVariants,
   y as badgeVariants,
-  H as buttonVariants,
-  we as canWriteText,
+  F as buttonVariants,
+  Pe as canWriteText,
   t as cn,
-  E as formatDay,
-  B as hhmm,
-  L as localToday,
+  L as formatDay,
+  A as hhmm,
+  E as localToday,
   te as nameColour,
-  I as parseTime,
+  B as parseTime,
   pe as scheduleColourClass,
   Be as useClipboard,
   Rr as useDialogSurface,
   i as useOverlayContainer,
-  Pe as writeText
+  Ie as writeText
 };

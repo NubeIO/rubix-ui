@@ -1,4 +1,4 @@
-// The "Dated entries this week / in <month>" list under the all-schedules calendar: one row per entry,
+// The "Closures & holidays this week / in <month>" list (lb's dated entries) under the all-schedules calendar: one row per entry,
 // date | label and hours | the schedules that have it | kind chip, so a holiday several schedules share
 // lists once.
 //
@@ -34,7 +34,7 @@ export function ScheduleDatedList({
         {entries.map((e) => (
           <li
             key={`${e.kind}|${e.label}`}
-            className="grid grid-cols-[minmax(0,8rem)_minmax(0,1fr)_minmax(0,1.2fr)_auto] items-center gap-3 px-3.5 py-2.5"
+            className="grid grid-cols-[minmax(0,8rem)_minmax(0,1fr)_minmax(0,1.2fr)_8.5rem] items-center gap-3 px-3.5 py-2.5"
           >
             <span className="text-xs font-semibold text-ink-strong">{dateText(e.date, today)}</span>
             <span className="truncate text-xs text-ink">

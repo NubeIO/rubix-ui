@@ -140,6 +140,7 @@ describe("@nube/rubix-ui entry", () => {
       "ScheduleWeekRows",
       "ScheduleMonthGrid",
       "AllSchedulesView",
+      "CHIP_LIMIT",
       "WeekStrip",
       "FilterTiles",
       "FacetChip",

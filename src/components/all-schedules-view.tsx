@@ -1,7 +1,8 @@
 // The all-schedules calendar's frame (Rubix Node Schedule Calendar): Week / Month, previous / next /
 // Today, a search over the schedules, a chip per matching schedule that hides or shows it (only while
-// few match: past `CHIP_LIMIT` a site with hundreds of schedules gets a count instead), the body the app puts in (`ScheduleWeekRows` or
-// `ScheduleMonthGrid`), a legend of name positions and "Dated entries this week / in Nov".
+// few match: past `CHIP_LIMIT` a site with hundreds of schedules gets a count instead), the body the
+// app puts in (`ScheduleWeekRows` or `ScheduleMonthGrid`), a legend of name positions and "Closures &
+// holidays this week / in Nov" (lb's dated entries: closures, holidays, changed and extra hours).
 //
 // Plain data in, events out: the app owns the view, the period and which schedules are hidden, and
 // resolves what the body and the list show.
@@ -43,6 +44,8 @@ export interface AllSchedulesViewProps {
   /** The search over schedules; the app matches it and passes the matches as `schedules`. */
   search: string;
   onSearch: (q: string) => void;
+  /** What the app calls a schedule, for the search and the count ("group", "groups"). */
+  noun?: { one: string; many: string };
   /** Ids of the schedules switched off by their chip. */
   hidden: string[];
   onToggle: (id: string) => void;
@@ -63,6 +66,7 @@ export function AllSchedulesView({
   schedules,
   search,
   onSearch,
+  noun = { one: "schedule", many: "schedules" },
   hidden,
   onToggle,
   legend,
@@ -91,9 +95,9 @@ export function AllSchedulesView({
             className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-muted"
           />
           <Input
-            aria-label="Search schedules"
+            aria-label={`Search ${noun.many}`}
             className="h-8 w-56 pl-8 text-xs"
-            placeholder="Search schedules…"
+            placeholder={`Search ${noun.many}…`}
             value={search}
             onChange={(e) => onSearch(e.target.value)}
           />
@@ -101,11 +105,15 @@ export function AllSchedulesView({
       </div>
       {schedules.length > CHIP_LIMIT ? (
         <p className="text-caption text-ink-muted">
-          Showing all {schedules.length} {search.trim() ? "matching schedules" : "schedules"}. Search to pick
-          fewer.
+          Showing all {schedules.length.toLocaleString()} {search.trim() ? `matching ${noun.many}` : noun.many}. Search
+          to pick fewer.
         </p>
       ) : schedules.length === 0 ? (
-        <p className="text-caption text-ink-muted">No schedule matches “{search.trim()}”.</p>
+        search.trim() && (
+          <p className="text-caption text-ink-muted">
+            No {noun.one} matches “{search.trim()}”.
+          </p>
+        )
       ) : (
         <div className="flex flex-wrap gap-1.5">
           {schedules.map((s) => {

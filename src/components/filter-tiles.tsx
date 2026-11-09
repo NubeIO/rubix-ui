@@ -4,6 +4,8 @@
 //
 // Plain data in: the app counts and filters.
 //
+// It follows rubix-ai's Insights `SummaryTile` (same design); keep the two alike.
+//
 // One responsibility: draw the tiles and report a pick.
 
 import type { ReactNode } from "react";
@@ -43,6 +45,8 @@ export function FilterTiles({ tiles, active, onPick, label }: FilterTilesProps) 
       {tiles.map((t) => {
         const on = t.key === active;
         const tone = `hsl(var(--${t.tone}))`;
+        // A grey tone would make "Filter →" read as disabled: the link takes the accent instead.
+        const link = t.tone.startsWith("ink") ? "hsl(var(--accent))" : tone;
         return (
           <button
             key={t.key}
@@ -56,7 +60,8 @@ export function FilterTiles({ tiles, active, onPick, label }: FilterTilesProps) 
               boxShadow: on ? "0 0 0 1px hsl(var(--accent) / .4), var(--elev-panel)" : "var(--elev-panel)",
             }}
             className={cn(
-              "flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-panel border bg-surface-card p-0 text-left text-inherit",
+              // Focus as an outline: the shadow is inline (above), so a ring utility would be overridden.
+              "flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-panel border bg-surface-card p-0 text-left text-inherit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
               on ? "border-accent/60" : "border-line",
             )}
           >
@@ -68,16 +73,18 @@ export function FilterTiles({ tiles, active, onPick, label }: FilterTilesProps) 
             </span>
             <span
               className={cn(
-                "flex flex-1 items-center justify-center text-value-lg tabular-nums",
+                "flex flex-1 items-center justify-center text-value-lg leading-none font-semibold tabular-nums",
                 t.alarm && t.count > 0 ? "text-destructive" : "text-ink-strong",
               )}
             >
               {t.count.toLocaleString()}
             </span>
             <span className="flex h-7 flex-none items-center gap-2 border-t border-line px-2.5 text-caption">
-              <span className="min-w-0 flex-1 truncate text-ink-muted">{t.note}</span>
+              <span className="min-w-0 flex-1 truncate text-ink-muted" title={t.note}>
+                {t.note}
+              </span>
               {t.key !== all && (
-                <span className="flex-none whitespace-nowrap" style={{ color: tone }}>
+                <span aria-hidden className="flex-none whitespace-nowrap" style={{ color: link }}>
                   Filter →
                 </span>
               )}
