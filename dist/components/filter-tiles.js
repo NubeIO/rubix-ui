@@ -8,7 +8,7 @@ function b({ tiles: a, active: c, onPick: d, label: x, height: p = 120 }) {
     {
       role: "group",
       "aria-label": x,
-      className: "grid flex-none auto-cols-[minmax(148px,1fr)] grid-flow-col gap-[var(--grid-gutter,10px)] overflow-x-auto border-b border-line bg-surface-card px-4 py-3",
+      className: "grid flex-none auto-cols-[minmax(148px,1fr)] grid-flow-col gap-[var(--grid-gutter,10px)] overflow-x-auto [scrollbar-width:none] border-b border-line bg-surface-card px-4 py-3",
       children: a.map((e) => {
         const r = e.key === c, s = `hsl(var(--${e.tone}))`, u = e.tone.startsWith("ink") ? "hsl(var(--accent))" : s;
         return /* @__PURE__ */ t(

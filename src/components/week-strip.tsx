@@ -21,7 +21,7 @@ export function WeekStrip({ week, className }: { week: WeekStripSegment[][]; cla
   return (
     <span aria-hidden className={cn("grid w-full gap-0.5", className)}>
       {week.map((segs, d) => (
-        <span key={d} className="relative block h-[3px] overflow-hidden rounded-xs bg-surface-inset">
+        <span key={d} className="relative block h-[3px] overflow-hidden rounded-xs bg-line">
           {segs.map((s) => (
             <span
               key={s.start}
