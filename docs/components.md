@@ -348,7 +348,8 @@ chip per schedule, the body you put in, a legend and "Dated entries this week / 
 | `view`, `onViewChange(view)` | `"week" \| "month"` |
 | `start` | the period's first day: the week's Monday, or the month's 1st. Heads "2 Nov – 8 Nov 2026" or "Nov 2026" |
 | `onPrev`, `onNext`, `onToday`, `atToday` | as above |
-| `schedules`, `hidden`, `onToggle(id)` | every schedule's chip; a hidden id draws its chip off |
+| `schedules`, `hidden`, `onToggle(id)` | the schedules the search matches, a chip each; a hidden id draws its chip off. Past 12 the chips give way to a count |
+| `search`, `onSearch(q)` | the search box's text; the app matches it and passes the matches as `schedules` |
 | `legend` | `ScheduleLegendItem[]`: `{ nameIndex: 1, label: "1st name", detail: "Occupied · Trading" }` |
 | `entries` | `ScheduleListEntry[]`: one row each, date \| label and hours \| schedules \| kind chip |
 | `today` | today in the viewer's zone |
@@ -359,18 +360,36 @@ first), `rows` (`ScheduleWeekRow[]`, the shown schedules only), `today`, `onOpen
 button).
 
 `ScheduleMonthGrid`: the month's dated entries on their days, up to three chips a day with a dot per
-schedule. Props: `days` (`ScheduleMonthDay[]`, whole weeks, Monday first), `month` (`YYYY-MM`; other days
-dimmed), `today`.
+schedule (three at most; the count follows the label). Props: `days` (`ScheduleMonthDay[]`, whole weeks,
+Monday first), `month` (`YYYY-MM`; other days dimmed), `today`. The dated list shows three schedule names
+an entry, then "+N more".
 
 ```tsx
 <AllSchedulesView
   view="week" onViewChange={setView} start="2026-11-02"
   onPrev={prev} onNext={next} onToday={home} atToday={offset === 0}
-  schedules={all} hidden={hidden} onToggle={toggle}
+  schedules={matches} search={q} onSearch={setQ} hidden={hidden} onToggle={toggle}
   legend={legend} entries={entries} today="2026-11-06"
 >
   <ScheduleWeekRows dates={dates} rows={rows} today="2026-11-06" onOpen={openSchedule} />
 </AllSchedulesView>
+```
+
+### FilterTiles, FacetChip
+
+`FilterTiles` is a row of count tiles that filter a list (the UART Units page's): an icon and title, the
+count, and a footer with a note and "Filter →" in the tile's tone. The first tile is the whole list;
+picking a tile filters, picking it again goes back to the first. Props: `tiles` (`FilterTile[]`: `key`,
+`label`, `count`, `tone` (a colour token without `--`), `icon`, `note`, `alarm?` for a red non-zero
+count), `active`, `onPick(key)`, `label` (the row's accessible name).
+
+`FacetChip` is the Insights toolbar's dashed filter chip: "+ Label" at rest, a checklist of values with
+optional counts, the picks on the chip and a × that clears. Props: `label`, `values`, `selected`,
+`onChange(next)`, `render?(value)`, `counts?`.
+
+```tsx
+<FilterTiles label="Schedule summary" tiles={tiles} active={tile} onPick={setTile} />
+<FacetChip label="Time zone" values={zones} counts={zoneCounts} selected={picked} onChange={setPicked} />
 ```
 
 ### WeekStrip, NameSwatch, colours

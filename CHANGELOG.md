@@ -4,6 +4,12 @@ Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/ru
 
 ## v0.6.0
 
+- New: **FilterTiles** (count tiles that filter a list, the UART Units page's) and **FacetChip** (the
+  Insights toolbar's dashed filter chip), for the Schedules and Schedule Groups lists.
+- **AllSchedulesView** takes `search` / `onSearch`: a search box in its toolbar; past 12 matching
+  schedules the chips give way to a count, so hundreds of schedules keep the calendar on screen.
+- The month grid draws at most three dots on an entry and the dated list three schedule names, then
+  "+N more".
 - **Breaking:** the package keeps visual building blocks only. **NodeScheduleEditor**, the data-reading
   **AllSchedulesCalendar** and all schedule logic moved out: `readNodeSchedule`, `writeNodeSchedule`,
   `resolveDay`, `nowAndNext`, `wallAt`, `nameIndex`, `valueOf`, `OFF`, `MAX_NAMES`, `toSaveError`,

@@ -43,7 +43,7 @@ export declare const alertVariants: (props?: ({
     variant?: "default" | "destructive" | "info" | "success" | "warning" | null | undefined;
 } & ClassProp) | undefined) => string;
 
-export declare function AllSchedulesView({ view, onViewChange, start, schedules, hidden, onToggle, legend, entries, today, children, ...nav }: AllSchedulesViewProps): JSX_2.Element;
+export declare function AllSchedulesView({ view, onViewChange, start, schedules, search, onSearch, hidden, onToggle, legend, entries, today, children, ...nav }: AllSchedulesViewProps): JSX_2.Element;
 
 export declare type AllSchedulesViewMode = "week" | "month";
 
@@ -57,8 +57,11 @@ export declare interface AllSchedulesViewProps {
     onToday: () => void;
     /** The period holds today: Today is off. */
     atToday: boolean;
-    /** Every schedule, for the chips. */
+    /** The schedules the search matches (every schedule while it is empty), for the chips. */
     schedules: ScheduleRef[];
+    /** The search over schedules; the app matches it and passes the matches as `schedules`. */
+    search: string;
+    onSearch: (q: string) => void;
     /** Ids of the schedules switched off by their chip. */
     hidden: string[];
     onToggle: (id: string) => void;
@@ -307,6 +310,43 @@ declare interface EmptyStateProps {
     /** The teaching action, usually ONE `<Button>`. Omit when the caller may not create anything. */
     action?: ReactNode;
     className?: string;
+}
+
+export declare function FacetChip({ label, values, selected, onChange, render, counts }: FacetChipProps): JSX_2.Element;
+
+export declare interface FacetChipProps {
+    label: string;
+    values: string[];
+    selected: string[];
+    onChange: (next: string[]) => void;
+    /** How a raw value reads ("holiday" → "Holiday"). */
+    render?: (v: string) => string;
+    /** A count beside each value. */
+    counts?: Record<string, number>;
+}
+
+export declare interface FilterTile {
+    key: string;
+    label: string;
+    count: number;
+    /** A colour token without `--` ("accent", "success", "destructive", "ink-muted", "chart-8"). */
+    tone: string;
+    icon: ReactNode;
+    /** The footer's note ("69% of units", "Comms, stale data or a fault"). */
+    note: string;
+    /** A non-zero count reads in the alarm colour (Issues, Needs attention). */
+    alarm?: boolean;
+}
+
+export declare function FilterTiles({ tiles, active, onPick, label }: FilterTilesProps): JSX_2.Element;
+
+export declare interface FilterTilesProps {
+    /** The first is the whole list: it has no "Filter →" and picking any pressed tile returns to it. */
+    tiles: FilterTile[];
+    active: string;
+    onPick: (key: string) => void;
+    /** The row's accessible name ("Schedule summary"). */
+    label: string;
 }
 
 /** "31 Oct 2026": the default way a picked day is shown. */

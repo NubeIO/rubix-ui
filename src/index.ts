@@ -138,3 +138,5 @@ export {
 } from "./components/all-schedules-view";
 export { WeekStrip, type WeekStripSegment } from "./components/week-strip";
 export { NameSwatch } from "./components/name-swatch";
+export { FilterTiles, type FilterTile, type FilterTilesProps } from "./components/filter-tiles";
+export { FacetChip, type FacetChipProps } from "./components/facet-chip";
