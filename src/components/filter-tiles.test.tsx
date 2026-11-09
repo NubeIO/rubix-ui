@@ -21,4 +21,11 @@ describe("FilterTiles", () => {
     fireEvent.click(screen.getByRole("button", { name: /Needs attention/ }));
     expect(onPick).toHaveBeenLastCalledWith("all");
   });
+
+  it("is 120px tall unless told otherwise", () => {
+    const { rerender } = render(<FilterTiles label="Summary" tiles={tiles} active="all" onPick={() => {}} />);
+    expect(screen.getByRole("button", { name: /^Total/ }).style.height).toBe("120px");
+    rerender(<FilterTiles label="Summary" tiles={tiles} active="all" onPick={() => {}} height={96} />);
+    expect(screen.getByRole("button", { name: /^Total/ }).style.height).toBe("96px");
+  });
 });

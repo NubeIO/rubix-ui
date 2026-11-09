@@ -346,7 +346,7 @@ export declare interface FilterTile {
     alarm?: boolean;
 }
 
-export declare function FilterTiles({ tiles, active, onPick, label }: FilterTilesProps): JSX_2.Element;
+export declare function FilterTiles({ tiles, active, onPick, label, height }: FilterTilesProps): JSX_2.Element;
 
 export declare interface FilterTilesProps {
     /** The first is the whole list: it has no "Filter →" and picking any pressed tile returns to it. */
@@ -355,6 +355,8 @@ export declare interface FilterTilesProps {
     onPick: (key: string) => void;
     /** The row's accessible name ("Schedule summary"). */
     label: string;
+    /** Tile height in px: 120 by default, 96 for the design's phone row (under 720px wide). */
+    height?: number;
 }
 
 /** "31 Oct 2026": the default way a picked day is shown. */

@@ -1,6 +1,6 @@
 import { jsx as n, jsxs as t } from "react/jsx-runtime";
 import { cn as i } from "../lib/cn.js";
-function m({ tiles: a, active: c, onPick: d, label: x }) {
+function b({ tiles: a, active: c, onPick: d, label: x, height: p = 120 }) {
   var o;
   const l = (o = a[0]) == null ? void 0 : o.key;
   return /* @__PURE__ */ n(
@@ -10,7 +10,7 @@ function m({ tiles: a, active: c, onPick: d, label: x }) {
       "aria-label": x,
       className: "grid flex-none auto-cols-[minmax(148px,1fr)] grid-flow-col gap-[var(--grid-gutter,10px)] overflow-x-auto border-b border-line bg-surface-card px-4 py-3",
       children: a.map((e) => {
-        const r = e.key === c, s = `hsl(var(--${e.tone}))`, p = e.tone.startsWith("ink") ? "hsl(var(--accent))" : s;
+        const r = e.key === c, s = `hsl(var(--${e.tone}))`, u = e.tone.startsWith("ink") ? "hsl(var(--accent))" : s;
         return /* @__PURE__ */ t(
           "button",
           {
@@ -18,7 +18,7 @@ function m({ tiles: a, active: c, onPick: d, label: x }) {
             "aria-pressed": r,
             onClick: () => d(r || e.key === l ? l : e.key),
             style: {
-              height: 120,
+              height: p,
               boxShadow: r ? "0 0 0 1px hsl(var(--accent) / .4), var(--elev-panel)" : "var(--elev-panel)"
             },
             className: i(
@@ -43,7 +43,7 @@ function m({ tiles: a, active: c, onPick: d, label: x }) {
               ),
               /* @__PURE__ */ t("span", { className: "flex h-7 flex-none items-center gap-2 border-t border-line px-2.5 text-caption", children: [
                 /* @__PURE__ */ n("span", { className: "min-w-0 flex-1 truncate text-ink-muted", title: e.note, children: e.note }),
-                e.key !== l && /* @__PURE__ */ n("span", { "aria-hidden": !0, className: "flex-none whitespace-nowrap", style: { color: p }, children: "Filter →" })
+                e.key !== l && /* @__PURE__ */ n("span", { "aria-hidden": !0, className: "flex-none whitespace-nowrap", style: { color: u }, children: "Filter →" })
               ] })
             ]
           },
@@ -54,5 +54,5 @@ function m({ tiles: a, active: c, onPick: d, label: x }) {
   );
 }
 export {
-  m as FilterTiles
+  b as FilterTiles
 };

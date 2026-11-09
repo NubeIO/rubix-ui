@@ -382,7 +382,8 @@ an entry, then "+N more".
 count, and a footer with a note and "Filter →" in the tile's tone. The first tile is the whole list;
 picking a tile filters, picking it again goes back to the first. Props: `tiles` (`FilterTile[]`: `key`,
 `label`, `count`, `tone` (a colour token without `--`), `icon`, `note`, `alarm?` for a red non-zero
-count), `active`, `onPick(key)`, `label` (the row's accessible name).
+count), `active`, `onPick(key)`, `label` (the row's accessible name), `height?` (px, default 120; 96 for the
+design's phone row).
 
 `FacetChip` is the Insights toolbar's dashed filter chip: "+ Label" at rest, a checklist of values with
 optional counts, the picks on the chip and a × that clears. Props: `label`, `values`, `selected`,

@@ -32,9 +32,11 @@ export interface FilterTilesProps {
   onPick: (key: string) => void;
   /** The row's accessible name ("Schedule summary"). */
   label: string;
+  /** Tile height in px: 120 by default, 96 for the design's phone row (under 720px wide). */
+  height?: number;
 }
 
-export function FilterTiles({ tiles, active, onPick, label }: FilterTilesProps) {
+export function FilterTiles({ tiles, active, onPick, label, height = 120 }: FilterTilesProps) {
   const all = tiles[0]?.key;
   return (
     <div
@@ -56,7 +58,7 @@ export function FilterTiles({ tiles, active, onPick, label }: FilterTilesProps) 
             // Height and shadow inline: an extension's own unlayered utilities beat this package's layered
             // ones, and a comma inside a class name trips the scoped-CSS guard.
             style={{
-              height: 120,
+              height,
               boxShadow: on ? "0 0 0 1px hsl(var(--accent) / .4), var(--elev-panel)" : "var(--elev-panel)",
             }}
             className={cn(
