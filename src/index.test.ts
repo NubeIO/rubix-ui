@@ -145,6 +145,7 @@ describe("@nube/rubix-ui entry", () => {
       "FilterTiles",
       "FacetChip",
       "NameSwatch",
+      "PanelFrame",
     ];
     for (const n of names) expect(ui[n as keyof typeof ui], n).toBeDefined();
   });

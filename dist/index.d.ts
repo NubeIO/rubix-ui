@@ -1,6 +1,7 @@
 import { ClassProp } from 'class-variance-authority/types';
 import { ClassValue } from 'clsx';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
+import { ComponentProps } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { ForwardRefExoticComponent } from 'react';
@@ -447,6 +448,13 @@ declare interface PagerProps {
     /** The sizes offered; `PAGE_SIZES` by default. */
     sizes?: number[];
     className?: string;
+}
+
+export declare function PanelFrame({ transparent, className, style, ...props }: PanelFrameProps): JSX_2.Element;
+
+export declare interface PanelFrameProps extends ComponentProps<"div"> {
+    /** Grafana's transparent panel: no border, background or shadow, and no `data-panel`. */
+    transparent?: boolean;
 }
 
 /** A time typed any usual way → minutes: "13:05", "13.05", "1305", "105" (= 01:05), "13" (= 13:00) or

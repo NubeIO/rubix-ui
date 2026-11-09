@@ -11,7 +11,7 @@ import { TimeField as w } from "./components/time-field.js";
 import { DAY_MINS as I, hhmm as A, parseTime as B } from "./lib/time.js";
 import { formatDay as L, localToday as E } from "./lib/date.js";
 import { Badge as v, badgeVariants as y } from "./components/badge.js";
-import { Button as H, buttonVariants as F } from "./components/button.js";
+import { Button as G, buttonVariants as H } from "./components/button.js";
 import { Card as O, CardContent as U, CardDescription as V, CardFooter as W, CardHeader as N, CardTitle as Z } from "./components/card.js";
 import { Checkbox as j } from "./components/checkbox.js";
 import { Input as z } from "./components/input.js";
@@ -25,13 +25,13 @@ import { Textarea as br } from "./components/textarea.js";
 import { Collapsible as cr, CollapsibleContent as Cr, CollapsibleTrigger as Sr } from "./components/collapsible.js";
 import { Combobox as gr } from "./components/combobox.js";
 import { Dialog as Mr, DialogClose as sr, DialogContent as hr, DialogDescription as wr, DialogFooter as Pr, DialogHeader as Ir, DialogOverlay as Ar, DialogPortal as Br, DialogSurfaceContext as kr, DialogTitle as Lr, DialogTrigger as Er, useDialogSurface as Rr } from "./components/dialog.js";
-import { DropdownMenu as yr, DropdownMenuCheckboxItem as Gr, DropdownMenuContent as Hr, DropdownMenuGroup as Fr, DropdownMenuItem as _r, DropdownMenuLabel as Or, DropdownMenuPortal as Ur, DropdownMenuRadioGroup as Vr, DropdownMenuRadioItem as Wr, DropdownMenuSeparator as Nr, DropdownMenuShortcut as Zr, DropdownMenuSub as Yr, DropdownMenuSubContent as jr, DropdownMenuSubTrigger as qr, DropdownMenuTrigger as zr } from "./components/dropdown-menu.js";
+import { DropdownMenu as yr, DropdownMenuCheckboxItem as Fr, DropdownMenuContent as Gr, DropdownMenuGroup as Hr, DropdownMenuItem as _r, DropdownMenuLabel as Or, DropdownMenuPortal as Ur, DropdownMenuRadioGroup as Vr, DropdownMenuRadioItem as Wr, DropdownMenuSeparator as Nr, DropdownMenuShortcut as Zr, DropdownMenuSub as Yr, DropdownMenuSubContent as jr, DropdownMenuSubTrigger as qr, DropdownMenuTrigger as zr } from "./components/dropdown-menu.js";
 import { Menubar as Kr, MenubarCheckboxItem as Qr, MenubarContent as Xr, MenubarGroup as $r, MenubarItem as ro, MenubarLabel as oo, MenubarMenu as eo, MenubarPortal as to, MenubarRadioGroup as ao, MenubarRadioItem as no, MenubarSeparator as po, MenubarShortcut as io, MenubarSub as lo, MenubarSubContent as mo, MenubarSubTrigger as uo, MenubarTrigger as xo } from "./components/menubar.js";
 import { Popover as fo, PopoverAnchor as co, PopoverContent as Co, PopoverTrigger as So } from "./components/popover.js";
 import { ScrollArea as go, ScrollBar as Do } from "./components/scroll-area.js";
 import { Sheet as so, SheetContent as ho, SheetDescription as wo, SheetHeader as Po, SheetTitle as Io } from "./components/sheet.js";
 import { Tooltip as Bo, TooltipContent as ko, TooltipProvider as Lo, TooltipTrigger as Eo } from "./components/tooltip.js";
-import { Accordion as vo, AccordionContent as yo, AccordionItem as Go, AccordionTrigger as Ho } from "./components/accordion.js";
+import { Accordion as vo, AccordionContent as yo, AccordionItem as Fo, AccordionTrigger as Go } from "./components/accordion.js";
 import { Breadcrumb as _o, BreadcrumbEllipsis as Oo, BreadcrumbItem as Uo, BreadcrumbLink as Vo, BreadcrumbList as Wo, BreadcrumbPage as No, BreadcrumbSeparator as Zo } from "./components/breadcrumb.js";
 import { ColorSwatchPicker as jo } from "./components/color-swatch.js";
 import { CopyButton as zo } from "./components/copy-button.js";
@@ -47,13 +47,14 @@ import { WeekStrip as Se } from "./components/week-strip.js";
 import { NameSwatch as ge } from "./components/name-swatch.js";
 import { FilterTiles as Me } from "./components/filter-tiles.js";
 import { FacetChip as he } from "./components/facet-chip.js";
-import { canWriteText as Pe, writeText as Ie } from "./lib/clipboard/writeText.js";
-import { useClipboard as Be } from "./lib/clipboard/useClipboard.js";
+import { PanelFrame as Pe } from "./components/panel-frame.js";
+import { canWriteText as Ae, writeText as Be } from "./lib/clipboard/writeText.js";
+import { useClipboard as Le } from "./lib/clipboard/useClipboard.js";
 export {
   vo as Accordion,
   yo as AccordionContent,
-  Go as AccordionItem,
-  Ho as AccordionTrigger,
+  Fo as AccordionItem,
+  Go as AccordionTrigger,
   m as Alert,
   u as AlertDescription,
   x as AlertTitle,
@@ -66,7 +67,7 @@ export {
   Wo as BreadcrumbList,
   No as BreadcrumbPage,
   Zo as BreadcrumbSeparator,
-  H as Button,
+  G as Button,
   ce as CHIP_LIMIT,
   O as Card,
   U as CardContent,
@@ -96,9 +97,9 @@ export {
   Lr as DialogTitle,
   Er as DialogTrigger,
   yr as DropdownMenu,
-  Gr as DropdownMenuCheckboxItem,
-  Hr as DropdownMenuContent,
-  Fr as DropdownMenuGroup,
+  Fr as DropdownMenuCheckboxItem,
+  Gr as DropdownMenuContent,
+  Hr as DropdownMenuGroup,
   _r as DropdownMenuItem,
   Or as DropdownMenuLabel,
   Ur as DropdownMenuPortal,
@@ -134,6 +135,7 @@ export {
   ge as NameSwatch,
   g as PAGE_SIZES,
   D as Pager,
+  Pe as PanelFrame,
   fo as Popover,
   co as PopoverAnchor,
   Co as PopoverContent,
@@ -175,8 +177,8 @@ export {
   Se as WeekStrip,
   d as alertVariants,
   y as badgeVariants,
-  F as buttonVariants,
-  Pe as canWriteText,
+  H as buttonVariants,
+  Ae as canWriteText,
   t as cn,
   L as formatDay,
   A as hhmm,
@@ -184,8 +186,8 @@ export {
   te as nameColour,
   B as parseTime,
   pe as scheduleColourClass,
-  Be as useClipboard,
+  Le as useClipboard,
   Rr as useDialogSurface,
   i as useOverlayContainer,
-  Ie as writeText
+  Be as writeText
 };

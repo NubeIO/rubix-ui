@@ -141,3 +141,4 @@ export { WeekStrip, type WeekStripSegment } from "./components/week-strip";
 export { NameSwatch } from "./components/name-swatch";
 export { FilterTiles, type FilterTile, type FilterTilesProps } from "./components/filter-tiles";
 export { FacetChip, type FacetChipProps } from "./components/facet-chip";
+export { PanelFrame, type PanelFrameProps } from "./components/panel-frame";
