@@ -2,6 +2,27 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
+## v0.6.0
+
+- **Breaking:** the package keeps visual building blocks only. **NodeScheduleEditor**, the data-reading
+  **AllSchedulesCalendar** and all schedule logic moved out: `readNodeSchedule`, `writeNodeSchedule`,
+  `resolveDay`, `nowAndNext`, `wallAt`, `nameIndex`, `valueOf`, `OFF`, `MAX_NAMES`, `toSaveError`,
+  `ChangedElsewhere`, `BackendNeedsUpgrade`, `Unreadable` and lb's schedule record types. The rubix-ai
+  app and the Schedule Groups extension each keep their own editor and logic; the `v0.5.0` tag has the
+  source to copy.
+- New: plain-data calendar primitives, fed days the app has already resolved: **ScheduleWeekCalendar**
+  (one schedule's week, the editor's Calendar tab), **ScheduleWeekRows** and **ScheduleMonthGrid** (every
+  schedule's week and month), and **AllSchedulesView**, their frame (Week / Month, previous / next /
+  Today, schedule chips, legend, dated entries). Types: `ScheduleSpan`, `ScheduleDay`, `ScheduleNote`,
+  `ScheduleMoment`, `ScheduleRef`, `ScheduleWeekRow`, `ScheduleChip`, `ScheduleMonthDay`,
+  `ScheduleListEntry`, `ScheduleLegendItem`, `ScheduleEntryKind`.
+- **Breaking:** `WeekStrip` takes `week` (seven arrays of `{ start, end, nameIndex }`) instead of a
+  schedule `doc`.
+- `nameColour`, `SCHEDULE_COLOURS`, `scheduleColourClass` and `NameSwatch` stay, unchanged.
+- The dated entries list puts the schedules in their own middle column (date, label, schedules, kind),
+  and the month view says "Nov 2026" and "Dated entries in Nov", as the design does.
+- The stylesheet reads `src/lib/colour` for the colour classes instead of `src/lib/schedule`.
+
 ## v0.5.0
 
 - New: **NodeScheduleEditor** (weekly hours, dated entries, calendar, settings, the save and conflict

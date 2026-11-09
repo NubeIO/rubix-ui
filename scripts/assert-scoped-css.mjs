@@ -9,7 +9,7 @@
 //   • no `:root` / `:host` rule at all: the host keys are declared `inline`, so nothing needs one;
 //   • no `.dark` selector: the host owns the mode;
 //   • every rule that targets a class or an attribute sits under `[data-ext-root]`;
-//   • the schedule colour classes the helpers in `src/lib/schedule` hand out are there.
+//   • the name and schedule colour classes the helpers in `src/lib/colour` hand out are there.
 // The one allowed global is Tailwind's `*,:before,:after,::backdrop { --tw-*: … }` property block (inert
 // `--tw-` defaults nothing reads outside a scoped utility), plus `@keyframes`.
 //
@@ -67,7 +67,7 @@ for (const m of text.matchAll(/([^{}@;]+)\{/g)) {
   }
 }
 
-// Classes that reach a component from `src/lib/schedule` (the name and schedule colours) rather than
+// Classes that reach a component from `src/lib/colour` (the name and schedule colours) rather than
 // from a component's own source: they exist only because `scoped.css` scans that folder too.
 const REQUIRED = [
   "bg-chart-1",

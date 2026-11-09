@@ -261,65 +261,126 @@ share tooltip delays.
 
 ## Schedules
 
-The node schedule editor and the all-schedules calendar, shared by the rubix-ai Schedules page and the
-Schedule Groups extension. Data in, events out: they take schedules as `NodeSchedule`s and hand edits
-back through callbacks. The page owns the API (`schedule.get` / `schedule.save`); nothing here calls it.
-Colours read the host's `--chart-*`, `--surface-inset`, `--ink-muted`, `--sheet-w-md` and
-`--elev-popover`.
+Visual building blocks for schedule pages: a week calendar, the all-schedules week rows and month grid,
+their frame, a week strip and the name colours. They know nothing about lb, records or schedule rules:
+the app resolves what each day runs with its own logic and hands plain data in; moving the period,
+hiding a schedule or opening one comes back as a callback. The schedule editor and the schedule logic
+are not here; each app keeps its own (the `v0.5.0` tag has the last shared copy).
 
-### NodeScheduleEditor
+Colours read the host's `--chart-*`, `--surface-inset` and `--ink-muted`.
 
-Weekly hours (paint, day sheet, names), dated entries, a calendar, settings and the page's own last
-tab, with the save bar, the "changed elsewhere" flow and the unreadable and needs-upgrade states.
-Below `md` it is view only.
+### The data
+
+Minutes are minutes of the day, `0` to `1439`; a span's `end` is its **last** minute, inclusive (a block
+to midnight ends at `1439` and reads "until 24:00"). Dates are wall dates, `YYYY-MM-DD`.
+
+```ts
+type ScheduleEntryKind = "extra" | "changed" | "closed" | "holiday";
+
+interface ScheduleSpan {
+  start: number;               // first minute
+  end: number;                 // last minute, inclusive
+  nameIndex: number;           // name position for nameColour: 1..5, 0 = default (Off)
+  name: string;                // the name it runs ("Occupied")
+  label?: string;              // the block's words when not the name (a dated entry's label)
+  kind?: "extra" | "changed";  // dashed edge / solid edge
+  title?: string;              // tooltip; default: label, name and times
+}
+interface ScheduleNote { kind: ScheduleEntryKind; label: string } // "" label: the kind's words
+interface ScheduleDay {
+  date: string;
+  spans: ScheduleSpan[];
+  closed?: ScheduleNote;       // closed all day: hatched, with this label
+  entries?: ScheduleNote[];    // dated entries touching the day; the first is named
+}
+interface ScheduleMoment { date: string; minute: number }       // now, in the schedule's zone
+interface ScheduleRef { id: string; name: string; colour?: string } // colour: a SCHEDULE_COLOURS value
+interface ScheduleWeekRow extends ScheduleRef {
+  status: string;              // "Now: Occupied = 1", "Switched off"
+  now?: ScheduleMoment;        // omitted: no now line, no ring
+  days: ScheduleDay[];         // the header's dates, in order
+}
+interface ScheduleChip extends ScheduleNote { schedules: ScheduleRef[] }
+interface ScheduleMonthDay { date: string; chips: ScheduleChip[] }
+interface ScheduleListEntry extends ScheduleChip {
+  date: string;                               // first day of the period it touches
+  hours?: { start: number; end: number }[];   // written after the label
+  nameIndex?: number;                         // colours an extra / changed chip; default 1
+}
+interface ScheduleLegendItem { nameIndex: number; label: string; detail?: string }
+```
+
+### ScheduleWeekCalendar
+
+One schedule's week as a vertical calendar: a column per day on an hour axis, blocks placed by their
+minutes, a closed day hatched with its label chip, the now line on today and a ring on the running
+block, previous / next / Today above and a legend below.
 
 | Prop | |
 |---|---|
-| `schedule` | the schedule, from `readNodeSchedule(record)`; `null` while it loads |
-| `onSave(doc)` | save `writeNodeSchedule(doc)`; resolve `{ rev }`, reject with the error (`toSaveError` sorts it) |
-| `onReload()` | the latest saved version, for "Reload, keep my edit" |
-| `onDelete`, `onRecreate(id, name)`, `onClose`, `onDirtyChange(dirty)` | the page's actions |
-| `unreadable` | `{ id, name }`: the record is in the old format; shows Recreate |
-| `backendNeedsUpgrade` | editing works, Save is off with the reason |
-| `extraTab` | `{ label, render }`: the page's own last tab (Used by, Boxes) |
-| `readOnly`, `hideSettings`, `title`, `subtitle`, `saveLabel`, `host` | |
-| `initialTab` | `"hours" \| "dated" \| "cal" \| "set" \| "extra"`: the tab it opens on (`"extra"` lands on the page's own tab) |
-| `weekOnly` | edit the weekly hours only (a box's own week): no Dated entries or Settings tab, names fixed |
-
-Below the host's `md` width (768px) it shows the phone view. The switch is made in code, not with
-`hidden md:flex`, because inside an extension the extension's own `.hidden` would win over the
-package's layered `md:flex` and the editor would never show.
-| `now` | the instant (epoch ms); omitted, it follows the clock |
+| `days` | the seven `ScheduleDay`s, Monday first; the heading is that week ("2 Nov – 8 Nov 2026") |
+| `now?` | `ScheduleMoment`: today's column, the now line and the running block |
+| `onPrev`, `onNext`, `onToday` | move the week |
+| `atToday` | the week holds today: Today is off |
+| `actions?` | at the right of the controls ("Add dated entry") |
+| `legend` | `ScheduleLegendItem[]`, the names in position order |
 
 ```tsx
-const record = await getSchedule(id);
-<NodeScheduleEditor
-  schedule={readNodeSchedule(record)}
-  onSave={async (doc) => ({ rev: (await saveSchedule(writeNodeSchedule(doc))).rev })}
-  onReload={async () => readNodeSchedule(await getSchedule(id))}
+<ScheduleWeekCalendar
+  days={dates.map((date) => toScheduleDay(myResolveDay(schedule, date)))}
+  now={{ date: "2026-11-06", minute: 860 }}
+  onPrev={() => setOffset((o) => o - 1)}
+  onNext={() => setOffset((o) => o + 1)}
+  onToday={() => setOffset(0)}
+  atToday={offset === 0}
+  legend={[{ nameIndex: 1, label: "Occupied" }, { nameIndex: 2, label: "Standby" }]}
 />
 ```
 
-### AllSchedulesCalendar, WeekStrip, NameSwatch
+### AllSchedulesView, ScheduleWeekRows, ScheduleMonthGrid
 
-`AllSchedulesCalendar` shows every schedule at once: a week (a row per schedule) or a month of dated
-entries, with schedule chips to hide one. Props: `schedules`, `onOpen?(id)`, `now?`. `WeekStrip` is
-the one-line week of a schedule's names for a list row: `doc`, `className?`. `NameSwatch` is one name's colour
-square (`index`: 0 is the default, outlined), for a legend or a list's now column.
+`AllSchedulesView` is the all-schedules calendar's frame: Week / Month tabs, previous / next / Today, a
+chip per schedule, the body you put in, a legend and "Dated entries this week / in Nov".
 
-### Schedule helpers
+| Prop | |
+|---|---|
+| `view`, `onViewChange(view)` | `"week" \| "month"` |
+| `start` | the period's first day: the week's Monday, or the month's 1st. Heads "2 Nov – 8 Nov 2026" or "Nov 2026" |
+| `onPrev`, `onNext`, `onToday`, `atToday` | as above |
+| `schedules`, `hidden`, `onToggle(id)` | every schedule's chip; a hidden id draws its chip off |
+| `legend` | `ScheduleLegendItem[]`: `{ nameIndex: 1, label: "1st name", detail: "Occupied · Trading" }` |
+| `entries` | `ScheduleListEntry[]`: one row each, date \| label and hours \| schedules \| kind chip |
+| `today` | today in the viewer's zone |
+| `children` | `ScheduleWeekRows` or `ScheduleMonthGrid` |
 
-- Record types (lb's `schedule.*` shape): `ScheduleRecord`, `ScheduleDocument`, `WeeklyEntry`,
-  `DatedEntry`, `DateWindow`, `DatedKind`.
-- The model: `NodeSchedule`, `NameValue`, `Seg`, `DatedItem`, `BoxOutput`, `OFF`, `MAX_NAMES`,
-  `nameIndex`, `valueOf`; `readNodeSchedule(record)` and `writeNodeSchedule(doc)` convert both ways.
-- `resolveDay(doc, date)`: what a date runs, minute by minute, by lb's own evaluation of what the
-  editor saves (earliest start wins, exceptions switch off).
-  `nowAndNext(doc, instant)` and `wallAt(instant, zone)`: what runs now and the next change.
-- `nameColour(index)`: a name's colour by position (0 is the default). `SCHEDULE_COLOURS` and
-  `scheduleColourClass(value)`: a schedule's own colour.
-- `toSaveError(e)` sorts a failed save into `ChangedElsewhere`, `BackendNeedsUpgrade`, `Unreadable` or
-  the error as it came.
+`ScheduleWeekRows`: one row per schedule with a 24-hour bar per day. Props: `dates` (the seven, Monday
+first), `rows` (`ScheduleWeekRow[]`, the shown schedules only), `today`, `onOpen?(id)` (the name becomes a
+button).
+
+`ScheduleMonthGrid`: the month's dated entries on their days, up to three chips a day with a dot per
+schedule. Props: `days` (`ScheduleMonthDay[]`, whole weeks, Monday first), `month` (`YYYY-MM`; other days
+dimmed), `today`.
+
+```tsx
+<AllSchedulesView
+  view="week" onViewChange={setView} start="2026-11-02"
+  onPrev={prev} onNext={next} onToday={home} atToday={offset === 0}
+  schedules={all} hidden={hidden} onToggle={toggle}
+  legend={legend} entries={entries} today="2026-11-06"
+>
+  <ScheduleWeekRows dates={dates} rows={rows} today="2026-11-06" onOpen={openSchedule} />
+</AllSchedulesView>
+```
+
+### WeekStrip, NameSwatch, colours
+
+`WeekStrip` is a week in miniature for a list row: seven 3px rows of coloured segments. Props: `week`
+(seven arrays of `WeekStripSegment` `{ start, end, nameIndex }`, Monday first), `className?`.
+`NameSwatch` is one name's colour square (`index`: 0 is the default, outlined), for a legend or a list's
+now column.
+
+- `nameColour(index)`: a name's colour by position (0 is the default): `{ token, css, bg, border, text }`.
+- `SCHEDULE_COLOURS` and `scheduleColourClass(value)`: a schedule's own colour, by token value.
 
 ## Setup
 

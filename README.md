@@ -71,7 +71,7 @@ one is missed, are in **[docs/extensions.md](docs/extensions.md)**.
 | Feedback | `Alert`, `Badge`, `EmptyState`, `Skeleton`, `Spinner` |
 | Navigation | `Breadcrumb`, `Pager` |
 | Popups | `Dialog`, `Sheet`, `Popover`, `DropdownMenu`, `Menubar`, `Tooltip` |
-| Schedules | `NodeScheduleEditor`, `AllSchedulesCalendar`, `WeekStrip`, `NameSwatch`, and the node schedule helpers (`readNodeSchedule`, `writeNodeSchedule`, `resolveDay`, `nowAndNext`, `nameColour`, `toSaveError`, the record types) |
+| Schedules | `ScheduleWeekCalendar`, `AllSchedulesView`, `ScheduleWeekRows`, `ScheduleMonthGrid`, `WeekStrip`, `NameSwatch`, `nameColour`, `scheduleColourClass` (visual only; each app keeps its schedule editor and logic) |
 | Setup | `RubixUiProvider`, `useOverlayContainer` |
 | Helpers | `cn`, `useClipboard`, `writeText`, `canWriteText`, `parseTime`, `hhmm`, `formatDay`, `localToday` |
 

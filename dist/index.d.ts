@@ -43,18 +43,33 @@ export declare const alertVariants: (props?: ({
     variant?: "default" | "destructive" | "info" | "success" | "warning" | null | undefined;
 } & ClassProp) | undefined) => string;
 
-export declare function AllSchedulesCalendar({ schedules, onOpen, now: fixed }: AllSchedulesCalendarProps): JSX_2.Element;
+export declare function AllSchedulesView({ view, onViewChange, start, schedules, hidden, onToggle, legend, entries, today, children, ...nav }: AllSchedulesViewProps): JSX_2.Element;
 
-export declare interface AllSchedulesCalendarProps {
-    schedules: NodeSchedule[];
-    /** Open a schedule (its name in a week row). */
-    onOpen?: (id: string) => void;
-    /** The current instant (epoch ms). Omitted, the calendar follows the clock. */
-    now?: number;
-}
+export declare type AllSchedulesViewMode = "week" | "month";
 
-export declare class BackendNeedsUpgrade extends Error {
-    readonly kind = "backend-needs-upgrade";
+export declare interface AllSchedulesViewProps {
+    view: AllSchedulesViewMode;
+    onViewChange: (view: AllSchedulesViewMode) => void;
+    /** The period's first day: the week's Monday, or the month's 1st (`YYYY-MM-01`). */
+    start: string;
+    onPrev: () => void;
+    onNext: () => void;
+    onToday: () => void;
+    /** The period holds today: Today is off. */
+    atToday: boolean;
+    /** Every schedule, for the chips. */
+    schedules: ScheduleRef[];
+    /** Ids of the schedules switched off by their chip. */
+    hidden: string[];
+    onToggle: (id: string) => void;
+    /** Name positions and the names that hold them ("1st name", "Occupied · Trading"). */
+    legend: ScheduleLegendItem[];
+    /** The period's dated entries. */
+    entries: ScheduleListEntry[];
+    /** Today in the viewer's zone. */
+    today: string;
+    /** The week rows or the month grid. */
+    children: ReactNode;
 }
 
 export declare function Badge({ className, variant, pill, size, ...props }: React_2.ComponentProps<"span"> & VariantProps<typeof badgeVariants>): React_2.JSX.Element;
@@ -64,13 +79,6 @@ export declare const badgeVariants: (props?: ({
     pill?: boolean | null | undefined;
     size?: "default" | "count" | null | undefined;
 } & ClassProp) | undefined) => string;
-
-/** What boxes running the schedule write. The default value is `names[0].value`. */
-export declare interface BoxOutput {
-    used: boolean;
-    min: number;
-    max: number;
-}
 
 export declare function Breadcrumb({ ...props }: React_2.ComponentProps<"nav">): React_2.JSX.Element;
 
@@ -116,10 +124,6 @@ export declare function CardFooter({ className, ...props }: React_2.ComponentPro
 export declare function CardHeader({ className, ...props }: React_2.ComponentProps<"div">): React_2.JSX.Element;
 
 export declare function CardTitle({ className, ...props }: React_2.ComponentProps<"div">): React_2.JSX.Element;
-
-export declare class ChangedElsewhere extends Error {
-    readonly kind = "changed-elsewhere";
-}
 
 export declare function Checkbox({ className, ...props }: React_2.ComponentProps<"input">): React_2.JSX.Element;
 
@@ -204,65 +208,6 @@ declare interface ComboboxProps {
 
 export declare function CopyButton({ text, label, copiedLabel, variant, size, className, ariaLabel, }: Props): JSX_2.Element;
 
-/** A dated entry. Under `events` it adds open hours; under `exception` it switches the schedule off
- *  (a closure, a changed-hours day, a holiday). */
-export declare interface DatedEntry {
-    name?: string;
-    label?: string;
-    kind?: DatedKind;
-    dates: DateWindow[];
-    value?: number;
-    color?: string;
-    /** Repeat every year. Only on `closed` and `holiday` exceptions. */
-    yearly?: boolean;
-}
-
-/** A date that differs from the week, stored the way the Schedule Groups extension stores it (both
- *  pages edit the same records; `writeNodeSchedule` has the form):
- *  - extra: the default name runs `start`..`end` on `date`, on top of the week;
- *  - changed: only `hours` run (the default name) on each day `date`..`to`; the week's hours for those
- *    days are replaced. Never yearly;
- *  - closed: Off all day from `date` to `to` (inclusive), optionally every year;
- *  - holiday: Off all day on `date`, optionally every year.
- *  An entry the editor does not write itself (a box's own, without a `kind`) is `kept`: shown, and
- *  written back exactly as it was read. */
-export declare interface DatedItem {
-    /** The key stem (`c1731...`; `h-2026-12-25` for a holiday), stable while the record is unchanged so
-     *  a reload can tell entries apart. A kept entry's is `kept:<map>:<key>`. */
-    id: string;
-    kind: DatedKind;
-    label: string;
-    /** `YYYY-MM-DD`, local. */
-    date: string;
-    /** The last day of a range, inclusive. */
-    to?: string;
-    /** Extra hours (and a kept part-day entry): its minutes on `date`, `end` inclusive. */
-    start?: number;
-    end?: number;
-    /** Changed hours: the hours left open each day, `end` inclusive. */
-    hours?: {
-        start: number;
-        end: number;
-    }[];
-    /** A kept entry's own name; the editor's own entries run the default name. */
-    name?: string;
-    /** Every year. Only closed and holiday (lb and the extension refuse it elsewhere). */
-    yearly?: boolean;
-    /** Read from a box's own entry: written back verbatim. */
-    kept?: {
-        map: "events" | "exception";
-        key: string;
-    };
-    /** A kept entry's own windows, as stored: what it runs is resolved from these, every day of them. */
-    windows?: {
-        start: string;
-        end: string;
-    }[];
-}
-
-/** What a dated entry is for: lb's addition beside rubix-ce's structure. */
-export declare type DatedKind = "closed" | "changed" | "extra" | "holiday";
-
 export declare function DatePicker({ value, onChange, min, max, placeholder, weekStart, format, size, disabled, "aria-label": ariaLabel, className, }: DatePickerProps): React_2.JSX.Element;
 
 declare interface DatePickerProps {
@@ -285,22 +230,8 @@ declare interface DatePickerProps {
     className?: string;
 }
 
-/** One dated window: local wall time `YYYY-MM-DDTHH:mm` in the schedule's zone, the end exact. */
-export declare interface DateWindow {
-    start: string;
-    end: string;
-}
-
 /** Minutes in a day. "24:00" (the end of the day) is this. */
 export declare const DAY_MINS = 1440;
-
-/** One block of the resolved day. `end` inclusive; `item` is the dated entry that put it there. */
-export declare interface DaySpan {
-    start: number;
-    end: number;
-    name: string;
-    item?: DatedItem;
-}
 
 /** What a table starts with. */
 export declare const DEFAULT_PAGE_SIZE = 25;
@@ -328,8 +259,6 @@ export declare const DialogSurfaceContext: React_2.Context<HTMLElement | null>;
 export declare const DialogTitle: React_2.ForwardRefExoticComponent<Omit<DialogPrimitive.DialogTitleProps & React_2.RefAttributes<HTMLHeadingElement>, "ref"> & React_2.RefAttributes<HTMLHeadingElement>>;
 
 export declare function DialogTrigger({ ...props }: React_2.ComponentProps<typeof DialogPrimitive.Trigger>): React_2.JSX.Element;
-
-declare type Doc = Pick<NodeSchedule, "week" | "dated" | "names" | "defaultName">;
 
 export declare function DropdownMenu({ ...props }: React_2.ComponentProps<typeof DropdownMenuPrimitive.Root>): React_2.JSX.Element;
 
@@ -393,9 +322,6 @@ export declare const Label: React_2.ForwardRefExoticComponent<Omit<React_2.Detai
 /** Today in the browser's own zone, as "YYYY-MM-DD". */
 export declare function localToday(): string;
 
-/** Up to six names, Off included. */
-export declare const MAX_NAMES = 6;
-
 export declare function Menubar({ className, ...props }: React_2.ComponentProps<typeof MenubarPrimitive.Root>): React_2.JSX.Element;
 
 export declare function MenubarCheckboxItem({ className, children, checked, ...props }: React_2.ComponentProps<typeof MenubarPrimitive.CheckboxItem>): React_2.JSX.Element;
@@ -435,17 +361,8 @@ export declare function MenubarSubTrigger({ className, inset, children, ...props
 
 export declare function MenubarTrigger({ className, ...props }: React_2.ComponentProps<typeof MenubarPrimitive.Trigger>): React_2.JSX.Element;
 
-/** A local wall moment: `YYYY-MM-DD` and the minute of that day. */
-export declare interface Moment {
-    date: string;
-    minute: number;
-}
-
 /** The tone of the name at `index` (0 = the default). Past the fifth name it stays pink. */
 export declare function nameColour(index: number): NameTone;
-
-/** A name's position: 0 for Off, 1..5 for the others, the index `nameColour` takes. */
-export declare function nameIndex(doc: Pick<NodeSchedule, "names">, name: string | null): number;
 
 export declare function NameSwatch({ index, className }: {
     index: number;
@@ -462,107 +379,6 @@ export declare interface NameTone {
     border: string;
     text: string;
 }
-
-/** A name and the value it sends. */
-export declare interface NameValue {
-    name: string;
-    value: number;
-    /** Set by a rename: the name this one was read as, so "Reload, keep my edit" can follow the rename
-     *  onto someone else's newer version. Never written. */
-    was?: string;
-}
-
-export declare interface NodeSchedule {
-    id: string;
-    name: string;
-    description: string;
-    /** A chart token name ("chart-8"): marks the schedule only, never its names. */
-    color: string;
-    timezone: string;
-    /** Off: dashboards and flows read Off; boxes keep their hours. */
-    enabled: boolean;
-    /** `[0]` is Off (the default); the rest are `config.names` in order. */
-    names: NameValue[];
-    /** `config.default_name` as read; a rename follows it. `defaultName()` says which name it means. */
-    defaultName?: string;
-    /** Seven days, Monday first, each sorted and non-overlapping. Off blocks are not listed. */
-    week: Seg[][];
-    dated: DatedItem[];
-    output: BoxOutput;
-    /** The revision the record was read at; a save sends it back. */
-    rev: number;
-    /** The record this was read from. Fields the editor does not edit ride through on save. */
-    source: ScheduleRecord;
-}
-
-export declare function NodeScheduleEditor(props: NodeScheduleEditorProps): JSX_2.Element;
-
-export declare interface NodeScheduleEditorProps {
-    /** The schedule, read with `readNodeSchedule`. Null while it loads. */
-    schedule: NodeSchedule | null;
-    /** The record can't be read (old format): no editor, Recreate keeps the name and id. */
-    unreadable?: {
-        id: string;
-        name: string;
-    };
-    /** The node's backend predates the new record: editing works, Save is off with the reason. */
-    backendNeedsUpgrade?: boolean;
-    /** Save the draft (send it with `writeNodeSchedule`; it carries the rev it was read at). Resolve
-     *  with the stored rev; reject with the save error (`toSaveError` sorts it). */
-    onSave?: (doc: NodeSchedule) => Promise<{
-        rev: number;
-    } | void>;
-    /** Fetch the latest saved version, for "Reload, keep my edit". */
-    onReload?: () => Promise<NodeSchedule>;
-    /** Delete was asked for (the page confirms). */
-    onDelete?: () => void;
-    /** Recreate an unreadable schedule under the same id and name. */
-    onRecreate?: (id: string, name: string) => void;
-    /** Close button in the header; omitted, there is none. */
-    onClose?: () => void;
-    /** Told whenever the draft gains or loses unsaved edits (a page's leave guard). */
-    onDirtyChange?: (dirty: boolean) => void;
-    host?: "schedules" | "groups";
-    /** The page's own last tab: Used by, Boxes. */
-    extraTab?: {
-        label: string;
-        render: () => ReactNode;
-    };
-    readOnly?: boolean;
-    hideSettings?: boolean;
-    /** The tab it opens on (e.g. "extra" to land on the page's own tab). Default Weekly hours. */
-    initialTab?: "hours" | "dated" | "cal" | "set" | "extra";
-    /** Edit the weekly hours only (a box's own week): no Dated entries or Settings tab, names fixed. The
-     *  Calendar tab stays, for looking. */
-    weekOnly?: boolean;
-    title?: string;
-    subtitle?: string;
-    /** The Save button's words; Groups says "Save and send to 12 boxes". */
-    saveLabel?: string;
-    /** The current instant (epoch ms). Omitted, the editor follows the clock minute by minute. */
-    now?: number;
-}
-
-export declare interface NowAndNext {
-    /** Now, in the schedule's zone. */
-    at: Moment;
-    enabled: boolean;
-    now: Running & {
-        /** When it stops (the next change), or null when nothing changes within the horizon. */
-        until: Moment | null;
-        /** The closed or holiday entry that makes today Off, when that is why it is Off. */
-        closed?: DatedItem;
-    };
-    next: (Running & {
-        from: Moment;
-        until: Moment | null;
-    }) | null;
-}
-
-export declare function nowAndNext(doc: NodeSchedule, instant: number): NowAndNext;
-
-/** The editor's default name. UI only: lb never stores it. */
-export declare const OFF = "Off";
 
 export declare const PAGE_SIZES: number[];
 
@@ -611,22 +427,6 @@ declare interface Props {
 
 export declare function Radio({ className, ...props }: React_2.ComponentProps<"input">): React_2.JSX.Element;
 
-export declare function readNodeSchedule(record: ScheduleRecord): NodeSchedule;
-
-export declare function resolveDay(doc: Doc, date: string): ResolvedDay;
-
-export declare interface ResolvedDay {
-    date: string;
-    /** 0 = Monday ... 6 = Sunday. */
-    weekday: number;
-    /** The blocks that run, Off left out, sorted. */
-    spans: DaySpan[];
-    /** The closed or holiday entry that makes the whole day Off. */
-    closed?: DatedItem;
-    /** Every dated entry that touched the day: changed hours, extra hours, then closures. */
-    items: DatedItem[];
-}
-
 export declare interface RevealProps {
     children: React_2.ReactNode;
     className?: string;
@@ -649,14 +449,12 @@ declare interface RubixUiProviderProps {
     children: React_2.ReactNode;
 }
 
-export declare interface Running {
-    name: string;
-    value: number;
-}
-
-export declare type SaveError = ChangedElsewhere | BackendNeedsUpgrade | Unreadable | Error;
-
 export declare const SCHEDULE_COLOURS: ScheduleColour[];
+
+/** One dated entry on a day of the month, with every schedule that has it. */
+export declare interface ScheduleChip extends ScheduleNote {
+    schedules: ScheduleRef[];
+}
 
 export declare interface ScheduleColour {
     value: string;
@@ -668,51 +466,139 @@ export declare interface ScheduleColour {
 /** The fill class for a stored colour; unknown values draw blue. */
 export declare function scheduleColourClass(value: string | undefined): string;
 
-/** rubix-ce's schedule document. Each map may be absent; absent reads as empty. */
-export declare interface ScheduleDocument {
-    /** The names an entry may use. Missing: `["Default"]`, default `"Default"`. */
-    config?: {
-        names?: string[];
-        default_name?: string;
-    };
-    schedules: {
-        weekly?: Record<string, WeeklyEntry>;
-        events?: Record<string, DatedEntry>;
-        exception?: Record<string, DatedEntry>;
-    };
+/** One day of one schedule, already resolved. */
+export declare interface ScheduleDay {
+    /** `YYYY-MM-DD`. */
+    date: string;
+    spans: ScheduleSpan[];
+    /** Closed all day (a closure or holiday): hatched, with its label. */
+    closed?: ScheduleNote;
+    /** The dated entries touching the day; the first is named when the day is not closed. */
+    entries?: ScheduleNote[];
 }
 
-/** One global schedule record. */
-export declare interface ScheduleRecord {
+/** The four kinds of dated entry. */
+export declare type ScheduleEntryKind = "extra" | "changed" | "closed" | "holiday";
+
+/** A legend entry: a name colour and what holds it. */
+export declare interface ScheduleLegendItem {
+    nameIndex: number;
+    /** "Occupied", or "1st name". */
+    label: string;
+    /** After the label, muted: "Occupied · Trading". */
+    detail?: string;
+}
+
+/** One row of "Dated entries this week / in <month>". */
+export declare interface ScheduleListEntry extends ScheduleChip {
+    /** The first day of the period it touches. */
+    date: string;
+    /** Its hours, written after the label. Same minutes as a span (`end` inclusive). */
+    hours?: {
+        start: number;
+        end: number;
+    }[];
+    /** The name position that colours an extra or changed chip. Default 1. */
+    nameIndex?: number;
+}
+
+/** "Now": a wall date and minute (in the schedule's zone). */
+export declare interface ScheduleMoment {
+    date: string;
+    minute: number;
+}
+
+/** One day of the month grid. */
+export declare interface ScheduleMonthDay {
+    date: string;
+    chips: ScheduleChip[];
+}
+
+export declare function ScheduleMonthGrid({ days, month, today }: ScheduleMonthGridProps): JSX_2.Element;
+
+export declare interface ScheduleMonthGridProps {
+    /** Every day the grid shows, Monday first, whole weeks. */
+    days: ScheduleMonthDay[];
+    /** `YYYY-MM` of the month; other days are dimmed. */
+    month: string;
+    today: string;
+}
+
+/** A dated entry as a day names it. An empty label falls back to the kind's words ("Holiday"). */
+export declare interface ScheduleNote {
+    kind: ScheduleEntryKind;
+    label: string;
+}
+
+/** A schedule as the calendars name it. */
+export declare interface ScheduleRef {
     id: string;
     name: string;
-    description?: string;
-    /** The schedule's own colour, `#rrggbb`. */
-    color?: string;
-    enabled: boolean;
-    timezone: string;
-    use_utc: boolean;
-    priority: number;
-    enable_payload?: boolean;
-    min_payload?: number;
-    max_payload?: number;
-    default_payload?: number;
-    schedule: ScheduleDocument;
-    /** The stored revision. Every save sends it back: the host refuses a save whose `rev` is not the
-     *  stored one, and `0` means "create; must not exist yet". */
-    rev: number;
+    /** The schedule's own colour, a token value from `SCHEDULE_COLOURS` ("chart-8"). Unknown draws blue. */
+    colour?: string;
+}
+
+/** One block of a day. */
+export declare interface ScheduleSpan {
+    /** First minute, 0 to 1439. */
+    start: number;
+    /** Last minute, inclusive. */
+    end: number;
+    /** The name's position, for its colour (`nameColour`): 1 to 5; 0 is the default (Off). */
+    nameIndex: number;
+    /** The name it runs ("Occupied"). */
+    name: string;
+    /** The words in the block when not the name (a dated entry's label). */
+    label?: string;
+    /** Extra hours draw a dashed edge, changed hours a solid one. */
+    kind?: "extra" | "changed";
+    /** The block's tooltip. Omitted: the label and its times. */
+    title?: string;
+}
+
+export declare function ScheduleWeekCalendar({ days, now, actions, legend, ...nav }: ScheduleWeekCalendarProps): JSX_2.Element;
+
+export declare interface ScheduleWeekCalendarProps {
+    /** The seven days, Monday first. */
+    days: ScheduleDay[];
+    /** Now in the schedule's zone: today's column, the now line and the running block. */
+    now?: ScheduleMoment;
+    onPrev: () => void;
+    onNext: () => void;
+    onToday: () => void;
+    /** The week holds today: Today is off. */
+    atToday: boolean;
+    /** At the right of the controls ("Add dated entry"). */
+    actions?: ReactNode;
+    /** The names, in position order. */
+    legend: ScheduleLegendItem[];
+}
+
+/** One schedule's row in the all-schedules week. */
+export declare interface ScheduleWeekRow extends ScheduleRef {
+    /** Under the name: "Now: Occupied = 1", "Switched off". */
+    status: string;
+    /** Now in the schedule's zone; omitted (switched off), no now line and no ring. */
+    now?: ScheduleMoment;
+    /** The row's days, the same dates as the header, in order. */
+    days: ScheduleDay[];
+}
+
+export declare function ScheduleWeekRows({ dates, rows, today, onOpen }: ScheduleWeekRowsProps): JSX_2.Element;
+
+export declare interface ScheduleWeekRowsProps {
+    /** The seven dates, Monday first, for the column heads. */
+    dates: string[];
+    rows: ScheduleWeekRow[];
+    /** Today in the viewer's zone, for the column heads. */
+    today: string;
+    /** Open a schedule: its name becomes a button. */
+    onOpen?: (id: string) => void;
 }
 
 export declare const ScrollArea: React_2.ForwardRefExoticComponent<Omit<ScrollAreaPrimitive.ScrollAreaProps & React_2.RefAttributes<HTMLDivElement>, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
 
 export declare const ScrollBar: React_2.ForwardRefExoticComponent<Omit<ScrollAreaPrimitive.ScrollAreaScrollbarProps & React_2.RefAttributes<HTMLDivElement>, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
-
-/** One block of one day: `name` runs from `start` to `end`, both minutes, `end` inclusive. */
-export declare interface Seg {
-    start: number;
-    end: number;
-    name: string;
-}
 
 /** `md` (36px, 14px text) is the form size and matches `Input`; `sm` (32px, 12px) is the chrome size
  *  for a toolbar or a dense row. The native numeric `size` attribute is not exposed: a list box is a
@@ -816,12 +702,6 @@ export declare function TooltipProvider({ delayDuration, ...props }: React_2.Com
 
 export declare const TooltipTrigger: React_2.ForwardRefExoticComponent<Omit<TooltipPrimitive.TooltipTriggerProps & React_2.RefAttributes<HTMLButtonElement>, "ref"> & React_2.RefAttributes<HTMLButtonElement>>;
 
-export declare function toSaveError(e: unknown): SaveError;
-
-export declare class Unreadable extends Error {
-    readonly kind = "unreadable";
-}
-
 export declare function useClipboard(resetMs?: number): Clipboard_2;
 
 export declare function useDialogSurface(): HTMLElement | null;
@@ -829,31 +709,18 @@ export declare function useDialogSurface(): HTMLElement | null;
 /** The container for a Radix `Portal`'s `container` prop: the provider's element, else `undefined`. */
 export declare function useOverlayContainer(): HTMLElement | undefined;
 
-/** The value a name sends; Off's is the box output default. Unknown names read as Off. */
-export declare function valueOf(doc: Pick<NodeSchedule, "names">, name: string | null): number;
-
-/** `instant` (epoch ms) as local wall time in `zone`. */
-export declare function wallAt(instant: number, zone: string): Moment;
-
-/** A weekly entry: open on `days` (lowercase day names) from `start` to `end`, `HH:MM` local wall time,
- *  the end INCLUSIVE to the minute (`17:59` runs to 17:59:59), never past midnight. A missing `enable`
- *  means on; a missing `value` means 0. */
-export declare interface WeeklyEntry {
-    name?: string;
-    days: string[];
-    start: string;
-    end: string;
-    value?: number;
-    color?: string;
-    enable?: boolean;
-}
-
-export declare function WeekStrip({ doc, className }: {
-    doc: Pick<NodeSchedule, "week" | "names">;
+export declare function WeekStrip({ week, className }: {
+    week: WeekStripSegment[][];
     className?: string;
 }): JSX_2.Element;
 
-export declare function writeNodeSchedule(doc: NodeSchedule): ScheduleRecord;
+/** One coloured stretch of a day. Minutes 0 to 1439, `end` inclusive. */
+export declare interface WeekStripSegment {
+    start: number;
+    end: number;
+    /** The name's position, for its colour (`nameColour`). */
+    nameIndex: number;
+}
 
 /**
  * Copy `text` to the system clipboard. Resolves to whether it succeeded; never throws.
