@@ -83,10 +83,11 @@ export function ScheduleMonthGrid({ days, month, today }: ScheduleMonthGridProps
                       className={cn("size-1.5 flex-none rounded-full", scheduleColourClass(s.colour))}
                     />
                   ))}
-                  <span className="truncate">
-                    {noteText(c)}
-                    {c.schedules.length > 1 ? ` · ${c.schedules.length}` : ""}
-                  </span>
+                  <span className="min-w-0 truncate">{noteText(c)}</span>
+                  {/* Outside the label, so a long label never hides how many schedules share it. */}
+                  {c.schedules.length > 1 && (
+                    <span className="flex-none tabular-nums">· {c.schedules.length.toLocaleString()}</span>
+                  )}
                 </span>
               );
             })}

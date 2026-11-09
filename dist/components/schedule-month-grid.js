@@ -1,10 +1,10 @@
-import { jsxs as n, jsx as o } from "react/jsx-runtime";
-import { cn as t } from "../lib/cn.js";
-import { scheduleColourClass as p } from "../lib/colour/scheduleColour.js";
-import { DAY_NAMES as u, namesText as x } from "./schedule-calendar-words.js";
+import { jsxs as n, jsx as t } from "react/jsx-runtime";
+import { cn as s } from "../lib/cn.js";
+import { scheduleColourClass as b } from "../lib/colour/scheduleColour.js";
+import { DAY_NAMES as p, namesText as x } from "./schedule-calendar-words.js";
 import { HATCH as g, KINDS as f, noteText as k } from "./schedule-kinds.js";
-const i = 3, N = 3;
-function S({ days: m, month: h, today: b }) {
+const o = 3, N = 3;
+function $({ days: m, month: h, today: u }) {
   return /* @__PURE__ */ n(
     "div",
     {
@@ -12,7 +12,7 @@ function S({ days: m, month: h, today: b }) {
       "aria-label": "Closures & holidays this month",
       className: "grid grid-cols-7 overflow-hidden rounded-lg border border-line",
       children: [
-        u.map((r) => /* @__PURE__ */ o(
+        p.map((r) => /* @__PURE__ */ t(
           "span",
           {
             className: "border-b border-line bg-surface-raised px-2 py-1.5 text-caption font-semibold text-ink-muted",
@@ -20,63 +20,64 @@ function S({ days: m, month: h, today: b }) {
           },
           r
         )),
-        m.map(({ date: r, chips: s }, l) => {
-          const d = r.startsWith(h);
+        m.map(({ date: r, chips: l }, i) => {
+          const a = r.startsWith(h);
           return /* @__PURE__ */ n(
             "div",
             {
               role: "gridcell",
-              className: t(
+              className: s(
                 "grid min-h-24 content-start gap-1 p-1.5",
-                l >= 7 && "border-t border-line",
-                l % 7 && "border-l border-line",
-                !d && "bg-surface-raised/40"
+                i >= 7 && "border-t border-line",
+                i % 7 && "border-l border-line",
+                !a && "bg-surface-raised/40"
               ),
               children: [
-                /* @__PURE__ */ o(
+                /* @__PURE__ */ t(
                   "span",
                   {
-                    className: t(
+                    className: s(
                       "text-xs",
-                      r === b ? "font-bold text-accent" : d ? "text-ink" : "text-ink-faint"
+                      r === u ? "font-bold text-accent" : a ? "text-ink" : "text-ink-faint"
                     ),
                     children: Number(r.slice(8))
                   }
                 ),
-                s.slice(0, i).map((e) => {
-                  const a = e.kind === "closed" || e.kind === "holiday";
+                l.slice(0, o).map((e) => {
+                  const d = e.kind === "closed" || e.kind === "holiday";
                   return /* @__PURE__ */ n(
                     "span",
                     {
                       title: `${f[e.kind].label}: ${e.label} · ${x(e.schedules)}`,
-                      className: t(
+                      className: s(
                         "flex min-w-0 items-center gap-1 rounded-sm border px-1.5 py-0.5 text-caption text-ink-strong",
-                        a ? "border-line-strong" : "bg-surface-raised",
+                        d ? "border-line-strong" : "bg-surface-raised",
                         e.kind === "extra" && "border-dashed border-ink-strong",
                         e.kind === "changed" && "border-ink-strong/50"
                       ),
-                      style: a ? g : void 0,
+                      style: d ? g : void 0,
                       children: [
-                        e.schedules.slice(0, N).map((c) => /* @__PURE__ */ o(
+                        e.schedules.slice(0, N).map((c) => /* @__PURE__ */ t(
                           "span",
                           {
                             "aria-hidden": !0,
-                            className: t("size-1.5 flex-none rounded-full", p(c.colour))
+                            className: s("size-1.5 flex-none rounded-full", b(c.colour))
                           },
                           c.id
                         )),
-                        /* @__PURE__ */ n("span", { className: "truncate", children: [
-                          k(e),
-                          e.schedules.length > 1 ? ` · ${e.schedules.length}` : ""
+                        /* @__PURE__ */ t("span", { className: "min-w-0 truncate", children: k(e) }),
+                        e.schedules.length > 1 && /* @__PURE__ */ n("span", { className: "flex-none tabular-nums", children: [
+                          "· ",
+                          e.schedules.length.toLocaleString()
                         ] })
                       ]
                     },
                     `${e.kind}|${e.label}`
                   );
                 }),
-                s.length > i && /* @__PURE__ */ n("span", { className: "text-caption text-ink-faint", children: [
+                l.length > o && /* @__PURE__ */ n("span", { className: "text-caption text-ink-faint", children: [
                   "+",
-                  s.length - i,
+                  l.length - o,
                   " more"
                 ] })
               ]
@@ -89,5 +90,5 @@ function S({ days: m, month: h, today: b }) {
   );
 }
 export {
-  S as ScheduleMonthGrid
+  $ as ScheduleMonthGrid
 };

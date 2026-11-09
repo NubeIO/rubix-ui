@@ -86,14 +86,16 @@ describe("ScheduleMonthGrid", () => {
     }));
     render(<ScheduleMonthGrid days={days} month="2026-11" today="2026-11-06" />);
     const grid = screen.getByRole("grid", { name: "Closures & holidays this month" });
-    expect(within(grid).getByText("Melbourne Cup · 2")).toBeTruthy();
+    expect(within(grid).getByText("Melbourne Cup").parentElement!.textContent).toBe("Melbourne Cup· 2");
   });
 
   it("keeps an entry shared by many schedules to three dots in the grid and three names in the list", () => {
     const many = Array.from({ length: 20 }, (_, i) => ({ id: `s${i}`, name: `Site ${i}` }));
     const days = DATES.map((date) => ({ date, chips: date === "2026-11-03" ? [{ ...cup, schedules: many }] : [] }));
     const { container } = render(<ScheduleMonthGrid days={days} month="2026-11" today="2026-11-06" />);
-    expect(screen.getByText("Melbourne Cup · 20").parentElement!.querySelectorAll("[aria-hidden]")).toHaveLength(3);
+    const chip = screen.getAllByText("Melbourne Cup")[0].parentElement!;
+    expect(chip.querySelectorAll("[aria-hidden]")).toHaveLength(3);
+    expect(chip.textContent).toContain("· 20");
     container.remove();
     render(<ScheduleDatedList title="Closures & holidays in Nov" entries={[{ ...cup, date: "2026-11-03", schedules: many }]} today="2026-11-06" />);
     expect(screen.getByText("Site 2")).toBeTruthy();

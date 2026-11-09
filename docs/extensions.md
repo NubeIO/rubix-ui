@@ -11,7 +11,7 @@ The `rust-schedule-management` extension (schedule groups) is a working example.
 ```jsonc
 // ui/package.json
 "dependencies": {
-  "@nube/rubix-ui": "github:NubeIO/rubix-ui#v0.5.0"
+  "@nube/rubix-ui": "github:NubeIO/rubix-ui#v0.6.0"
 }
 ```
 

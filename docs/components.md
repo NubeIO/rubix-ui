@@ -323,7 +323,7 @@ strip (its tooltip names it); one with room for one line shows only the label.
 | `now?` | `ScheduleMoment`: today's column, the now line and the running block |
 | `onPrev`, `onNext`, `onToday` | move the week |
 | `atToday` | the week holds today: Today is off |
-| `actions?` | at the right of the controls ("Add dated entry") |
+| `actions?` | at the right of the controls ("Add closure or holiday") |
 | `legend` | `ScheduleLegendItem[]`, the names in position order |
 
 ```tsx
@@ -360,7 +360,7 @@ chip per schedule, the body you put in, a legend and "Closures & holidays this w
 first), `rows` (`ScheduleWeekRow[]`, the shown schedules only), `today`, `onOpen?(id)` (the name becomes a
 button).
 
-`ScheduleMonthGrid`: the month's dated entries on their days, up to three chips a day with a dot per
+`ScheduleMonthGrid`: the month's closures & holidays (lb's dated entries) on their days, up to three chips a day with a dot per
 schedule (three at most; the count follows the label). Props: `days` (`ScheduleMonthDay[]`, whole weeks,
 Monday first), `month` (`YYYY-MM`; other days dimmed), `today`. The dated list shows three schedule names
 an entry, then "+N more".
