@@ -1,8 +1,10 @@
 // lb's schedule record read into the editor's `NodeSchedule` (node schedule brief, decision 1).
 //
 //   - names: Off (value = `default_payload`, else 0), then `config.names` in order. A name's value is
-//     read from its blocks (weekly entries, then events; the first one found). A name with no blocks
-//     has no stored value, so it reads as its position (Occupied 1, Standby 2, ...).
+//     read from its blocks (enabled weekly entries, then a box's own events; the first one found). A
+//     disabled entry's value is not read: it runs nothing (the extension's `value_named` skips it too).
+//     A name with no blocks has no stored value, so it reads as its position (Occupied 1, Standby 2).
+//   - default name: `config.default_name` as stored (`defaultName()` falls back while it is not a name).
 //   - week: each weekday as the box runs it. Where weekly entries overlap, the one that starts first
 //     wins, ties by key in natural order (lb's evaluator). Disabled entries are not drawn; they stay in
 //     `source` and ride through a save unchanged.
@@ -33,7 +35,7 @@ export function readNodeSchedule(record: ScheduleRecord): NodeSchedule {
   const exception = Object.entries(doc.schedules?.exception ?? {}).sort(([a], [b]) => natural(a, b));
 
   const seen = new Map<string, number>();
-  for (const [, e] of [...weekly, ...events.filter(([, x]) => !x.kind)])
+  for (const [, e] of [...weekly.filter(([, w]) => w.enable !== false), ...events.filter(([, x]) => !x.kind)])
     if (e.name && !seen.has(e.name)) seen.set(e.name, e.value ?? 0);
   const names: NameValue[] = [
     { name: OFF, value: record.default_payload ?? 0 },
@@ -49,6 +51,7 @@ export function readNodeSchedule(record: ScheduleRecord): NodeSchedule {
     timezone: record.timezone,
     enabled: record.enabled,
     names,
+    ...(doc.config?.default_name ? { defaultName: doc.config.default_name } : {}),
     week,
     dated: readDated(Object.fromEntries(events), Object.fromEntries(exception), week),
     output: {

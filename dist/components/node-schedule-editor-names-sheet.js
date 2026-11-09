@@ -1,90 +1,96 @@
-import { jsxs as n, jsx as e } from "react/jsx-runtime";
-import { Trash2 as h, Plus as p } from "lucide-react";
-import { Button as o } from "./button.js";
-import { Input as d } from "./input.js";
-import { renameName as f, setNameValue as v, removeName as N, addName as x } from "../lib/schedule/editNodeSchedule.js";
-import { MAX_NAMES as g } from "../lib/schedule/nodeSchedule.js";
-import { EditorSheet as b } from "./node-schedule-editor-sheet.js";
-import { NameSwatch as k } from "./name-swatch.js";
-function A({ open: c, doc: t, canEdit: m, onClose: u, onChange: i }) {
-  return /* @__PURE__ */ n(
-    b,
+import { jsxs as i, jsx as a } from "react/jsx-runtime";
+import { Trash2 as p, Plus as f } from "lucide-react";
+import { Button as u } from "./button.js";
+import { Input as c } from "./input.js";
+import { removeBlocker as v, renameName as x, setNameValue as N, removeName as b, addName as g } from "../lib/schedule/editNodeSchedule.js";
+import { MAX_NAMES as k } from "../lib/schedule/nodeSchedule.js";
+import { EditorSheet as _ } from "./node-schedule-editor-sheet.js";
+import { NameSwatch as y } from "./name-swatch.js";
+function D({ open: h, doc: s, canEdit: m, onClose: d, onChange: n }) {
+  const o = s.names.map((t, e) => m && e > 1 ? v(s, e) : null);
+  return /* @__PURE__ */ i(
+    _,
     {
-      open: c,
-      onClose: u,
-      scheduleName: t.name,
+      open: h,
+      onClose: d,
+      scheduleName: s.name,
       title: "Names and values",
       description: "Each name sends its value to the boxes and dashboards, and has its own colour by position: the same in every schedule, calendar and chart.",
-      footer: /* @__PURE__ */ e(o, { variant: "ghost", size: "sm", onClick: u, children: "Done" }),
+      footer: /* @__PURE__ */ a(u, { variant: "ghost", size: "sm", onClick: d, children: "Done" }),
       children: [
-        /* @__PURE__ */ n("div", { className: "grid grid-cols-[0.75rem_minmax(0,1fr)_5rem_4.5rem] items-center gap-2 text-caption text-ink-faint", children: [
-          /* @__PURE__ */ e("span", {}),
-          /* @__PURE__ */ e("span", { children: "Name" }),
-          /* @__PURE__ */ e("span", { children: "Value" }),
-          /* @__PURE__ */ e("span", {})
+        /* @__PURE__ */ i("div", { className: "grid grid-cols-[0.75rem_minmax(0,1fr)_5rem_4.5rem] items-center gap-2 text-caption text-ink-faint", children: [
+          /* @__PURE__ */ a("span", {}),
+          /* @__PURE__ */ a("span", { children: "Name" }),
+          /* @__PURE__ */ a("span", { children: "Value" }),
+          /* @__PURE__ */ a("span", {})
         ] }),
-        t.names.map((s, a) => (
+        s.names.map((t, e) => (
           // Keyed by name so a rename re-mounts the field with the committed text.
-          /* @__PURE__ */ n("div", { className: "grid grid-cols-[0.75rem_minmax(0,1fr)_5rem_4.5rem] items-center gap-2", children: [
-            /* @__PURE__ */ e(k, { index: a }),
-            /* @__PURE__ */ e(
-              d,
+          /* @__PURE__ */ i("div", { className: "grid grid-cols-[0.75rem_minmax(0,1fr)_5rem_4.5rem] items-center gap-2", children: [
+            /* @__PURE__ */ a(y, { index: e }),
+            /* @__PURE__ */ a(
+              c,
               {
-                "aria-label": `Name ${a + 1}`,
-                defaultValue: s.name,
-                disabled: !m || a === 0,
+                "aria-label": `Name ${e + 1}`,
+                defaultValue: t.name,
+                disabled: !m || e === 0,
                 className: "h-8 text-xs",
-                onBlur: (r) => {
-                  const l = f(t, a, r.target.value);
-                  l === t ? r.target.value = s.name : i(l);
+                onBlur: (l) => {
+                  const r = x(s, e, l.target.value);
+                  r === s ? l.target.value = t.name : n(r);
                 }
               }
             ),
-            /* @__PURE__ */ e(
-              d,
+            /* @__PURE__ */ a(
+              c,
               {
                 type: "number",
-                "aria-label": `${s.name} value`,
-                defaultValue: s.value,
+                "aria-label": `${t.name} value`,
+                defaultValue: t.value,
                 disabled: !m,
                 className: "h-8 text-xs",
-                onBlur: (r) => {
-                  const l = Number(r.target.value);
-                  r.target.value === "" || !Number.isFinite(l) ? r.target.value = String(s.value) : l !== s.value && i(v(t, a, l));
+                onBlur: (l) => {
+                  const r = Number(l.target.value);
+                  l.target.value === "" || !Number.isFinite(r) ? l.target.value = String(t.value) : r !== t.value && n(N(s, e, r));
                 }
               }
             ),
-            a === 0 ? /* @__PURE__ */ e("span", { title: "Default: runs when nothing else does", className: "text-caption text-ink-muted", children: "Default" }) : m && a > 1 ? /* @__PURE__ */ e(
-              o,
+            e === 0 ? /* @__PURE__ */ a("span", { title: "Default: runs when nothing else does", className: "text-caption text-ink-muted", children: "Default" }) : m && e > 1 ? /* @__PURE__ */ a(
+              u,
               {
                 variant: "ghost",
                 size: "icon-sm",
-                "aria-label": `Remove ${s.name}`,
-                onClick: () => i(N(t, a)),
-                children: /* @__PURE__ */ e(h, {})
+                "aria-label": `Remove ${t.name}`,
+                disabled: o[e] !== null,
+                title: o[e] ?? void 0,
+                onClick: () => n(b(s, e)),
+                children: /* @__PURE__ */ a(p, {})
               }
-            ) : /* @__PURE__ */ e("span", {})
-          ] }, `${a}-${s.name}`)
+            ) : /* @__PURE__ */ a("span", {})
+          ] }, `${e}-${t.name}`)
         )),
-        m && /* @__PURE__ */ n(
-          o,
+        m && /* @__PURE__ */ i(
+          u,
           {
             variant: "ghost",
             size: "sm",
             className: "justify-self-start",
-            disabled: t.names.length >= g,
-            onClick: () => i(x(t)),
+            disabled: s.names.length >= k,
+            onClick: () => n(g(s)),
             children: [
-              /* @__PURE__ */ e(p, {}),
+              /* @__PURE__ */ a(f, {}),
               "Add a name"
             ]
           }
         ),
-        /* @__PURE__ */ e("p", { className: "text-caption text-ink-muted", children: "Up to six names, the default included. Colours go by position: blue, amber, teal, violet, pink. The default runs whenever nothing else does and has no colour. Removing a name clears its blocks to the default." })
+        o.map(
+          (t, e) => t ? /* @__PURE__ */ a("p", { className: "text-caption text-ink-muted", children: t }, s.names[e].name) : null
+        ),
+        /* @__PURE__ */ a("p", { className: "text-caption text-ink-muted", children: "Up to six names, the default included. Colours go by position: blue, amber, teal, violet, pink. The default runs whenever nothing else does and has no colour. Removing a name clears its blocks to the default." })
       ]
     }
   );
 }
 export {
-  A as NamesSheet
+  D as NamesSheet
 };

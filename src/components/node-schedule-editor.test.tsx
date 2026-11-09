@@ -118,6 +118,15 @@ describe("NodeScheduleEditor", () => {
     expect(weekly.map((w) => w.value)).toEqual([5]);
   });
 
+  it("will not remove a name a box's own entry still uses, and says why", async () => {
+    const own = { name: "Standby", label: "Box's own", dates: [{ start: "2026-11-10T06:30", end: "2026-11-10T10:00" }] };
+    const { editor } = mount({ schedule: readNodeSchedule(buildingHours({ events: { box1: own } })) });
+    fireEvent.click(editor().getByRole("button", { name: /Names 3\/6/ }));
+    const remove = await screen.findByRole("button", { name: "Remove Standby" });
+    expect((remove as HTMLButtonElement).disabled).toBe(true);
+    expect(screen.getByText("Standby can't be removed: a box's own dated entry still uses it.")).toBeTruthy();
+  });
+
   it("keeps the draft when the save is refused as stale, then reloads and reapplies it", async () => {
     const theirs = { ...paintWeek(readNodeSchedule(buildingHours()), [6], 600, 660, "Standby"), rev: 2 };
     const onSave = vi

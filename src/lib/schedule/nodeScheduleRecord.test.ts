@@ -46,7 +46,15 @@ describe("readNodeSchedule", () => {
     delete own.kind;
     const doc = readNodeSchedule(buildingHours({ exception: { box1: own } }));
     expect(doc.dated.map(({ id: _, ...e }) => e)).toEqual([
-      { kind: "closed", label: "Late start", date: "2026-11-10", start: 390, end: 599, kept: { map: "exception", key: "box1" } },
+      {
+        kind: "closed",
+        label: "Late start",
+        date: "2026-11-10",
+        start: 390,
+        end: 599,
+        kept: { map: "exception", key: "box1" },
+        windows: [{ start: "2026-11-10T06:30", end: "2026-11-10T10:00" }],
+      },
     ]);
     expect(writeNodeSchedule(doc).schedule.schedules.exception).toEqual({ box1: own });
   });
@@ -98,7 +106,35 @@ describe("writeNodeSchedule", () => {
     ) as unknown as Record<string, unknown> & typeof source;
     expect(record.weekly).toBeUndefined();
     expect(record.exceptions).toBeUndefined();
-    expect(record.schedule.schedules.weekly?.["kept-off"]).toMatchObject({ enable: false });
+    expect(record.schedule.schedules.weekly?.off).toMatchObject({ enable: false });
+  });
+
+  it("a save with no edit changes nothing, however often: a disabled entry's value is not read", () => {
+    const first = buildingHours({
+      weekly: {
+        w1: { name: "Occupied", days: ["monday"], start: "08:00", end: "17:59", value: 1 },
+        w2: { name: "Occupied", days: ["sunday"], start: "01:00", end: "02:00", value: 9, enable: false },
+      },
+    });
+    const once = writeNodeSchedule(readNodeSchedule(first));
+    const twice = writeNodeSchedule(readNodeSchedule(once));
+    expect(readNodeSchedule(first).names[1]).toEqual({ name: "Occupied", value: 1 });
+    // The disabled entry keeps its key; the new block takes the next free one.
+    expect(Object.keys(once.schedule.schedules.weekly ?? {}).sort()).toEqual(["w1", "w2"]);
+    expect(once.schedule.schedules.weekly?.w1).toMatchObject({ value: 1, start: "08:00" });
+    expect(twice.schedule).toEqual(once.schedule);
+  });
+
+  it("new blocks skip the key a disabled entry holds", () => {
+    const record = buildingHours({
+      weekly: {
+        w1: { name: "Occupied", days: ["monday"], start: "08:00", end: "17:59", value: 1, enable: false },
+        w9: { name: "Standby", days: ["monday"], start: "18:00", end: "18:59", value: 2 },
+      },
+    });
+    const weekly = writeNodeSchedule(readNodeSchedule(record)).schedule.schedules.weekly ?? {};
+    expect(weekly.w1).toEqual(record.schedule.schedules.weekly?.w1);
+    expect(weekly.w2).toMatchObject({ name: "Standby", start: "18:00" });
   });
 
   it("removing a name turns its blocks Off", () => {

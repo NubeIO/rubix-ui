@@ -24,6 +24,9 @@ export const DAY_MINUTES = 1440;
 export interface NameValue {
   name: string;
   value: number;
+  /** Set by a rename: the name this one was read as, so "Reload, keep my edit" can follow the rename
+   *  onto someone else's newer version. Never written. */
+  was?: string;
 }
 
 /** One block of one day: `name` runs from `start` to `end`, both minutes, `end` inclusive. */
@@ -65,10 +68,16 @@ export interface DatedItem {
   yearly?: boolean;
   /** Read from a box's own entry: written back verbatim. */
   kept?: { map: "events" | "exception"; key: string };
+  /** A kept entry's own windows, as stored: what it runs is resolved from these, every day of them. */
+  windows?: { start: string; end: string }[];
 }
 
-/** The name the editor's dated entries run: lb's default name, the first after Off. */
-export function defaultName(doc: Pick<NodeSchedule, "names">): string {
+/** The name the editor's dated entries run: lb's `default_name` while it is one of the names (the
+ *  Schedule Groups extension runs its changed hours and overrides under it too), else the first after
+ *  Off. */
+export function defaultName(doc: Pick<NodeSchedule, "names" | "defaultName">): string {
+  const stored = doc.defaultName;
+  if (stored && doc.names.some((n, i) => i > 0 && n.name === stored)) return stored;
   return doc.names[1]?.name ?? "Default";
 }
 
@@ -90,6 +99,8 @@ export interface NodeSchedule {
   enabled: boolean;
   /** `[0]` is Off (the default); the rest are `config.names` in order. */
   names: NameValue[];
+  /** `config.default_name` as read; a rename follows it. `defaultName()` says which name it means. */
+  defaultName?: string;
   /** Seven days, Monday first, each sorted and non-overlapping. Off blocks are not listed. */
   week: Seg[][];
   dated: DatedItem[];

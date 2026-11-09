@@ -24,7 +24,7 @@ import {
   type NodeSchedule,
 } from "./nodeSchedule";
 import type { DatedEntry } from "./scheduleRecord";
-import { weekdayOf } from "./resolveDay";
+import { weekdayOf } from "./datedWindows";
 
 const CLOSED_COLOR = "#6b7280";
 const OPEN_COLOR = "#2563eb";
@@ -72,7 +72,7 @@ export function weeklyOn(doc: Pick<NodeSchedule, "week">, day: string): boolean[
 }
 
 /** The value hours added by a dated entry carry: the default name's weekly value, else 1. */
-export function onValue(doc: Pick<NodeSchedule, "names" | "week">): number {
+export function onValue(doc: Pick<NodeSchedule, "names" | "week" | "defaultName">): number {
   const name = defaultName(doc);
   return doc.week.some((d) => d.some((s) => s.name === name)) ? valueOf(doc, name) : 1;
 }
@@ -99,43 +99,67 @@ function daysOf(item: DatedItem): string[] {
   return out;
 }
 
+/** One lb entry of a dated item: which map, its key, the entry. */
+export interface ItemEntry {
+  map: "events" | "exception";
+  key: string;
+  entry: DatedEntry;
+}
+
+/** The lb entries an item the editor writes itself stands for. A changed-hours item is worked out on
+ *  `days` (every day of it unless given). A kept item gives none: it is written back as read. */
+export function itemEntries(
+  doc: Pick<NodeSchedule, "names" | "week" | "defaultName">,
+  item: DatedItem,
+  days = daysOf(item),
+): ItemEntry[] {
+  const name = defaultName(doc);
+  if (item.kept) return [];
+  if (item.kind === "holiday") {
+    const dates: Window[] = [[stamp(item.date, 0), stamp(item.date, DAY_MINUTES)]];
+    const e = entry(name, item.label, "holiday", dates, 0, item.yearly);
+    return [{ map: "exception", key: `h-${item.date}`, entry: e }];
+  }
+  if (item.kind === "closed") {
+    const dates: Window[] = [[stamp(item.date, 0), stamp(item.to ?? item.date, DAY_MINUTES)]];
+    const e = entry(name, item.label, "closed", dates, 0, item.yearly);
+    return [{ map: "exception", key: `${item.id}-x`, entry: e }];
+  }
+  const on = onValue(doc);
+  if (item.kind === "extra" && item.start !== undefined && item.end !== undefined) {
+    const dates: Window[] = [[stamp(item.date, item.start), stamp(item.date, item.end + 1)]];
+    return [{ map: "events", key: `${item.id}-e`, entry: entry(name, item.label, "extra", dates, on) }];
+  }
+  if (item.kind !== "changed") return [];
+  const wanted = new Array<boolean>(DAY_MINUTES).fill(false);
+  for (const h of item.hours ?? []) wanted.fill(true, h.start, h.end + 1);
+  const closed: Window[] = [];
+  const extra: Window[] = [];
+  for (const day of days) {
+    const d = diff(weeklyOn(doc, day), wanted);
+    closed.push(...d.closed.map(([s, e]): Window => [stamp(day, s), stamp(day, e)]));
+    extra.push(...d.extra.map(([s, e]): Window => [stamp(day, s), stamp(day, e)]));
+  }
+  const out: ItemEntry[] = [];
+  if (closed.length)
+    out.push({ map: "exception", key: `${item.id}-x`, entry: entry(name, item.label, "changed", closed, 0) });
+  if (extra.length)
+    out.push({ map: "events", key: `${item.id}-e`, entry: entry(name, item.label, "extra", extra, on) });
+  return out;
+}
+
 export function writeDated(doc: NodeSchedule): {
   events: Record<string, DatedEntry>;
   exception: Record<string, DatedEntry>;
 } {
-  const name = defaultName(doc);
-  const on = onValue(doc);
-  const events: Record<string, DatedEntry> = {};
-  const exception: Record<string, DatedEntry> = {};
+  const out = { events: {} as Record<string, DatedEntry>, exception: {} as Record<string, DatedEntry> };
   const source = doc.source.schedule?.schedules ?? {};
   for (const item of doc.dated) {
     if (item.kept) {
       const raw = source[item.kept.map]?.[item.kept.key];
-      if (raw) (item.kept.map === "events" ? events : exception)[item.kept.key] = raw;
-      continue;
+      if (raw) out[item.kept.map][item.kept.key] = raw;
     }
-    if (item.kind === "holiday") {
-      const dates: Window[] = [[stamp(item.date, 0), stamp(item.date, DAY_MINUTES)]];
-      exception[`h-${item.date}`] = entry(name, item.label, "holiday", dates, 0, item.yearly);
-    } else if (item.kind === "closed") {
-      const dates: Window[] = [[stamp(item.date, 0), stamp(item.to ?? item.date, DAY_MINUTES)]];
-      exception[`${item.id}-x`] = entry(name, item.label, "closed", dates, 0, item.yearly);
-    } else if (item.kind === "extra" && item.start !== undefined && item.end !== undefined) {
-      const dates: Window[] = [[stamp(item.date, item.start), stamp(item.date, item.end + 1)]];
-      events[`${item.id}-e`] = entry(name, item.label, "extra", dates, on);
-    } else if (item.kind === "changed") {
-      const wanted = new Array<boolean>(DAY_MINUTES).fill(false);
-      for (const h of item.hours ?? []) wanted.fill(true, h.start, h.end + 1);
-      const closed: Window[] = [];
-      const extra: Window[] = [];
-      for (const day of daysOf(item)) {
-        const d = diff(weeklyOn(doc, day), wanted);
-        closed.push(...d.closed.map(([s, e]): Window => [stamp(day, s), stamp(day, e)]));
-        extra.push(...d.extra.map(([s, e]): Window => [stamp(day, s), stamp(day, e)]));
-      }
-      if (closed.length) exception[`${item.id}-x`] = entry(name, item.label, "changed", closed, 0);
-      if (extra.length) events[`${item.id}-e`] = entry(name, item.label, "extra", extra, on);
-    }
+    for (const e of itemEntries(doc, item)) out[e.map][e.key] = e.entry;
   }
-  return { events, exception };
+  return out;
 }

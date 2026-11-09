@@ -1,5 +1,5 @@
-// resolveDay's order (week → changed → extra → closed/holiday) and where dated entries fall: yearly,
-// ranges over a year end, 29 February the way lb reads it.
+// resolveDay on the editor's own dated items, and where dated entries fall: yearly, ranges over a year
+// end, 29 February the way lb reads it. lb's own evaluation cases are in `resolveDay.lb.test.ts`.
 
 import { describe, expect, it } from "vitest";
 
@@ -24,7 +24,7 @@ describe("resolveDay", () => {
     expect(spans(doc([]), "2026-11-14")).toEqual([]);
   });
 
-  it("changed hours replace the day, extra hours go on top, a closure wins over both", () => {
+  it("changed hours close the week's unwanted hours, extra hours add some, a closure wins over both", () => {
     const changed: DatedItem = { id: "c", kind: "changed", label: "Late", date: "2026-11-11", hours: [{ start: 600, end: 1079 }] };
     const extra: DatedItem = { id: "e", kind: "extra", label: "Dinner", date: "2026-11-11", start: 1140, end: 1319 };
     const d = doc([changed, extra]);
@@ -39,8 +39,17 @@ describe("resolveDay", () => {
     expect(day.closed).toBe(closed);
   });
 
-  it("a part-day closure clears only its minutes", () => {
-    const x: DatedItem = { id: "x", kind: "closed", label: "Late start", date: "2026-11-10", start: 390, end: 599 };
+  it("a box's own part-day closure clears only its minutes", () => {
+    const x: DatedItem = {
+      id: "kept:exception:x",
+      kind: "closed",
+      label: "Late start",
+      date: "2026-11-10",
+      start: 390,
+      end: 599,
+      kept: { map: "exception", key: "x" },
+      windows: [{ start: "2026-11-10T06:30", end: "2026-11-10T10:00" }],
+    };
     expect(spans(doc([x]), "2026-11-10")).toEqual([[600, 1079, "Occupied"]]);
     expect(resolveDay(doc([x]), "2026-11-10").closed).toBeUndefined();
   });

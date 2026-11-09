@@ -1,91 +1,100 @@
-import { addDays as g } from "../date.js";
-import { defaultName as $, DAY_MINUTES as c, valueOf as w } from "./nodeSchedule.js";
-import { weekdayOf as b } from "./resolveDay.js";
-const S = "#6b7280", v = "#2563eb";
-function f(n, t) {
-  return t >= c ? `${g(n, 1)}T00:00` : `${n}T${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`;
+import { addDays as x } from "../date.js";
+import { defaultName as O, DAY_MINUTES as u, valueOf as g } from "./nodeSchedule.js";
+import { weekdayOf as $ } from "./datedWindows.js";
+const w = "#6b7280", b = "#2563eb";
+function f(t, e) {
+  return e >= u ? `${x(t, 1)}T00:00` : `${t}T${String(Math.floor(e / 60)).padStart(2, "0")}:${String(e % 60).padStart(2, "0")}`;
 }
-function O(n) {
-  const t = [];
-  for (let o = 0; o < c; ) {
-    if (!n(o)) {
-      o++;
+function k(t) {
+  const e = [];
+  for (let n = 0; n < u; ) {
+    if (!t(n)) {
+      n++;
       continue;
     }
-    const s = o;
-    for (; o < c && n(o); ) o++;
-    t.push([s, o]);
+    const o = n;
+    for (; n < u && t(n); ) n++;
+    e.push([o, n]);
   }
-  return t;
+  return e;
 }
-function D(n, t) {
-  const o = [];
-  for (const [s, a] of O((l) => n[l] && !t[l])) {
-    const l = o[o.length - 1];
-    l && !t.slice(l[1], s).includes(!0) ? l[1] = a : o.push([s, a]);
+function v(t, e) {
+  const n = [];
+  for (const [o, c] of k((r) => t[r] && !e[r])) {
+    const r = n[n.length - 1];
+    r && !e.slice(r[1], o).includes(!0) ? r[1] = c : n.push([o, c]);
   }
-  return { closed: o, extra: O((s) => t[s] && !n[s]) };
+  return { closed: n, extra: k((o) => e[o] && !t[o]) };
 }
-function A(n, t) {
-  const o = new Array(c).fill(!1);
-  for (const s of n.week[b(t)] ?? []) o.fill(!0, s.start, s.end + 1);
-  return o;
+function S(t, e) {
+  const n = new Array(u).fill(!1);
+  for (const o of t.week[$(e)] ?? []) n.fill(!0, o.start, o.end + 1);
+  return n;
 }
-function C(n) {
-  const t = $(n);
-  return n.week.some((o) => o.some((s) => s.name === t)) ? w(n, t) : 1;
+function D(t) {
+  const e = O(t);
+  return t.week.some((n) => n.some((o) => o.name === e)) ? g(t, e) : 1;
 }
-function u(n, t, o, s, a, l) {
-  const d = {
-    name: n,
-    label: t,
-    kind: o,
-    value: a,
-    color: o === "extra" ? v : S,
-    dates: s.map(([h, e]) => ({ start: h, end: e }))
+function y(t, e, n, o, c, r) {
+  const a = {
+    name: t,
+    label: e,
+    kind: n,
+    value: c,
+    color: n === "extra" ? b : w,
+    dates: o.map(([d, p]) => ({ start: d, end: p }))
   };
-  return l && (d.yearly = !0), d;
+  return r && (a.yearly = !0), a;
 }
-function E(n) {
-  const t = [n.date];
-  for (; n.to && t[t.length - 1] < n.to; ) t.push(g(t[t.length - 1], 1));
-  return t;
+function E(t) {
+  const e = [t.date];
+  for (; t.to && e[e.length - 1] < t.to; ) e.push(x(e[e.length - 1], 1));
+  return e;
 }
-function _(n) {
-  var d, h;
-  const t = $(n), o = C(n), s = {}, a = {}, l = ((d = n.source.schedule) == null ? void 0 : d.schedules) ?? {};
-  for (const e of n.dated) {
-    if (e.kept) {
-      const r = (h = l[e.kept.map]) == null ? void 0 : h[e.kept.key];
-      r && ((e.kept.map === "events" ? s : a)[e.kept.key] = r);
-      continue;
-    }
-    if (e.kind === "holiday") {
-      const r = [[f(e.date, 0), f(e.date, c)]];
-      a[`h-${e.date}`] = u(t, e.label, "holiday", r, 0, e.yearly);
-    } else if (e.kind === "closed") {
-      const r = [[f(e.date, 0), f(e.to ?? e.date, c)]];
-      a[`${e.id}-x`] = u(t, e.label, "closed", r, 0, e.yearly);
-    } else if (e.kind === "extra" && e.start !== void 0 && e.end !== void 0) {
-      const r = [[f(e.date, e.start), f(e.date, e.end + 1)]];
-      s[`${e.id}-e`] = u(t, e.label, "extra", r, o);
-    } else if (e.kind === "changed") {
-      const r = new Array(c).fill(!1);
-      for (const i of e.hours ?? []) r.fill(!0, i.start, i.end + 1);
-      const p = [], y = [];
-      for (const i of E(e)) {
-        const x = D(A(n, i), r);
-        p.push(...x.closed.map(([m, k]) => [f(i, m), f(i, k)])), y.push(...x.extra.map(([m, k]) => [f(i, m), f(i, k)]));
-      }
-      p.length && (a[`${e.id}-x`] = u(t, e.label, "changed", p, 0)), y.length && (s[`${e.id}-e`] = u(t, e.label, "extra", y, o));
-    }
+function A(t, e, n = E(e)) {
+  const o = O(t);
+  if (e.kept) return [];
+  if (e.kind === "holiday") {
+    const s = [[f(e.date, 0), f(e.date, u)]], l = y(o, e.label, "holiday", s, 0, e.yearly);
+    return [{ map: "exception", key: `h-${e.date}`, entry: l }];
   }
-  return { events: s, exception: a };
+  if (e.kind === "closed") {
+    const s = [[f(e.date, 0), f(e.to ?? e.date, u)]], l = y(o, e.label, "closed", s, 0, e.yearly);
+    return [{ map: "exception", key: `${e.id}-x`, entry: l }];
+  }
+  const c = D(t);
+  if (e.kind === "extra" && e.start !== void 0 && e.end !== void 0) {
+    const s = [[f(e.date, e.start), f(e.date, e.end + 1)]];
+    return [{ map: "events", key: `${e.id}-e`, entry: y(o, e.label, "extra", s, c) }];
+  }
+  if (e.kind !== "changed") return [];
+  const r = new Array(u).fill(!1);
+  for (const s of e.hours ?? []) r.fill(!0, s.start, s.end + 1);
+  const a = [], d = [];
+  for (const s of n) {
+    const l = v(S(t, s), r);
+    a.push(...l.closed.map(([h, i]) => [f(s, h), f(s, i)])), d.push(...l.extra.map(([h, i]) => [f(s, h), f(s, i)]));
+  }
+  const p = [];
+  return a.length && p.push({ map: "exception", key: `${e.id}-x`, entry: y(o, e.label, "changed", a, 0) }), d.length && p.push({ map: "events", key: `${e.id}-e`, entry: y(o, e.label, "extra", d, c) }), p;
+}
+function T(t) {
+  var o, c;
+  const e = { events: {}, exception: {} }, n = ((o = t.source.schedule) == null ? void 0 : o.schedules) ?? {};
+  for (const r of t.dated) {
+    if (r.kept) {
+      const a = (c = n[r.kept.map]) == null ? void 0 : c[r.kept.key];
+      a && (e[r.kept.map][r.kept.key] = a);
+    }
+    for (const a of A(t, r)) e[a.map][a.key] = a.entry;
+  }
+  return e;
 }
 export {
-  D as diff,
-  C as onValue,
+  v as diff,
+  A as itemEntries,
+  D as onValue,
   f as stamp,
-  A as weeklyOn,
-  _ as writeDated
+  S as weeklyOn,
+  T as writeDated
 };

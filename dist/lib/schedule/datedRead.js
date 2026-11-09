@@ -1,68 +1,68 @@
-import { splitDays as k } from "./datedWindows.js";
+import { splitDays as w } from "./datedWindows.js";
 import { weeklyOn as v } from "./datedWrite.js";
-import { DAY_MINUTES as p } from "./nodeSchedule.js";
+import { DAY_MINUTES as k } from "./nodeSchedule.js";
 import { addDays as D } from "../date.js";
-const O = (s) => s.replace(/-(x|e)$/, ""), w = (s) => s.endsWith("T00:00") ? D(s.slice(0, 10), -1) : s.slice(0, 10);
-function E(s, r, c) {
-  var d;
-  const o = [], e = /* @__PURE__ */ new Map(), l = [
-    ...Object.entries(s).map(([n, a]) => ({ map: "events", key: n, e: a })),
-    ...Object.entries(r).map(([n, a]) => ({ map: "exception", key: n, e: a }))
+const O = (o) => o.replace(/-(x|e)$/, ""), g = (o) => o.endsWith("T00:00") ? D(o.slice(0, 10), -1) : o.slice(0, 10);
+function E(o, r, c) {
+  var i;
+  const n = [], e = /* @__PURE__ */ new Map(), l = [
+    ...Object.entries(o).map(([s, a]) => ({ map: "events", key: s, e: a })),
+    ...Object.entries(r).map(([s, a]) => ({ map: "exception", key: s, e: a }))
   ];
-  for (const n of l) {
-    const a = n.e.kind;
-    if (a === "holiday" && n.map === "exception") {
-      const i = (d = n.e.dates) == null ? void 0 : d[0];
-      i ? o.push({ id: n.key, kind: "holiday", label: n.e.label ?? "", date: i.start.slice(0, 10), ...h(n.e) }) : o.push(u(n));
+  for (const s of l) {
+    const a = s.e.kind;
+    if (a === "holiday" && s.map === "exception") {
+      const d = (i = s.e.dates) == null ? void 0 : i[0];
+      d ? n.push({ id: s.key, kind: "holiday", label: s.e.label ?? "", date: d.start.slice(0, 10), ...b(s.e) }) : n.push(h(s));
     } else if (a === "closed" || a === "changed" || a === "extra") {
-      const i = O(n.key);
-      e.set(i, [...e.get(i) ?? [], n]);
-    } else o.push(u(n));
+      const d = O(s.key);
+      e.set(d, [...e.get(d) ?? [], s]);
+    } else n.push(h(s));
   }
-  for (const [n, a] of e) o.push(...$(n, a, c));
-  return o;
+  for (const [s, a] of e) n.push(...$(s, a, c));
+  return n;
 }
-function $(s, r, c) {
+function $(o, r, c) {
   var m;
-  const o = r.find((t) => t.map === "exception" && t.key === `${s}-x`), e = r.find((t) => t.map === "events" && t.key === `${s}-e` && t.e.kind === "extra"), l = r.every((t) => t === o || t === e), d = r.flatMap((t) => t.e.dates ?? []);
-  if (!l || d.length === 0) return r.map(u);
-  const n = ((m = o ?? e) == null ? void 0 : m.e.label) ?? "", a = d.map((t) => t.start.slice(0, 10)).sort()[0], i = d.map((t) => w(t.end)).sort().reverse()[0], f = i > a ? { to: i } : {};
-  if ((o == null ? void 0 : o.e.kind) === "closed" && !e) return [{ id: s, kind: "closed", label: n, date: a, ...f, ...h(o.e) }];
-  if ((o == null ? void 0 : o.e.kind) === "changed") {
+  const n = r.find((t) => t.map === "exception" && t.key === `${o}-x`), e = r.find((t) => t.map === "events" && t.key === `${o}-e` && t.e.kind === "extra"), l = r.every((t) => t === n || t === e), i = r.flatMap((t) => t.e.dates ?? []);
+  if (!l || i.length === 0) return r.map(h);
+  const s = ((m = n ?? e) == null ? void 0 : m.e.label) ?? "", a = i.map((t) => t.start.slice(0, 10)).sort()[0], d = i.map((t) => g(t.end)).sort().reverse()[0], f = d > a ? { to: d } : {};
+  if ((n == null ? void 0 : n.e.kind) === "closed" && !e) return [{ id: o, kind: "closed", label: s, date: a, ...f, ...b(n.e) }];
+  if ((n == null ? void 0 : n.e.kind) === "changed") {
     const t = v({ week: c }, a);
-    for (const y of [o, ...e ? [e] : []])
-      for (const g of y.e.dates ?? [])
-        for (const b of k(g).filter((x) => x.date === a))
-          t.fill(y.map === "events", b.from, b.to);
-    return [{ id: s, kind: "changed", label: n, date: a, ...f, hours: M(t) }];
+    for (const p of [n, ...e ? [e] : []])
+      for (const y of p.e.dates ?? [])
+        for (const u of w(y).filter((x) => x.date === a))
+          t.fill(p.map === "events", u.from, u.to);
+    return [{ id: o, kind: "changed", label: s, date: a, ...f, hours: M(t) }];
   }
-  if (!o && e) {
-    const t = k(e.e.dates[0]);
+  if (!n && e) {
+    const t = w(e.e.dates[0]);
     if (e.e.dates.length === 1 && t.length === 1)
-      return [{ id: s, kind: "extra", label: n, date: a, start: t[0].from, end: t[0].to - 1 }];
+      return [{ id: o, kind: "extra", label: s, date: a, start: t[0].from, end: t[0].to - 1 }];
   }
-  return r.map(u);
+  return r.map(h);
 }
-function M(s) {
+function M(o) {
   const r = [];
-  for (let c = 0; c < p; ) {
-    if (!s[c]) {
+  for (let c = 0; c < k; ) {
+    if (!o[c]) {
       c++;
       continue;
     }
-    const o = c;
-    for (; c < p && s[c]; ) c++;
-    r.push({ start: o, end: c - 1 });
+    const n = c;
+    for (; c < k && o[c]; ) c++;
+    r.push({ start: n, end: c - 1 });
   }
   return r;
 }
-const h = (s) => s.yearly ? { yearly: !0 } : {};
-function u({ map: s, key: r, e: c }) {
-  var t;
-  const o = ((t = c.dates) == null ? void 0 : t[0]) ?? { start: "", end: "" }, e = k(o)[0], l = { id: `kept:${s}:${r}`, label: c.label ?? "", kept: { map: s, key: r }, ...h(c) }, d = e && (e.from > 0 || e.to < p), n = (e == null ? void 0 : e.date) ?? o.start.slice(0, 10), a = (e == null ? void 0 : e.from) ?? 0, i = ((e == null ? void 0 : e.to) ?? p) - 1;
-  if (s === "events") return { ...l, kind: "extra", date: n, start: a, end: i, name: c.name };
-  const f = w(o.end), m = c.kind === "holiday" ? "holiday" : "closed";
-  return { ...l, kind: m, date: n, ...d ? { start: a, end: i } : f > n ? { to: f } : {} };
+const b = (o) => o.yearly ? { yearly: !0 } : {};
+function h({ map: o, key: r, e: c }) {
+  var p;
+  const n = ((p = c.dates) == null ? void 0 : p[0]) ?? { start: "", end: "" }, e = w(n)[0], l = (c.dates ?? []).map(({ start: y, end: u }) => ({ start: y, end: u })), i = { id: `kept:${o}:${r}`, label: c.label ?? "", kept: { map: o, key: r }, windows: l, ...b(c) }, s = e && (e.from > 0 || e.to < k), a = (e == null ? void 0 : e.date) ?? n.start.slice(0, 10), d = (e == null ? void 0 : e.from) ?? 0, f = ((e == null ? void 0 : e.to) ?? k) - 1;
+  if (o === "events") return { ...i, kind: "extra", date: a, start: d, end: f, name: c.name };
+  const m = g(n.end), t = c.kind === "holiday" ? "holiday" : "closed";
+  return { ...i, kind: t, date: a, ...s ? { start: d, end: f } : m > a ? { to: m } : {} };
 }
 export {
   E as readDated

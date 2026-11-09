@@ -1,9 +1,10 @@
-const a = "Off", o = 6, s = 1440;
-function f(e) {
-  var n;
-  return ((n = e.names[1]) == null ? void 0 : n.name) ?? "Default";
+const a = "Off", s = 6, o = 1440;
+function m(e) {
+  var t;
+  const n = e.defaultName;
+  return n && e.names.some((u, r) => r > 0 && u.name === n) ? n : ((t = e.names[1]) == null ? void 0 : t.name) ?? "Default";
 }
-const m = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+const f = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 function i(e) {
   const n = new Array(1440).fill(null);
   for (const t of e)
@@ -37,11 +38,11 @@ function N(e) {
   return e.source.use_utc ? "UTC" : e.timezone || "UTC";
 }
 export {
-  s as DAY_MINUTES,
-  o as MAX_NAMES,
+  o as DAY_MINUTES,
+  s as MAX_NAMES,
   a as OFF,
-  m as WIRE_DAYS,
-  f as defaultName,
+  f as WIRE_DAYS,
+  m as defaultName,
   l as fromMinutes,
   d as nameIndex,
   M as parseHHMM,

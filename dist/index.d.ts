@@ -253,6 +253,11 @@ export declare interface DatedItem {
         map: "events" | "exception";
         key: string;
     };
+    /** A kept entry's own windows, as stored: what it runs is resolved from these, every day of them. */
+    windows?: {
+        start: string;
+        end: string;
+    }[];
 }
 
 /** What a dated entry is for: lb's addition beside rubix-ce's structure. */
@@ -323,6 +328,8 @@ export declare const DialogSurfaceContext: React_2.Context<HTMLElement | null>;
 export declare const DialogTitle: React_2.ForwardRefExoticComponent<Omit<DialogPrimitive.DialogTitleProps & React_2.RefAttributes<HTMLHeadingElement>, "ref"> & React_2.RefAttributes<HTMLHeadingElement>>;
 
 export declare function DialogTrigger({ ...props }: React_2.ComponentProps<typeof DialogPrimitive.Trigger>): React_2.JSX.Element;
+
+declare type Doc = Pick<NodeSchedule, "week" | "dated" | "names" | "defaultName">;
 
 export declare function DropdownMenu({ ...props }: React_2.ComponentProps<typeof DropdownMenuPrimitive.Root>): React_2.JSX.Element;
 
@@ -460,6 +467,9 @@ export declare interface NameTone {
 export declare interface NameValue {
     name: string;
     value: number;
+    /** Set by a rename: the name this one was read as, so "Reload, keep my edit" can follow the rename
+     *  onto someone else's newer version. Never written. */
+    was?: string;
 }
 
 export declare interface NodeSchedule {
@@ -473,6 +483,8 @@ export declare interface NodeSchedule {
     enabled: boolean;
     /** `[0]` is Off (the default); the rest are `config.names` in order. */
     names: NameValue[];
+    /** `config.default_name` as read; a rename follows it. `defaultName()` says which name it means. */
+    defaultName?: string;
     /** Seven days, Monday first, each sorted and non-overlapping. Off blocks are not listed. */
     week: Seg[][];
     dated: DatedItem[];
@@ -601,7 +613,7 @@ export declare function Radio({ className, ...props }: React_2.ComponentProps<"i
 
 export declare function readNodeSchedule(record: ScheduleRecord): NodeSchedule;
 
-export declare function resolveDay(doc: Pick<NodeSchedule, "week" | "dated" | "names">, date: string): ResolvedDay;
+export declare function resolveDay(doc: Doc, date: string): ResolvedDay;
 
 export declare interface ResolvedDay {
     date: string;
@@ -611,7 +623,7 @@ export declare interface ResolvedDay {
     spans: DaySpan[];
     /** The closed or holiday entry that makes the whole day Off. */
     closed?: DatedItem;
-    /** Every dated entry that touched the day, in the order applied. */
+    /** Every dated entry that touched the day: changed hours, extra hours, then closures. */
     items: DatedItem[];
 }
 

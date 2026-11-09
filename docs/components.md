@@ -313,7 +313,8 @@ square (`index`: 0 is the default, outlined), for a legend or a list's now colum
   `DatedEntry`, `DateWindow`, `DatedKind`.
 - The model: `NodeSchedule`, `NameValue`, `Seg`, `DatedItem`, `BoxOutput`, `OFF`, `MAX_NAMES`,
   `nameIndex`, `valueOf`; `readNodeSchedule(record)` and `writeNodeSchedule(doc)` convert both ways.
-- `resolveDay(doc, date)`: what a date runs, minute by minute, dated entries applied.
+- `resolveDay(doc, date)`: what a date runs, minute by minute, by lb's own evaluation of what the
+  editor saves (earliest start wins, exceptions switch off).
   `nowAndNext(doc, instant)` and `wallAt(instant, zone)`: what runs now and the next change.
 - `nameColour(index)`: a name's colour by position (0 is the default). `SCHEDULE_COLOURS` and
   `scheduleColourClass(value)`: a schedule's own colour.

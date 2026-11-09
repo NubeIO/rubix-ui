@@ -16,6 +16,14 @@ Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/ru
 - A block that runs all day reads "00:00–24:00".
 - NodeScheduleEditor takes `initialTab` and `weekOnly`, and switches to its phone view by checking the
   width in code (`useMinWidth`), so an extension's own `.hidden` cannot hide it.
+- `resolveDay` (and so Now and the calendars) is lb's own evaluation of what the editor saves: the
+  entry that started first gives the name, exceptions switch off, a box's own entry runs on every day
+  its windows touch.
+- Saves keep the stored `default_name`, keep switched-off weekly entries under their own keys, and
+  ignore their values when reading a name's value. A rename reaches those entries and a box's own
+  dated entries; a name they still use cannot be removed, and the names sheet says why.
+- "Reload, keep my edit" carries renames and removed names onto the other person's days and keeps the
+  names they added.
 - The stylesheet also reads `src/lib/schedule`, for the name and schedule colour classes; the CSS guard
   checks they are there.
 

@@ -23,6 +23,12 @@ export interface DayPiece {
   to: number;
 }
 
+/** The weekday of `YYYY-MM-DD`, 0 = Monday. */
+export function weekdayOf(date: string): number {
+  const [y, m, d] = date.split("-").map(Number);
+  return (new Date(Date.UTC(y, m - 1, d)).getUTCDay() + 6) % 7;
+}
+
 const WALL = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
 
 const minuteOf = (wall: string) => Number(wall.slice(11, 13)) * 60 + Number(wall.slice(14, 16));
@@ -47,18 +53,33 @@ export function itemWindow(item: DatedItem): WallWindow {
 /** The concrete windows of an entry. One-offs give their own; a yearly one gives a copy starting in
  *  each of `years`, by lb's rules above. */
 export function occurrences(item: DatedItem, years: number[]): WallWindow[] {
-  const own = itemWindow(item);
-  if (!item.yearly) return [own];
-  const first = Number(own.start.slice(0, 4));
+  return windowCopies([itemWindow(item)], item.yearly, years);
+}
+
+/** lb's `occurrences` over stored windows: unreadable ones are skipped, a yearly entry gives a copy
+ *  of each window starting in each of `years`. */
+export function windowCopies(
+  windows: WallWindow[],
+  yearly: boolean | undefined,
+  years: number[],
+): WallWindow[] {
   const out: WallWindow[] = [];
-  for (const year of years) {
-    const by = year - first;
-    if (by < 0) continue;
-    const start = withYear(own.start, year);
-    if (!start) continue;
-    const endYear = Number(own.end.slice(0, 4)) + by;
-    const end = withYear(own.end, endYear) ?? `${String(endYear).padStart(4, "0")}-03-01T00:00`;
-    out.push({ start, end });
+  for (const own of windows) {
+    if (!WALL.test(own.start) || !WALL.test(own.end)) continue;
+    if (!yearly) {
+      out.push(own);
+      continue;
+    }
+    const first = Number(own.start.slice(0, 4));
+    for (const year of years) {
+      const by = year - first;
+      if (by < 0) continue;
+      const start = withYear(own.start, year);
+      if (!start) continue;
+      const endYear = Number(own.end.slice(0, 4)) + by;
+      const end = withYear(own.end, endYear) ?? `${String(endYear).padStart(4, "0")}-03-01T00:00`;
+      out.push({ start, end });
+    }
   }
   return out;
 }
@@ -73,16 +94,6 @@ export function pieceOn(w: WallWindow, date: string): DayPiece | null {
     from: w.start <= dayStart ? 0 : minuteOf(w.start),
     to: w.end >= dayEnd ? DAY_MINUTES : minuteOf(w.end),
   };
-}
-
-/** The minutes of `date` an entry covers in any year, merged into one span, or null. */
-export function coverOn(item: DatedItem, date: string): DayPiece | null {
-  const y = Number(date.slice(0, 4));
-  const pieces = occurrences(item, [y - 1, y])
-    .map((w) => pieceOn(w, date))
-    .filter((p): p is DayPiece => p !== null);
-  if (pieces.length === 0) return null;
-  return { date, from: Math.min(...pieces.map((p) => p.from)), to: Math.max(...pieces.map((p) => p.to)) };
 }
 
 /** A window cut into one piece per local day it touches. Unreadable or empty windows give none. */
