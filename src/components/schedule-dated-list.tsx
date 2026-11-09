@@ -27,10 +27,10 @@ export function ScheduleDatedList({
     <div className="grid gap-2">
       <h3 className="text-sm font-semibold text-ink-strong">{title}</h3>
       <ul
-        aria-label="Dated entries in this period"
+        aria-label="Closures & holidays in this period"
         className="divide-y divide-line overflow-hidden rounded-lg border border-line"
       >
-        {entries.length === 0 && <li className="p-4 text-center text-xs text-ink-faint">No dated entries.</li>}
+        {entries.length === 0 && <li className="p-4 text-center text-xs text-ink-faint">No closures or holidays.</li>}
         {entries.map((e) => (
           <li
             key={`${e.kind}|${e.label}`}

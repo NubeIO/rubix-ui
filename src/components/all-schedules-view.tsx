@@ -144,7 +144,7 @@ export function AllSchedulesView({
       </div>
 
       <ScheduleDatedList
-        title={view === "week" ? "Dated entries this week" : `Dated entries in ${mon}`}
+        title={view === "week" ? "Closures & holidays this week" : `Closures & holidays in ${mon}`}
         entries={entries}
         today={today}
       />

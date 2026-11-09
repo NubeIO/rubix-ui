@@ -85,7 +85,7 @@ describe("ScheduleMonthGrid", () => {
       chips: date === "2026-11-03" ? [{ ...cup, schedules: [office, retail] }] : [],
     }));
     render(<ScheduleMonthGrid days={days} month="2026-11" today="2026-11-06" />);
-    const grid = screen.getByRole("grid", { name: "Dated entries this month" });
+    const grid = screen.getByRole("grid", { name: "Closures & holidays this month" });
     expect(within(grid).getByText("Melbourne Cup · 2")).toBeTruthy();
   });
 
@@ -95,7 +95,7 @@ describe("ScheduleMonthGrid", () => {
     const { container } = render(<ScheduleMonthGrid days={days} month="2026-11" today="2026-11-06" />);
     expect(screen.getByText("Melbourne Cup · 20").parentElement!.querySelectorAll("[aria-hidden]")).toHaveLength(3);
     container.remove();
-    render(<ScheduleDatedList title="Dated entries in Nov" entries={[{ ...cup, date: "2026-11-03", schedules: many }]} today="2026-11-06" />);
+    render(<ScheduleDatedList title="Closures & holidays in Nov" entries={[{ ...cup, date: "2026-11-03", schedules: many }]} today="2026-11-06" />);
     expect(screen.getByText("Site 2")).toBeTruthy();
     expect(screen.queryByText("Site 3")).toBeNull();
     expect(screen.getByText("+17 more")).toBeTruthy();
@@ -128,8 +128,8 @@ describe("AllSchedulesView", () => {
     expect(screen.getByRole("button", { name: "Retail hours", pressed: false })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Office hours", pressed: true }));
     expect(onToggle).toHaveBeenCalledWith("office");
-    expect(screen.getByText("Dated entries this week")).toBeTruthy();
-    const row = within(screen.getByRole("list", { name: "Dated entries in this period" })).getByRole("listitem");
+    expect(screen.getByText("Closures & holidays this week")).toBeTruthy();
+    const row = within(screen.getByRole("list", { name: "Closures & holidays in this period" })).getByRole("listitem");
     expect([...row.children].map((c) => c.textContent)).toEqual([
       "Tue 3 Nov",
       "Melbourne Cup",
@@ -159,7 +159,7 @@ describe("AllSchedulesView", () => {
       </AllSchedulesView>,
     );
     expect(screen.getByText("Nov 2026")).toBeTruthy();
-    expect(screen.getByText("Dated entries in Nov")).toBeTruthy();
+    expect(screen.getByText("Closures & holidays in Nov")).toBeTruthy();
   });
 });
 

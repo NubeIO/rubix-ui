@@ -1,18 +1,18 @@
-import { jsxs as n, jsx as i } from "react/jsx-runtime";
+import { jsxs as n, jsx as o } from "react/jsx-runtime";
 import { cn as t } from "../lib/cn.js";
 import { scheduleColourClass as p } from "../lib/colour/scheduleColour.js";
 import { DAY_NAMES as u, namesText as x } from "./schedule-calendar-words.js";
 import { HATCH as g, KINDS as f, noteText as k } from "./schedule-kinds.js";
-const o = 3, N = 3;
-function y({ days: m, month: h, today: b }) {
+const i = 3, N = 3;
+function S({ days: m, month: h, today: b }) {
   return /* @__PURE__ */ n(
     "div",
     {
       role: "grid",
-      "aria-label": "Dated entries this month",
+      "aria-label": "Closures & holidays this month",
       className: "grid grid-cols-7 overflow-hidden rounded-lg border border-line",
       children: [
-        u.map((r) => /* @__PURE__ */ i(
+        u.map((r) => /* @__PURE__ */ o(
           "span",
           {
             className: "border-b border-line bg-surface-raised px-2 py-1.5 text-caption font-semibold text-ink-muted",
@@ -33,7 +33,7 @@ function y({ days: m, month: h, today: b }) {
                 !d && "bg-surface-raised/40"
               ),
               children: [
-                /* @__PURE__ */ i(
+                /* @__PURE__ */ o(
                   "span",
                   {
                     className: t(
@@ -43,7 +43,7 @@ function y({ days: m, month: h, today: b }) {
                     children: Number(r.slice(8))
                   }
                 ),
-                s.slice(0, o).map((e) => {
+                s.slice(0, i).map((e) => {
                   const a = e.kind === "closed" || e.kind === "holiday";
                   return /* @__PURE__ */ n(
                     "span",
@@ -57,7 +57,7 @@ function y({ days: m, month: h, today: b }) {
                       ),
                       style: a ? g : void 0,
                       children: [
-                        e.schedules.slice(0, N).map((c) => /* @__PURE__ */ i(
+                        e.schedules.slice(0, N).map((c) => /* @__PURE__ */ o(
                           "span",
                           {
                             "aria-hidden": !0,
@@ -74,9 +74,9 @@ function y({ days: m, month: h, today: b }) {
                     `${e.kind}|${e.label}`
                   );
                 }),
-                s.length > o && /* @__PURE__ */ n("span", { className: "text-caption text-ink-faint", children: [
+                s.length > i && /* @__PURE__ */ n("span", { className: "text-caption text-ink-faint", children: [
                   "+",
-                  s.length - o,
+                  s.length - i,
                   " more"
                 ] })
               ]
@@ -89,5 +89,5 @@ function y({ days: m, month: h, today: b }) {
   );
 }
 export {
-  y as ScheduleMonthGrid
+  S as ScheduleMonthGrid
 };

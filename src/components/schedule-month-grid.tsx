@@ -30,7 +30,7 @@ export function ScheduleMonthGrid({ days, month, today }: ScheduleMonthGridProps
   return (
     <div
       role="grid"
-      aria-label="Dated entries this month"
+      aria-label="Closures & holidays this month"
       className="grid grid-cols-7 overflow-hidden rounded-lg border border-line"
     >
       {DAY_NAMES.map((d) => (

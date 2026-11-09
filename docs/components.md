@@ -341,7 +341,7 @@ strip (its tooltip names it); one with room for one line shows only the label.
 ### AllSchedulesView, ScheduleWeekRows, ScheduleMonthGrid
 
 `AllSchedulesView` is the all-schedules calendar's frame: Week / Month tabs, previous / next / Today, a
-chip per schedule, the body you put in, a legend and "Dated entries this week / in Nov".
+chip per schedule, the body you put in, a legend and "Closures & holidays this week / in Nov".
 
 | Prop | |
 |---|---|
