@@ -124,6 +124,21 @@ on by default).
 
 `Card` with `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`.
 
+### PanelFrame
+
+The dashboard panel's frame: border, background, shadow and hover, plus `data-panel` and
+`surface-panel`, which the host's elevated and glass looks style. Wrap a real panel shown outside the
+dashboard in it (an extension embedding one with dash-kit's `PanelEmbed`). Wrap the whole panel body
+once; never nest frames. Props: `transparent?` (no border, background or shadow, and no `data-panel`),
+plus every `div` prop; `className` merges with `cn`. It is a flex column with hidden overflow, so give it
+a height and let the panel fill it.
+
+```tsx
+<PanelFrame className="h-64">
+  <PanelEmbed ... />
+</PanelFrame>
+```
+
 ### Table
 
 Styled native table: `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`.

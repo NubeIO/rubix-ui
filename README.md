@@ -67,7 +67,7 @@ one is missed, are in **[docs/extensions.md](docs/extensions.md)**.
 |---|---|
 | Actions | `Button`, `CopyButton` |
 | Form fields | `Input`, `Textarea`, `Label`, `Checkbox`, `Radio`, `Switch`, `Select`, `Combobox`, `DatePicker`, `TimeField`, `ColorSwatchPicker` |
-| Surfaces | `Card`, `Table`, `Tabs`, `Accordion`, `Collapsible`, `ScrollArea`, `Separator` |
+| Surfaces | `Card`, `PanelFrame` (a dashboard panel's frame), `Table`, `Tabs`, `Accordion`, `Collapsible`, `ScrollArea`, `Separator` |
 | Feedback | `Alert`, `Badge`, `EmptyState`, `Skeleton`, `Spinner` |
 | Filters | `FilterTiles` (count tiles that filter a list), `FacetChip` (a dashed filter chip) |
 | Navigation | `Breadcrumb`, `Pager` |

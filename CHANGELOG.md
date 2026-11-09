@@ -2,6 +2,12 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
+## v0.6.2
+
+- New: **PanelFrame**, the dashboard panel's frame (border, background, shadow, `data-panel` for the
+  look's elevated and glass surfaces), for a real panel shown outside the dashboard, such as one an
+  extension embeds with dash-kit's `PanelEmbed`. `transparent` gives the transparent panel's bare frame.
+
 ## v0.6.1
 
 - **WeekStrip**: the hours with nothing running (the default name) draw in the divider grey, so off hours
