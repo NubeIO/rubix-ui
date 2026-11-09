@@ -48,6 +48,19 @@ describe("ScheduleWeekCalendar", () => {
     fireEvent.click(screen.getByRole("button", { name: "Previous week" }));
     expect(onPrev).toHaveBeenCalled();
   });
+
+  it("draws a short block as a plain strip, named only by its tooltip", () => {
+    const standby = { start: 390, end: 419, nameIndex: 2, name: "Standby" };
+    const hour = { start: 1200, end: 1279, nameIndex: 2, name: "Standby", label: "Late" };
+    const days = week.map((d, i) => (i === 0 ? { ...d, spans: [standby, occupied, hour] } : d));
+    render(
+      <ScheduleWeekCalendar days={days} onPrev={() => {}} onNext={() => {}} onToday={() => {}} atToday legend={[]} />,
+    );
+    const mon = screen.getByTestId("cal-2026-11-02");
+    expect(within(mon).getByTitle("Standby · 06:30 until 07:00").textContent).toBe("");
+    expect(within(mon).getByTitle("Late · Standby · 20:00 until 21:20").textContent).toBe("Late");
+    expect(within(mon).getByTitle("Occupied · 08:00 until 18:00").textContent).toBe("Occupied08:00–18:00");
+  });
 });
 
 describe("ScheduleWeekRows", () => {

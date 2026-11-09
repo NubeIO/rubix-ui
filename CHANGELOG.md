@@ -21,6 +21,8 @@ Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/ru
 - `nameColour`, `SCHEDULE_COLOURS`, `scheduleColourClass` and `NameSwatch` stay, unchanged.
 - The dated entries list puts the schedules in their own middle column (date, label, schedules, kind),
   and the month view says "Nov 2026" and "Dated entries in Nov", as the design does.
+- ScheduleWeekCalendar draws a block too short for its words (a 30 minute strip) as a plain strip, and
+  one with room for one line shows only the label; the tooltip still names it.
 - The stylesheet reads `src/lib/colour` for the colour classes instead of `src/lib/schedule`.
 
 ## v0.5.0

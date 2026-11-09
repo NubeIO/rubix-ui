@@ -39,6 +39,16 @@ export interface ScheduleWeekCalendarProps {
 const pct = (m: number) => `${(m / 1440) * 100}%`;
 const HOURS = [0, 3, 6, 9, 12, 15, 18, 21];
 
+// How many text lines a block fits, from its length in minutes. A day column is `h-120` (30rem, 480px)
+// for 24 hours, so 20px an hour; a line is `text-caption` (11px) at `leading-tight` (1.25), and the
+// block's `py-1` takes 8px. Change these with those classes. A block that fits no line is a plain strip
+// (its tooltip still names it), one line shows the label, two the label and its times.
+const PX_PER_MIN = 480 / 1440;
+const LINE_PX = 11 * 1.25;
+const PAD_PX = 8;
+const linesFor = (s: { start: number; end: number }) =>
+  Math.floor(((s.end + 1 - s.start) * PX_PER_MIN - PAD_PX) / LINE_PX);
+
 export function ScheduleWeekCalendar({ days, now, actions, legend, ...nav }: ScheduleWeekCalendarProps) {
   return (
     <section className="grid gap-3">
@@ -97,6 +107,7 @@ export function ScheduleWeekCalendar({ days, now, actions, legend, ...nav }: Sch
                 const tone = nameColour(s.nameIndex);
                 const running = isToday && s.start <= now.minute && now.minute <= s.end;
                 const label = s.label || s.name;
+                const lines = linesFor(s);
                 return (
                   <div
                     key={s.start}
@@ -115,10 +126,12 @@ export function ScheduleWeekCalendar({ days, now, actions, legend, ...nav }: Sch
                     )}
                     style={{ top: pct(s.start), height: pct(s.end + 1 - s.start) }}
                   >
-                    <span className="block truncate font-sans font-semibold">{label}</span>
-                    <span className="block truncate">
-                      {hhmm(s.start)}–{untilText(s.end)}
-                    </span>
+                    {lines >= 1 && <span className="block truncate font-sans font-semibold">{label}</span>}
+                    {lines >= 2 && (
+                      <span className="block truncate">
+                        {hhmm(s.start)}–{untilText(s.end)}
+                      </span>
+                    )}
                   </div>
                 );
               })}

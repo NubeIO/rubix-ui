@@ -314,7 +314,8 @@ interface ScheduleLegendItem { nameIndex: number; label: string; detail?: string
 
 One schedule's week as a vertical calendar: a column per day on an hour axis, blocks placed by their
 minutes, a closed day hatched with its label chip, the now line on today and a ring on the running
-block, previous / next / Today above and a legend below.
+block, previous / next / Today above and a legend below. A block too short for its words is a plain
+strip (its tooltip names it); one with room for one line shows only the label.
 
 | Prop | |
 |---|---|
