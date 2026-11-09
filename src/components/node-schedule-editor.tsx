@@ -13,6 +13,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Tabs, TabsList, TabsTrigger } from "./tabs";
 
+import { MD_PX, useMinWidth } from "../lib/media";
 import type { DatedItem, NodeSchedule } from "../lib/schedule/nodeSchedule";
 import { nowAndNext } from "../lib/schedule/nowAndNext";
 import { changedDays } from "../lib/schedule/scheduleEdits";
@@ -55,6 +56,11 @@ export interface NodeScheduleEditorProps {
   extraTab?: { label: string; render: () => ReactNode };
   readOnly?: boolean;
   hideSettings?: boolean;
+  /** The tab it opens on (e.g. "extra" to land on the page's own tab). Default Weekly hours. */
+  initialTab?: "hours" | "dated" | "cal" | "set" | "extra";
+  /** Edit the weekly hours only (a box's own week): no Dated entries or Settings tab, names fixed. The
+   *  Calendar tab stays, for looking. */
+  weekOnly?: boolean;
   title?: string;
   subtitle?: string;
   /** The Save button's words; Groups says "Save and send to 12 boxes". */
@@ -79,7 +85,8 @@ export function NodeScheduleEditor(props: NodeScheduleEditorProps) {
   const { schedule, unreadable: unreadableProp, readOnly = false, hideSettings = false, extraTab } = props;
   const instant = useClock(props.now);
   const d = useEditorDraft(schedule, props);
-  const [tab, setTab] = useState<Tab>("hours");
+  const [tab, setTab] = useState<Tab>(props.initialTab ?? "hours");
+  const wide = useMinWidth(MD_PX);
   const [adding, setAdding] = useState(false);
   const draft = d.draft;
   const state = useMemo(() => (draft ? nowAndNext(draft, instant) : null), [draft, instant]);
@@ -109,11 +116,12 @@ export function NodeScheduleEditor(props: NodeScheduleEditorProps) {
 
   const canEdit = !readOnly;
   const edit = (next: NodeSchedule) => canEdit && d.setDraft(next);
+  const weekOnly = props.weekOnly ?? false;
   const tabs: [Tab, string][] = [
     ["hours", "Weekly hours"],
-    ["dated", `Dated entries (${draft.dated.length})`],
+    ...(weekOnly ? [] : ([["dated", `Dated entries (${draft.dated.length})`]] as [Tab, string][])),
     ["cal", "Calendar"],
-    ...(hideSettings ? [] : ([["set", "Settings"]] as [Tab, string][])),
+    ...(hideSettings || weekOnly ? [] : ([["set", "Settings"]] as [Tab, string][])),
     ...(extraTab ? ([["extra", extraTab.label]] as [Tab, string][]) : []),
   ];
   const open = tabs.some(([t]) => t === tab) ? tab : "hours";
@@ -122,7 +130,8 @@ export function NodeScheduleEditor(props: NodeScheduleEditorProps) {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <EditorHeader doc={draft} state={state} title={props.title} subtitle={props.subtitle} onClose={props.onClose} />
-      <div className="hidden min-h-0 flex-1 flex-col md:flex" data-testid="node-schedule-editor">
+      {wide ? (
+      <div className="flex min-h-0 flex-1 flex-col" data-testid="node-schedule-editor">
         <EditorBanner
           conflict={d.conflict}
           needsUpgrade={d.needsUpgrade}
@@ -143,7 +152,14 @@ export function NodeScheduleEditor(props: NodeScheduleEditorProps) {
               ))}
             </TabsList>
             {open === "hours" && (
-              <WeekTab doc={draft} canEdit={canEdit} changed={changed} today={weekday} onChange={edit} />
+              <WeekTab
+                doc={draft}
+                canEdit={canEdit}
+                namesFixed={weekOnly}
+                changed={changed}
+                today={weekday}
+                onChange={edit}
+              />
             )}
             {open === "dated" && (
               <DatedTab
@@ -155,7 +171,7 @@ export function NodeScheduleEditor(props: NodeScheduleEditorProps) {
               />
             )}
             {open === "cal" && (
-              <CalendarTab doc={draft} at={state.at} canEdit={canEdit} onAdd={() => setAdding(true)} />
+              <CalendarTab doc={draft} at={state.at} canEdit={canEdit && !weekOnly} onAdd={() => setAdding(true)} />
             )}
             {open === "set" && (
               <SettingsTab doc={draft} canEdit={canEdit} onChange={edit} onDelete={props.onDelete} />
@@ -175,9 +191,9 @@ export function NodeScheduleEditor(props: NodeScheduleEditorProps) {
           />
         )}
       </div>
-      <div className="md:hidden">
+      ) : (
         <PhoneView doc={draft} state={state} />
-      </div>
+      )}
       <AddDatedSheet
         open={adding}
         doc={draft}

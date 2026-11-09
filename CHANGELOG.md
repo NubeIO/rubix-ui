@@ -14,6 +14,8 @@ Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/ru
   `Unreadable`, and lb's schedule record types (`ScheduleRecord`, `ScheduleDocument`, `WeeklyEntry`,
   `DatedEntry`, `DateWindow`, `DatedKind`) as plain types.
 - A block that runs all day reads "00:00–24:00".
+- NodeScheduleEditor takes `initialTab` and `weekOnly`, and switches to its phone view by checking the
+  width in code (`useMinWidth`), so an extension's own `.hidden` cannot hide it.
 - The stylesheet also reads `src/lib/schedule`, for the name and schedule colour classes; the CSS guard
   checks they are there.
 

@@ -30,12 +30,14 @@ const CLEAR = "\u0000clear";
 interface Props {
   doc: NodeSchedule;
   canEdit: boolean;
+  /** The names can't be changed here (a box's own week takes the schedule's names). */
+  namesFixed?: boolean;
   changed: ReadonlySet<number>;
   today: number | null;
   onChange: (doc: NodeSchedule) => void;
 }
 
-export function WeekTab({ doc, canEdit, changed, today, onChange }: Props) {
+export function WeekTab({ doc, canEdit, namesFixed = false, changed, today, onChange }: Props) {
   const [brush, setBrush] = useState<string>(doc.names[1]?.name ?? CLEAR);
   const [snap, setSnap] = useState(15);
   const [day, setDayOpen] = useState<number | null>(null);
@@ -66,10 +68,12 @@ export function WeekTab({ doc, canEdit, changed, today, onChange }: Props) {
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-            <Button variant="ghost" size="sm" onClick={() => setNamesOpen(true)}>
-              <Pencil />
-              Names {doc.names.length}/{MAX_NAMES}
-            </Button>
+            {!namesFixed && (
+              <Button variant="ghost" size="sm" onClick={() => setNamesOpen(true)}>
+                <Pencil />
+                Names {doc.names.length}/{MAX_NAMES}
+              </Button>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-ink-muted">Snap</span>

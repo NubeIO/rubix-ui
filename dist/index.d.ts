@@ -518,6 +518,11 @@ export declare interface NodeScheduleEditorProps {
     };
     readOnly?: boolean;
     hideSettings?: boolean;
+    /** The tab it opens on (e.g. "extra" to land on the page's own tab). Default Weekly hours. */
+    initialTab?: "hours" | "dated" | "cal" | "set" | "extra";
+    /** Edit the weekly hours only (a box's own week): no Dated entries or Settings tab, names fixed. The
+     *  Calendar tab stays, for looking. */
+    weekOnly?: boolean;
     title?: string;
     subtitle?: string;
     /** The Save button's words; Groups says "Save and send to 12 boxes". */

@@ -283,6 +283,12 @@ Below `md` it is view only.
 | `backendNeedsUpgrade` | editing works, Save is off with the reason |
 | `extraTab` | `{ label, render }`: the page's own last tab (Used by, Boxes) |
 | `readOnly`, `hideSettings`, `title`, `subtitle`, `saveLabel`, `host` | |
+| `initialTab` | `"hours" \| "dated" \| "cal" \| "set" \| "extra"`: the tab it opens on (`"extra"` lands on the page's own tab) |
+| `weekOnly` | edit the weekly hours only (a box's own week): no Dated entries or Settings tab, names fixed |
+
+Below the host's `md` width (768px) it shows the phone view. The switch is made in code, not with
+`hidden md:flex`, because inside an extension the extension's own `.hidden` would win over the
+package's layered `md:flex` and the editor would never show.
 | `now` | the instant (epoch ms); omitted, it follows the clock |
 
 ```tsx

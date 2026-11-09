@@ -179,4 +179,36 @@ describe("NodeScheduleEditor", () => {
     render(<NodeScheduleEditor schedule={null} />);
     expect(screen.getByLabelText("Loading schedule")).toBeTruthy();
   });
+
+  it("opens on the tab it is asked for", () => {
+    const { editor } = mount({ extraTab: { label: "Boxes", render: () => <p>Box rows</p> }, initialTab: "extra" });
+    expect(editor().getByRole("tab", { name: "Boxes" }).getAttribute("aria-selected")).toBe("true");
+    expect(editor().getByText("Box rows")).toBeTruthy();
+  });
+
+  it("edits only the weekly hours when weekOnly: no Dated entries, Settings or Names", () => {
+    const { editor } = mount({ weekOnly: true });
+    const tabs = editor().getAllByRole("tab").map((t) => t.textContent);
+    expect(tabs.some((t) => t?.startsWith("Dated entries"))).toBe(false);
+    expect(tabs).not.toContain("Settings");
+    expect(tabs).toContain("Weekly hours");
+    expect(editor().queryByRole("button", { name: /^Names/ })).toBeNull();
+  });
+
+  it("shows the phone view, not the editor, below the md width", () => {
+    const matchMedia = vi.fn((query: string) => ({
+      matches: false,
+      media: query,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    }));
+    vi.stubGlobal("matchMedia", matchMedia);
+    try {
+      render(<NodeScheduleEditor schedule={readNodeSchedule(buildingHours())} now={NOW} />);
+      expect(screen.queryByTestId("node-schedule-editor")).toBeNull();
+      expect(matchMedia).toHaveBeenCalledWith("(min-width: 768px)");
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
 });
