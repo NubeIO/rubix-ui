@@ -9,7 +9,7 @@ import type { ScheduleDay, ScheduleRef } from "./schedule-calendar-types";
 import { ScheduleWeekCalendar } from "./schedule-week-calendar";
 import { ScheduleWeekRows } from "./schedule-week-rows";
 import { ScheduleMonthGrid } from "./schedule-month-grid";
-import { AllSchedulesView } from "./all-schedules-view";
+import { AllSchedulesView, CHIP_LIMIT } from "./all-schedules-view";
 import { WeekStrip } from "./week-strip";
 
 const DATES = ["2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08"];
@@ -97,6 +97,8 @@ describe("AllSchedulesView", () => {
     onToday: () => {},
     atToday: true,
     schedules: [office, retail],
+    search: "",
+    onSearch: () => {},
     hidden: ["retail"],
     legend: [{ nameIndex: 1, label: "1st name", detail: "Occupied" }],
     entries: [{ ...cup, date: "2026-11-03", schedules: [office, retail] }],
@@ -121,6 +123,20 @@ describe("AllSchedulesView", () => {
       "Office hoursRetail hours",
       "Holiday",
     ]);
+  });
+
+  it("gives the chips way to a count past CHIP_LIMIT and reports the search", () => {
+    const many = Array.from({ length: CHIP_LIMIT + 1 }, (_, i) => ({ ...office, id: `s${i}`, name: `Site ${i}` }));
+    const onSearch = vi.fn();
+    render(
+      <AllSchedulesView {...base} view="week" start="2026-11-02" schedules={many} onSearch={onSearch} onToggle={() => {}}>
+        body
+      </AllSchedulesView>,
+    );
+    expect(screen.queryByRole("button", { name: "Site 0" })).toBeNull();
+    expect(screen.getByText(`Showing all ${CHIP_LIMIT + 1} schedules. Search to pick fewer.`)).toBeTruthy();
+    fireEvent.change(screen.getByLabelText("Search schedules"), { target: { value: "site 1" } });
+    expect(onSearch).toHaveBeenCalledWith("site 1");
   });
 
   it("names the month short", () => {

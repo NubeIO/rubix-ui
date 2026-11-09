@@ -1,5 +1,6 @@
 // The all-schedules calendar's frame (Rubix Node Schedule Calendar): Week / Month, previous / next /
-// Today, a chip per schedule that hides or shows it, the body the app puts in (`ScheduleWeekRows` or
+// Today, a search over the schedules, a chip per matching schedule that hides or shows it (only while
+// few match: past `CHIP_LIMIT` a site with hundreds of schedules gets a count instead), the body the app puts in (`ScheduleWeekRows` or
 // `ScheduleMonthGrid`), a legend of name positions and "Dated entries this week / in Nov".
 //
 // Plain data in, events out: the app owns the view, the period and which schedules are hidden, and
@@ -8,7 +9,9 @@
 // One responsibility: draw the calendar's controls, legend and dated list around its body.
 
 import type { ReactNode } from "react";
+import { Search } from "lucide-react";
 import { Button } from "./button";
+import { Input } from "./input";
 import { cn } from "../lib/cn";
 import { Tabs, TabsList, TabsTrigger } from "./tabs";
 
@@ -22,6 +25,9 @@ import { ScheduleLegendKeys } from "./schedule-legend-keys";
 
 export type AllSchedulesViewMode = "week" | "month";
 
+/** More matching schedules than this and the chips give way to a count: search to narrow. */
+export const CHIP_LIMIT = 12;
+
 export interface AllSchedulesViewProps {
   view: AllSchedulesViewMode;
   onViewChange: (view: AllSchedulesViewMode) => void;
@@ -32,8 +38,11 @@ export interface AllSchedulesViewProps {
   onToday: () => void;
   /** The period holds today: Today is off. */
   atToday: boolean;
-  /** Every schedule, for the chips. */
+  /** The schedules the search matches (every schedule while it is empty), for the chips. */
   schedules: ScheduleRef[];
+  /** The search over schedules; the app matches it and passes the matches as `schedules`. */
+  search: string;
+  onSearch: (q: string) => void;
   /** Ids of the schedules switched off by their chip. */
   hidden: string[];
   onToggle: (id: string) => void;
@@ -52,6 +61,8 @@ export function AllSchedulesView({
   onViewChange,
   start,
   schedules,
+  search,
+  onSearch,
   hidden,
   onToggle,
   legend,
@@ -73,7 +84,30 @@ export function AllSchedulesView({
           </TabsList>
         </Tabs>
         <ScheduleCalendarNav unit={view} label={label} {...nav} />
-        <div className="ml-auto flex flex-wrap gap-1.5">
+        <label className="relative ml-auto">
+          <Search
+            size={14}
+            aria-hidden
+            className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-muted"
+          />
+          <Input
+            aria-label="Search schedules"
+            className="h-8 w-56 pl-8 text-xs"
+            placeholder="Search schedules…"
+            value={search}
+            onChange={(e) => onSearch(e.target.value)}
+          />
+        </label>
+      </div>
+      {schedules.length > CHIP_LIMIT ? (
+        <p className="text-caption text-ink-muted">
+          Showing all {schedules.length} {search.trim() ? "matching schedules" : "schedules"}. Search to pick
+          fewer.
+        </p>
+      ) : schedules.length === 0 ? (
+        <p className="text-caption text-ink-muted">No schedule matches “{search.trim()}”.</p>
+      ) : (
+        <div className="flex flex-wrap gap-1.5">
           {schedules.map((s) => {
             const on = !hidden.includes(s.id);
             return (
@@ -94,7 +128,7 @@ export function AllSchedulesView({
             );
           })}
         </div>
-      </div>
+      )}
 
       {children}
 
