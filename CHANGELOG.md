@@ -2,6 +2,12 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
+## v0.6.1
+
+- **WeekStrip**: the hours with nothing running (the default name) draw in the divider grey, so off hours
+  and empty days show on a selected or highlighted row instead of vanishing into it.
+- **FilterTiles**: the row hides its sideways scrollbar; it still scrolls by trackpad, wheel or keyboard.
+
 ## v0.6.0
 
 - New: **FilterTiles** (count tiles that filter a list, the UART Units page's) and **FacetChip** (the

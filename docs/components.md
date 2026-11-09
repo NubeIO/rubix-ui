@@ -383,7 +383,7 @@ count, and a footer with a note and "Filter →" in the tile's tone. The first t
 picking a tile filters, picking it again goes back to the first. Props: `tiles` (`FilterTile[]`: `key`,
 `label`, `count`, `tone` (a colour token without `--`), `icon`, `note`, `alarm?` for a red non-zero
 count), `active`, `onPick(key)`, `label` (the row's accessible name), `height?` (px, default 120; 96 for the
-design's phone row).
+design's phone row). When the tiles overflow, the row scrolls sideways with no visible scrollbar.
 
 `FacetChip` is the Insights toolbar's dashed filter chip: "+ Label" at rest, a checklist of values with
 optional counts, the picks on the chip and a × that clears. Props: `label`, `values`, `selected`,
@@ -397,7 +397,8 @@ optional counts, the picks on the chip and a × that clears. Props: `label`, `va
 ### WeekStrip, NameSwatch, colours
 
 `WeekStrip` is a week in miniature for a list row: seven 3px rows of coloured segments. Props: `week`
-(seven arrays of `WeekStripSegment` `{ start, end, nameIndex }`, Monday first), `className?`.
+(seven arrays of `WeekStripSegment` `{ start, end, nameIndex }`, Monday first), `className?`. Hours with no segment show the divider grey (`bg-line`), so off hours
+stay visible on a selected row.
 `NameSwatch` is one name's colour square (`index`: 0 is the default, outlined), for a legend or a list's
 now column.
 
