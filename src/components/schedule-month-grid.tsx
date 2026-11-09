@@ -1,5 +1,5 @@
 // A month of dated entries on their days, one chip per entry with a dot for each schedule that has it
-// (a holiday several schedules share shows once). Closures and holidays are hatched, extra hours have a
+// (a holiday several schedules share shows once; past `MAX_DOTS` the count after the label says how many). Closures and holidays are hatched, extra hours have a
 // dashed edge, changed hours a solid one. Days outside the month are dimmed; today is in the accent.
 //
 // Plain data in: the app works out each day's chips.
@@ -10,6 +10,7 @@ import { cn } from "../lib/cn";
 
 import { scheduleColourClass } from "../lib/colour/scheduleColour";
 import type { ScheduleMonthDay } from "./schedule-calendar-types";
+import { namesText } from "./schedule-calendar-words";
 import { DAY_NAMES } from "./schedule-calendar-words";
 import { HATCH, KINDS, noteText } from "./schedule-kinds";
 
@@ -22,6 +23,8 @@ export interface ScheduleMonthGridProps {
 }
 
 const MAX_CHIPS = 3;
+/** Dots on one chip; a holiday shared by hundreds of schedules still fits its day. */
+const MAX_DOTS = 3;
 
 export function ScheduleMonthGrid({ days, month, today }: ScheduleMonthGridProps) {
   return (
@@ -64,7 +67,7 @@ export function ScheduleMonthGrid({ days, month, today }: ScheduleMonthGridProps
               return (
                 <span
                   key={`${c.kind}|${c.label}`}
-                  title={`${KINDS[c.kind].label}: ${c.label} · ${c.schedules.map((s) => s.name).join(", ")}`}
+                  title={`${KINDS[c.kind].label}: ${c.label} · ${namesText(c.schedules)}`}
                   className={cn(
                     "flex min-w-0 items-center gap-1 rounded-sm border px-1.5 py-0.5 text-caption text-ink-strong",
                     off ? "border-line-strong" : "bg-surface-raised",
@@ -73,7 +76,7 @@ export function ScheduleMonthGrid({ days, month, today }: ScheduleMonthGridProps
                   )}
                   style={off ? HATCH : undefined}
                 >
-                  {c.schedules.map((s) => (
+                  {c.schedules.slice(0, MAX_DOTS).map((s) => (
                     <span
                       key={s.id}
                       aria-hidden

@@ -10,6 +10,7 @@ import { ScheduleWeekCalendar } from "./schedule-week-calendar";
 import { ScheduleWeekRows } from "./schedule-week-rows";
 import { ScheduleMonthGrid } from "./schedule-month-grid";
 import { AllSchedulesView, CHIP_LIMIT } from "./all-schedules-view";
+import { ScheduleDatedList } from "./schedule-dated-list";
 import { WeekStrip } from "./week-strip";
 
 const DATES = ["2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08"];
@@ -86,6 +87,18 @@ describe("ScheduleMonthGrid", () => {
     render(<ScheduleMonthGrid days={days} month="2026-11" today="2026-11-06" />);
     const grid = screen.getByRole("grid", { name: "Dated entries this month" });
     expect(within(grid).getByText("Melbourne Cup · 2")).toBeTruthy();
+  });
+
+  it("keeps an entry shared by many schedules to three dots in the grid and three names in the list", () => {
+    const many = Array.from({ length: 20 }, (_, i) => ({ id: `s${i}`, name: `Site ${i}` }));
+    const days = DATES.map((date) => ({ date, chips: date === "2026-11-03" ? [{ ...cup, schedules: many }] : [] }));
+    const { container } = render(<ScheduleMonthGrid days={days} month="2026-11" today="2026-11-06" />);
+    expect(screen.getByText("Melbourne Cup · 20").parentElement!.querySelectorAll("[aria-hidden]")).toHaveLength(3);
+    container.remove();
+    render(<ScheduleDatedList title="Dated entries in Nov" entries={[{ ...cup, date: "2026-11-03", schedules: many }]} today="2026-11-06" />);
+    expect(screen.getByText("Site 2")).toBeTruthy();
+    expect(screen.queryByText("Site 3")).toBeNull();
+    expect(screen.getByText("+17 more")).toBeTruthy();
   });
 });
 

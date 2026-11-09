@@ -44,3 +44,9 @@ export function untilText(end: number): string {
 export function spanText(start: number, end: number): string {
   return `${hhmm(start)}–${untilText(end)}`;
 }
+
+/** Schedule names for a tooltip: the first `max`, then "and N more". */
+export function namesText(schedules: { name: string }[], max = 10): string {
+  const names = schedules.slice(0, max).map((s) => s.name).join(", ");
+  return schedules.length > max ? `${names} and ${schedules.length - max} more` : names;
+}

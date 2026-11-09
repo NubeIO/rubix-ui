@@ -8,8 +8,11 @@ import { cn } from "../lib/cn";
 
 import { scheduleColourClass } from "../lib/colour/scheduleColour";
 import type { ScheduleListEntry } from "./schedule-calendar-types";
-import { dateText, spanText } from "./schedule-calendar-words";
+import { dateText, namesText, spanText } from "./schedule-calendar-words";
 import { KindChip } from "./schedule-kinds";
+
+/** Schedule names on one row; past this a holiday shared by hundreds says "+N more". */
+const MAX_NAMES = 3;
 
 export function ScheduleDatedList({
   title,
@@ -39,12 +42,17 @@ export function ScheduleDatedList({
               {(e.hours ?? []).map((h) => ` · ${spanText(h.start, h.end)}`).join("")}
             </span>
             <span className="flex min-w-0 flex-wrap gap-x-3 gap-y-1">
-              {e.schedules.map((s) => (
+              {e.schedules.slice(0, MAX_NAMES).map((s) => (
                 <span key={s.id} className="flex items-center gap-1.5 whitespace-nowrap text-caption text-ink-muted">
                   <span aria-hidden className={cn("size-1.5 rounded-full", scheduleColourClass(s.colour))} />
                   {s.name}
                 </span>
               ))}
+              {e.schedules.length > MAX_NAMES && (
+                <span className="text-caption text-ink-faint" title={namesText(e.schedules, Infinity)}>
+                  +{e.schedules.length - MAX_NAMES} more
+                </span>
+              )}
             </span>
             <KindChip kind={e.kind} nameIndex={e.nameIndex ?? 1} />
           </li>
