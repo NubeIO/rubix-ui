@@ -397,8 +397,12 @@ an entry, then "+N more".
 count, and a footer with a note and "Filter →" in the tile's tone. The first tile is the whole list;
 picking a tile filters, picking it again goes back to the first. Props: `tiles` (`FilterTile[]`: `key`,
 `label`, `count`, `tone` (a colour token without `--`), `icon`, `note`, `alarm?` for a red non-zero
-count), `active`, `onPick(key)`, `label` (the row's accessible name), `height?` (px, default 120; 96 for the
-design's phone row). When the tiles overflow, the row scrolls sideways with no visible scrollbar.
+count, `of?` for a muted "/ 16" beside the count, read as "of 16", and `bar?` `{ value, of, title? }` for a
+4px bar of `value` out of `of` in the tile's tone), `active`, `onPick(key)`, `label` (the row's accessible
+name), `height?` (px, default 120; 96 for the design's phone row). The count stays the length of the list
+the tile opens; the note should name what the bar is out of ("of 14 running"). When any tile has a bar,
+the others keep an empty slot so the counts line up; a share above zero shows at least a 4px sliver. When
+the tiles overflow, the row scrolls sideways with no visible scrollbar.
 
 `FacetChip` is the Insights toolbar's dashed filter chip: "+ Label" at rest, a checklist of values with
 optional counts, the picks on the chip and a × that clears. Props: `label`, `values`, `selected`,

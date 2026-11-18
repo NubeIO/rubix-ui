@@ -2,6 +2,10 @@
 // and a footer with a note and "Filter →" in the tile's tone. The first tile is the whole list; picking
 // a tile filters, picking it again goes back to the first. The pressed tile has the accent edge.
 //
+// A tile can also carry "/ of" beside its count (the count stays the length of the list it opens) and a
+// thin bar of `value` out of `of` in its own tone, just above the footer. When any tile in the row has a
+// bar, the others keep an empty slot, so every count sits at the same height.
+//
 // Plain data in: the app counts and filters.
 //
 // It follows rubix-ai's Insights `SummaryTile` (same design); keep the two alike.
@@ -23,6 +27,11 @@ export interface FilterTile {
   note: string;
   /** A non-zero count reads in the alarm colour (Issues, Needs attention). */
   alarm?: boolean;
+  /** Drawn as a muted "/ 16" beside the count (read as "of 16"); the count still opens the list. */
+  of?: number;
+  /** A 4px bar of `value` out of `of` in the tile's tone; `title` is its words on hover ("14 of 16
+   *  units running"). The note should name what the bar is out of. */
+  bar?: { value: number; of: number; title?: string };
 }
 
 export interface FilterTilesProps {
@@ -38,6 +47,7 @@ export interface FilterTilesProps {
 
 export function FilterTiles({ tiles, active, onPick, label, height = 120 }: FilterTilesProps) {
   const all = tiles[0]?.key;
+  const bars = tiles.some((t) => t.bar);
   return (
     <div
       role="group"
@@ -73,14 +83,16 @@ export function FilterTiles({ tiles, active, onPick, label, height = 120 }: Filt
               </span>
               <span className="min-w-0 truncate text-sm font-semibold text-ink-strong">{t.label}</span>
             </span>
-            <span
-              className={cn(
-                "flex flex-1 items-center justify-center text-value-lg leading-none font-semibold tabular-nums",
-                t.alarm && t.count > 0 ? "text-destructive" : "text-ink-strong",
+            <span className="flex flex-1 items-center justify-center gap-1.5 text-value-lg leading-none font-semibold tabular-nums">
+              <span className={t.alarm && t.count > 0 ? "text-destructive" : "text-ink-strong"}>{t.count.toLocaleString()}</span>
+              {t.of !== undefined && (
+                <span className="self-baseline text-sm leading-none font-normal text-ink-muted">
+                  <span aria-hidden>/ {t.of.toLocaleString()}</span>
+                  <span className="sr-only"> of {t.of.toLocaleString()}</span>
+                </span>
               )}
-            >
-              {t.count.toLocaleString()}
             </span>
+            {bars && <Bar bar={t.bar} tone={tone} tight={height < 120} />}
             <span className="flex h-7 flex-none items-center gap-2 border-t border-line px-2.5 text-caption">
               <span className="min-w-0 flex-1 truncate text-ink-muted" title={t.note}>
                 {t.note}
@@ -95,5 +107,18 @@ export function FilterTiles({ tiles, active, onPick, label, height = 120 }: Filt
         );
       })}
     </div>
+  );
+}
+
+/** The tile's bar: the Overview bar's treatment (inset track, rounded), 4px. An empty slot without a
+ *  `bar`; no fill at zero; a small share keeps a 4px sliver so 1 of 70 still shows. */
+function Bar({ bar, tone, tight }: { bar?: FilterTile["bar"]; tone: string; tight: boolean }) {
+  const share = bar && bar.of > 0 ? Math.min(1, Math.max(0, bar.value / bar.of)) : 0;
+  return (
+    <span data-bar aria-hidden className={cn("mx-2.5 flex h-1 flex-none overflow-hidden rounded-full", tight ? "mb-1.5" : "mb-2", bar && "bg-surface-inset")}>
+      {share > 0 && (
+        <span data-bar-fill title={bar?.title} className="h-full rounded-full" style={{ width: `${share * 100}%`, minWidth: "4px", background: tone }} />
+      )}
+    </span>
   );
 }
