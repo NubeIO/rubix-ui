@@ -31,9 +31,9 @@ function g({ tiles: n, active: o, onPick: s, label: t, height: d = 120 }) {
                 /* @__PURE__ */ l("span", { "aria-hidden": !0, className: "flex size-4 [&_svg]:size-4", style: { color: c }, children: e.icon }),
                 /* @__PURE__ */ l("span", { className: "min-w-0 truncate text-sm font-semibold text-ink-strong", children: e.label })
               ] }),
-              /* @__PURE__ */ a("span", { className: "flex flex-1 items-center justify-center gap-1.5 text-value-lg leading-none font-semibold tabular-nums", children: [
+              /* @__PURE__ */ l("span", { className: "flex flex-1 items-center justify-center text-value-lg leading-none font-semibold tabular-nums", children: /* @__PURE__ */ a("span", { className: "inline-flex items-baseline gap-1.5", children: [
                 /* @__PURE__ */ l("span", { className: e.alarm && e.count > 0 ? "text-destructive" : "text-ink-strong", children: e.count.toLocaleString() }),
-                e.of !== void 0 && /* @__PURE__ */ a("span", { className: "self-baseline text-sm leading-none font-normal text-ink-muted", children: [
+                e.of !== void 0 && /* @__PURE__ */ a("span", { className: "text-sm leading-none font-normal text-ink-muted", children: [
                   /* @__PURE__ */ a("span", { "aria-hidden": !0, children: [
                     "/ ",
                     e.of.toLocaleString()
@@ -43,7 +43,7 @@ function g({ tiles: n, active: o, onPick: s, label: t, height: d = 120 }) {
                     e.of.toLocaleString()
                   ] })
                 ] })
-              ] }),
+              ] }) }),
               m && /* @__PURE__ */ l(x, { bar: e.bar, tone: c, tight: d < 120 }),
               /* @__PURE__ */ a("span", { className: "flex h-7 flex-none items-center gap-2 border-t border-line px-2.5 text-caption", children: [
                 /* @__PURE__ */ l("span", { className: "min-w-0 flex-1 truncate text-ink-muted", title: e.note, children: e.note }),

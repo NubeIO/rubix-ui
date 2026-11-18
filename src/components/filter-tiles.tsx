@@ -83,14 +83,17 @@ export function FilterTiles({ tiles, active, onPick, label, height = 120 }: Filt
               </span>
               <span className="min-w-0 truncate text-sm font-semibold text-ink-strong">{t.label}</span>
             </span>
-            <span className="flex flex-1 items-center justify-center gap-1.5 text-value-lg leading-none font-semibold tabular-nums">
-              <span className={t.alarm && t.count > 0 ? "text-destructive" : "text-ink-strong"}>{t.count.toLocaleString()}</span>
-              {t.of !== undefined && (
-                <span className="self-baseline text-sm leading-none font-normal text-ink-muted">
-                  <span aria-hidden>/ {t.of.toLocaleString()}</span>
-                  <span className="sr-only"> of {t.of.toLocaleString()}</span>
-                </span>
-              )}
+            {/* Centred as one group; inside it the count and "/ of" share a baseline. */}
+            <span className="flex flex-1 items-center justify-center text-value-lg leading-none font-semibold tabular-nums">
+              <span className="inline-flex items-baseline gap-1.5">
+                <span className={t.alarm && t.count > 0 ? "text-destructive" : "text-ink-strong"}>{t.count.toLocaleString()}</span>
+                {t.of !== undefined && (
+                  <span className="text-sm leading-none font-normal text-ink-muted">
+                    <span aria-hidden>/ {t.of.toLocaleString()}</span>
+                    <span className="sr-only"> of {t.of.toLocaleString()}</span>
+                  </span>
+                )}
+              </span>
             </span>
             {bars && <Bar bar={t.bar} tone={tone} tight={height < 120} />}
             <span className="flex h-7 flex-none items-center gap-2 border-t border-line px-2.5 text-caption">
