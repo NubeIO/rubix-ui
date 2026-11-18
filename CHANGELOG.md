@@ -2,7 +2,7 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
-## v0.6.3
+## v0.7.0
 
 - **FilterTiles**: a tile can show `of` as a muted "/ 16" beside its count, and a 4px `bar` of `value` out
   of `of` in its own tone, just above the footer (the UART Units summary). Tiles without either look as
