@@ -2,6 +2,12 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
+## v0.7.0
+
+- **FilterTiles**: a tile can show `of` as a muted "/ 16" beside its count, and a 4px `bar` of `value` out
+  of `of` in its own tone, just above the footer (the UART Units summary). Tiles without either look as
+  before; in a row where any tile has a bar, the rest keep an empty slot so the counts stay level.
+
 ## v0.6.2
 
 - New: **PanelFrame**, the dashboard panel's frame (border, background, shadow, `data-panel` for the

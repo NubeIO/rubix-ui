@@ -345,6 +345,15 @@ export declare interface FilterTile {
     note: string;
     /** A non-zero count reads in the alarm colour (Issues, Needs attention). */
     alarm?: boolean;
+    /** Drawn as a muted "/ 16" beside the count (read as "of 16"); the count still opens the list. */
+    of?: number;
+    /** A 4px bar of `value` out of `of` in the tile's tone; `title` is its words on hover ("14 of 16
+     *  units running"). The note should name what the bar is out of. */
+    bar?: {
+        value: number;
+        of: number;
+        title?: string;
+    };
 }
 
 export declare function FilterTiles({ tiles, active, onPick, label, height }: FilterTilesProps): JSX_2.Element;
