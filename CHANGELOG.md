@@ -2,6 +2,21 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
+## v0.8.0
+
+- New: the **overview kit**, the UART Overview's pieces for every extension's Overview (`docs/components.md`,
+  *Overview*). All display only; colours are tokens without `--`.
+  - **StatTiles**: the headline row; four across or two by two, an `alarm` tile tinted red while it counts.
+  - **SegmentRing**: parts as arcs of a ring, a value and caption in the middle.
+  - **BreakdownList** / **BreakdownRow**: a total's groups, each count, title, share and parts in words.
+  - **CountToggle**: a count that narrows a view to its part and lets it go.
+  - **BarList**: label, bar and count rows, each row a `CountToggle` given `onPick`.
+  - **CountChips**: pill chips with counts that narrow one list.
+  - **ShareBar** ("10 of 14" over a bar) and **CountPill** (a tinted count).
+  - **SplitCard** / **SplitRow**: a 3 : 2 card with a divider, and two cards on its lines below, stacking
+    together under `SPLIT_STACK_BELOW`.
+  - Helpers: `useElementWidth` (an element's border-box width, kept current) and `tone(token, alpha?)`.
+
 ## v0.7.0
 
 - **FilterTiles**: a tile can show `of` as a muted "/ 16" beside its count, and a 4px `bar` of `value` out

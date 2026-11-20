@@ -70,6 +70,7 @@ one is missed, are in **[docs/extensions.md](docs/extensions.md)**.
 | Surfaces | `Card`, `PanelFrame` (a dashboard panel's frame), `Table`, `Tabs`, `Accordion`, `Collapsible`, `ScrollArea`, `Separator` |
 | Feedback | `Alert`, `Badge`, `EmptyState`, `Skeleton`, `Spinner` |
 | Filters | `FilterTiles` (count tiles that filter a list), `FacetChip` (a dashed filter chip) |
+| Overview | `StatTiles`, `SegmentRing`, `BreakdownList`/`BreakdownRow`, `CountToggle`, `BarList`, `CountChips`, `ShareBar`, `CountPill`, `SplitCard`/`SplitRow` (an extension Overview's pieces) |
 | Navigation | `Breadcrumb`, `Pager` |
 | Popups | `Dialog`, `Sheet`, `Popover`, `DropdownMenu`, `Menubar`, `Tooltip` |
 | Schedules | `ScheduleWeekCalendar`, `AllSchedulesView`, `ScheduleWeekRows`, `ScheduleMonthGrid`, `WeekStrip`, `NameSwatch`, `nameColour`, `scheduleColourClass` (visual only; each app keeps its schedule editor and logic) |
