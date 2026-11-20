@@ -2,6 +2,7 @@ import { ClassProp } from 'class-variance-authority/types';
 import { ClassValue } from 'clsx';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
 import { ComponentProps } from 'react';
+import { CSSProperties } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { ForwardRefExoticComponent } from 'react';
@@ -13,6 +14,7 @@ import * as PopoverPrimitive from '@radix-ui/react-popover';
 import * as React_2 from 'react';
 import { ReactNode } from 'react';
 import { RefAttributes } from 'react';
+import { RefObject } from 'react';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { VariantProps } from 'class-variance-authority';
@@ -89,6 +91,31 @@ export declare const badgeVariants: (props?: ({
     size?: "default" | "count" | null | undefined;
 } & ClassProp) | undefined) => string;
 
+export declare function BarList({ rows, picked, onPick, labelWidth, pressedTitle }: BarListProps): JSX_2.Element;
+
+export declare interface BarListProps {
+    rows: BarRow[];
+    /** The pressed row's key, when the rows toggle. */
+    picked?: string;
+    /** Makes each row a toggle: the row's key on press, `undefined` on letting go. */
+    onPick?: (key: string | undefined) => void;
+    /** The label column's width in px (88). */
+    labelWidth?: number;
+    /** The tooltip while a row is pressed ("Show all"). */
+    pressedTitle?: string;
+}
+
+export declare interface BarRow {
+    key: string;
+    label: string;
+    value: number;
+    /** The bar's colour (and the icon's): a token without `--`. */
+    tone: string;
+    icon?: ReactNode;
+    /** The row's tooltip at rest, before "Show only these" when it toggles. */
+    title?: string;
+}
+
 export declare function Breadcrumb({ ...props }: React_2.ComponentProps<"nav">): React_2.JSX.Element;
 
 export declare function BreadcrumbEllipsis({ className, ...props }: React_2.ComponentProps<"span">): React_2.JSX.Element;
@@ -104,6 +131,23 @@ export declare function BreadcrumbList({ className, ...props }: React_2.Componen
 export declare function BreadcrumbPage({ className, ...props }: React_2.ComponentProps<"span">): React_2.JSX.Element;
 
 export declare function BreadcrumbSeparator({ children, className, ...props }: React_2.ComponentProps<"li">): React_2.JSX.Element;
+
+export declare function BreakdownList({ children }: {
+    children: ReactNode;
+}): JSX_2.Element;
+
+export declare function BreakdownRow({ value, tone: t, title, share, children }: BreakdownRowProps): JSX_2.Element;
+
+export declare interface BreakdownRowProps {
+    value: number;
+    /** The count's colour: a token without `--`. */
+    tone: string;
+    title: string;
+    /** Beside the title, faint: "67%". */
+    share?: string;
+    /** The words under the title: the group's parts. */
+    children: ReactNode;
+}
 
 export declare const Button: React_2.ForwardRefExoticComponent<Omit<React_2.ClassAttributes<HTMLButtonElement> & React_2.ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<(props?: ({
     variant?: "default" | "destructive" | "solid" | "outline" | "ghost" | null | undefined;
@@ -219,6 +263,47 @@ declare interface ComboboxProps {
 }
 
 export declare function CopyButton({ text, label, copiedLabel, variant, size, className, ariaLabel, }: Props): JSX_2.Element;
+
+export declare interface CountChip {
+    key: string;
+    label: string;
+    count: number;
+}
+
+export declare function CountChips({ chips, value, onChange, label }: CountChipsProps): JSX_2.Element;
+
+export declare interface CountChipsProps {
+    /** The first is the whole list. */
+    chips: CountChip[];
+    value: string;
+    onChange: (key: string) => void;
+    /** The row's accessible name ("Filter Issues"). */
+    label: string;
+}
+
+export declare function CountPill({ count, tone: t }: CountPillProps): JSX_2.Element;
+
+export declare interface CountPillProps {
+    count: number | null;
+    /** A token without `--`: "destructive" for a fault, "warning", "ink-muted" for an offline site. */
+    tone: string;
+}
+
+export declare function CountToggle({ pressed, count, onToggle, title, pressedTitle, className, style, children }: CountToggleProps): JSX_2.Element;
+
+export declare interface CountToggleProps {
+    pressed: boolean;
+    /** How many the part holds: at 0 an unpressed toggle is off. */
+    count: number;
+    onToggle: (next: boolean) => void;
+    /** The tooltip at rest ("Show only these"). */
+    title?: string;
+    /** The tooltip while pressed ("Show all"). */
+    pressedTitle?: string;
+    className?: string;
+    style?: CSSProperties;
+    children: ReactNode;
+}
 
 export declare function DatePicker({ value, onChange, min, max, placeholder, weekStart, format, size, disabled, "aria-label": ariaLabel, className, }: DatePickerProps): React_2.JSX.Element;
 
@@ -499,6 +584,15 @@ export declare interface RevealProps {
     className?: string;
 }
 
+export declare interface RingSegment {
+    key: string;
+    value: number;
+    /** A colour token without `--`. */
+    tone: string;
+    /** The tone's alpha, 0–1 (a lighter shade of a neighbour's hue). */
+    alpha?: number;
+}
+
 export declare interface RubixUiMotion {
     /** Wraps a tab panel each time it mounts (an entrance). */
     Reveal?: React_2.ComponentType<RevealProps>;
@@ -667,6 +761,22 @@ export declare const ScrollArea: React_2.ForwardRefExoticComponent<Omit<ScrollAr
 
 export declare const ScrollBar: React_2.ForwardRefExoticComponent<Omit<ScrollAreaPrimitive.ScrollAreaScrollbarProps & React_2.RefAttributes<HTMLDivElement>, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
 
+export declare function SegmentRing({ segments, total, value, caption, size, thickness }: SegmentRingProps): JSX_2.Element;
+
+export declare interface SegmentRingProps {
+    segments: RingSegment[];
+    /** What the arcs are shares of; the segments usually add up to it. */
+    total: number;
+    /** In the middle, large: "67%". "—" when `total` is 0. */
+    value: string;
+    /** Under it, small: "healthy". */
+    caption?: string;
+    /** Outer size in px (148). */
+    size?: number;
+    /** Ring thickness in px (14). */
+    thickness?: number;
+}
+
 /** `md` (36px, 14px text) is the form size and matches `Input`; `sm` (32px, 12px) is the chrome size
  *  for a toolbar or a dense row. The native numeric `size` attribute is not exposed: a list box is a
  *  different control. */
@@ -680,6 +790,17 @@ declare interface SeparatorProps extends React_2.ComponentProps<"div"> {
     orientation?: "horizontal" | "vertical";
     /** Purely visual (no semantic separation) — omit it from the a11y tree. */
     decorative?: boolean;
+}
+
+export declare function ShareBar({ value, of, tone: t, noun }: ShareBarProps): JSX_2.Element;
+
+export declare interface ShareBarProps {
+    value: number | null;
+    of: number | null;
+    /** The bar's colour: a token without `--` ("success"). */
+    tone?: string;
+    /** What is counted, for the tooltip: "units running" → "10 of 14 units running (71%)". */
+    noun?: string;
 }
 
 export declare function Sheet({ ...props }: React_2.ComponentProps<typeof DialogPrimitive.Root>): React_2.JSX.Element;
@@ -697,6 +818,60 @@ export declare const SheetTitle: React_2.ForwardRefExoticComponent<Omit<DialogPr
 export declare function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): JSX_2.Element;
 
 export declare function Spinner({ className, ...props }: React.ComponentProps<typeof Loader2>): JSX_2.Element;
+
+/** The card's least width for its halves side by side: a 420px and a 300px half, the 28px gap and
+ *  divider padding between them, and the card's 20px padding and 1px border each side, as
+ *  `useElementWidth` measures the border box. */
+export declare const SPLIT_STACK_BELOW: number;
+
+export declare function SplitCard({ label, left, right, stackBelow, className }: SplitCardProps): JSX_2.Element;
+
+export declare interface SplitCardProps {
+    /** The card's accessible name ("Fleet status"). */
+    label: string;
+    left: ReactNode;
+    right: ReactNode;
+    /** The width, in px, below which the halves stack (`SPLIT_STACK_BELOW`). */
+    stackBelow?: number;
+    className?: string;
+}
+
+export declare function SplitRow({ left, right, stackBelow, className }: SplitRowProps): JSX_2.Element;
+
+export declare interface SplitRowProps {
+    left: ReactNode;
+    right: ReactNode;
+    /** As the `SplitCard` above it (`SPLIT_STACK_BELOW`). */
+    stackBelow?: number;
+    /** Fill classes, e.g. a least row height and `contain:size` for cards that scroll inside. */
+    className?: string;
+}
+
+export declare interface StatTile {
+    key: string;
+    label: string;
+    value: number;
+    /** Beside the number, muted: "units", "/ 42". */
+    suffix?: string;
+    /** A dot before the label: a colour token without `--` ("success", "destructive", "line-strong"). */
+    dot?: string;
+    /** A share bar under the number, 0–100, in the accent. */
+    bar?: number;
+    /** At the tile's foot, under the bar where there is one; it wraps on a narrow tile. */
+    note: ReactNode;
+    /** The note's tooltip, where the note is short for more. */
+    noteTitle?: string;
+    /** Tinted as an alarm (a red tint, a red label) while `value` is above zero. */
+    alarm?: boolean;
+}
+
+export declare function StatTiles({ tiles, label }: StatTilesProps): JSX_2.Element;
+
+export declare interface StatTilesProps {
+    tiles: StatTile[];
+    /** The row's accessible name ("Summary"). */
+    label: string;
+}
 
 export declare interface Swatch {
     /** The stored color value (a semantic name or a hex literal). */
@@ -761,6 +936,8 @@ declare interface TimeFieldProps extends Omit<React_2.ComponentProps<"input">, "
     onChange: (text: string) => void;
 }
 
+export declare function tone(token: string, alpha?: number): string;
+
 export declare function Tooltip({ ...props }: React_2.ComponentProps<typeof TooltipPrimitive.Root>): React_2.JSX.Element;
 
 export declare function TooltipContent({ className, sideOffset, ...props }: React_2.ComponentProps<typeof TooltipPrimitive.Content>): React_2.JSX.Element;
@@ -772,6 +949,8 @@ export declare const TooltipTrigger: React_2.ForwardRefExoticComponent<Omit<Tool
 export declare function useClipboard(resetMs?: number): Clipboard_2;
 
 export declare function useDialogSurface(): HTMLElement | null;
+
+export declare function useElementWidth(ref: RefObject<HTMLElement | null>): number | null;
 
 /** The container for a Radix `Portal`'s `container` prop: the provider's element, else `undefined`. */
 export declare function useOverlayContainer(): HTMLElement | undefined;

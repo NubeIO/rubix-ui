@@ -146,6 +146,20 @@ describe("@nube/rubix-ui entry", () => {
       "FacetChip",
       "NameSwatch",
       "PanelFrame",
+      "StatTiles",
+      "SegmentRing",
+      "BreakdownList",
+      "BreakdownRow",
+      "CountToggle",
+      "BarList",
+      "CountChips",
+      "ShareBar",
+      "CountPill",
+      "SplitCard",
+      "SPLIT_STACK_BELOW",
+      "SplitRow",
+      "useElementWidth",
+      "tone",
     ];
     for (const n of names) expect(ui[n as keyof typeof ui], n).toBeDefined();
   });

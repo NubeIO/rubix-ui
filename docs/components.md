@@ -413,6 +413,76 @@ optional counts, the picks on the chip and a × that clears. Props: `label`, `va
 <FacetChip label="Time zone" values={zones} counts={zoneCounts} selected={picked} onChange={setPicked} />
 ```
 
+## Overview
+
+The UART Overview's pieces, for any extension's Overview (Schedule Groups is next), so every Overview
+looks alike. They are display only: the app counts, picks the colours and decides what a click does.
+Colours are tokens without `--` (`"success"`, `"destructive"`, `"chart-8"`), as `FilterTiles` takes them;
+`tone(token, alpha?)` turns one into a CSS colour.
+
+### StatTiles
+
+The headline row: a label (with an optional `dot` in its tone), a big `value` with a muted `suffix`
+("units", "/ 42"), an optional share `bar` (0–100, accent) and a `note` at the foot that wraps on a narrow
+tile. `alarm` tints the tile red while its value is above zero. Four across where there is room, else two
+by two, never three and one. Props: `tiles` (`StatTile[]`), `label` (the row's accessible name).
+
+### SegmentRing
+
+A ring of parts, each an arc of its share of `total` in its tone (and `alpha`), in order, with a hair gap,
+and `value` / `caption` in the middle ("67%" · "healthy"). Give the parts the middle counts one hue (a
+lighter `alpha` for the second), so the arcs read as the middle's share. Props: `segments`
+(`RingSegment[]`: `key`, `value`, `tone`, `alpha?`), `total`, `value`, `caption?`, `size?` (148),
+`thickness?` (14).
+
+### BreakdownList, BreakdownRow
+
+A total in a few groups (Healthy, Needs attention, Offline): each row its `value` in its `tone`, its
+`title` with its `share` right beside it, and its parts in words under it (children, often
+`CountToggle`s), a hairline between rows.
+
+### CountToggle
+
+A count that narrows a view to its part and, pressed again, lets it go: off at a 0 `count` unless
+`pressed`, pressed in the accent wash. Props: `pressed`, `count`, `onToggle(next)`, `title?` ("Show only
+these"), `pressedTitle?` ("Show all"), `className?`, `style?`.
+
+### BarList
+
+Rows of label, bar and count, each bar its share of the largest, in its tone, with an optional `icon`.
+Given `onPick`, each row is a `CountToggle` for its key (`undefined` on letting go). The app orders the
+rows. Props: `rows` (`BarRow[]`), `picked?`, `onPick?`, `labelWidth?` (88), `pressedTitle?`.
+
+### CountChips
+
+Pill chips that narrow one list, one at a time, each with its count: the first (the whole list) always
+shows, the rest only where they count anything. Props: `chips`, `value`, `onChange(key)`, `label`. The
+app keeps the pick and should let it go once its chip's rows are all gone.
+
+### ShareBar, CountPill
+
+`ShareBar` reads "10 of 14" over a bar of that share (`tone`, default success), the share and `noun` in
+its tooltip, "—" when `value` is null or `of` is 0. `CountPill` is a count tinted in its `tone`, a faint
+0 with none, "—" when null.
+
+### SplitCard, SplitRow
+
+`SplitCard` is a card of two halves, 3 : 2, with a divider, stacked below `stackBelow`
+(`SPLIT_STACK_BELOW`, 818px) with the divider across. `SplitRow` puts two cards under it on the same
+lines, the gap centred under the divider, stacking at the same width. Both measure themselves
+(`useElementWidth`, the border box), so they follow the room the page has, not the window. Pass
+`SplitRow` fill classes (a least row height, `[&>*]:[contain:size]`) when its cards scroll inside.
+
+```tsx
+<StatTiles label="Summary" tiles={tiles} />
+<SplitCard
+  label="Fleet status"
+  left={<><SegmentRing segments={parts} total={42} value="67%" caption="healthy" /><BreakdownList>…</BreakdownList></>}
+  right={<BarList rows={modes} picked={part} onPick={setPart} />}
+/>
+<SplitRow left={<Sites />} right={<Issues chips={<CountChips label="Filter Issues" chips={chips} value={kind} onChange={setKind} />} />} />
+```
+
 ### WeekStrip, NameSwatch, colours
 
 `WeekStrip` is a week in miniature for a list row: seven 3px rows of coloured segments. Props: `week`

@@ -142,3 +142,16 @@ export { NameSwatch } from "./components/name-swatch";
 export { FilterTiles, type FilterTile, type FilterTilesProps } from "./components/filter-tiles";
 export { FacetChip, type FacetChipProps } from "./components/facet-chip";
 export { PanelFrame, type PanelFrameProps } from "./components/panel-frame";
+// The overview kit (the UART Overview's pieces, for every extension's Overview).
+export { StatTiles, type StatTile, type StatTilesProps } from "./components/stat-tiles";
+export { SegmentRing, type RingSegment, type SegmentRingProps } from "./components/segment-ring";
+export { BreakdownList, BreakdownRow, type BreakdownRowProps } from "./components/breakdown-list";
+export { CountToggle, type CountToggleProps } from "./components/count-toggle";
+export { BarList, type BarRow, type BarListProps } from "./components/bar-list";
+export { CountChips, type CountChip, type CountChipsProps } from "./components/count-chips";
+export { ShareBar, type ShareBarProps } from "./components/share-bar";
+export { CountPill, type CountPillProps } from "./components/count-pill";
+export { SplitCard, SPLIT_STACK_BELOW, type SplitCardProps } from "./components/split-card";
+export { SplitRow, type SplitRowProps } from "./components/split-row";
+export { useElementWidth } from "./lib/element-width";
+export { tone } from "./lib/tone";

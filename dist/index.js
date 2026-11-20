@@ -1,122 +1,140 @@
 /* empty css                  */
 import { cn as t } from "./lib/cn.js";
-import { RubixUiProvider as n } from "./lib/provider.js";
-import { useOverlayContainer as i } from "./lib/overlay.js";
-import { Alert as m, AlertDescription as u, AlertTitle as x, alertVariants as d } from "./components/alert.js";
-import { DatePicker as f } from "./components/date-picker.js";
-import { EmptyState as C } from "./components/empty-state.js";
+import { RubixUiProvider as p } from "./lib/provider.js";
+import { useOverlayContainer as m } from "./lib/overlay.js";
+import { Alert as l, AlertDescription as u, AlertTitle as x, alertVariants as f } from "./components/alert.js";
+import { DatePicker as b } from "./components/date-picker.js";
+import { EmptyState as S } from "./components/empty-state.js";
 import { DEFAULT_PAGE_SIZE as T, PAGE_SIZES as g, Pager as D } from "./components/pager.js";
 import { Radio as s } from "./components/radio.js";
 import { TimeField as w } from "./components/time-field.js";
-import { DAY_MINS as I, hhmm as A, parseTime as B } from "./lib/time.js";
-import { formatDay as L, localToday as E } from "./lib/date.js";
-import { Badge as v, badgeVariants as y } from "./components/badge.js";
-import { Button as G, buttonVariants as H } from "./components/button.js";
-import { Card as O, CardContent as U, CardDescription as V, CardFooter as W, CardHeader as N, CardTitle as Z } from "./components/card.js";
-import { Checkbox as j } from "./components/checkbox.js";
-import { Input as z } from "./components/input.js";
-import { Label as K } from "./components/label.js";
+import { DAY_MINS as B, hhmm as I, parseTime as A } from "./lib/time.js";
+import { formatDay as k, localToday as R } from "./lib/date.js";
+import { Badge as v, badgeVariants as _ } from "./components/badge.js";
+import { Button as F, buttonVariants as G } from "./components/button.js";
+import { Card as W, CardContent as O, CardDescription as U, CardFooter as V, CardHeader as N, CardTitle as Z } from "./components/card.js";
+import { Checkbox as Y } from "./components/checkbox.js";
+import { Input as q } from "./components/input.js";
+import { Label as J } from "./components/label.js";
 import { Separator as X } from "./components/separator.js";
 import { Skeleton as rr } from "./components/skeleton.js";
 import { Spinner as er } from "./components/spinner.js";
 import { Switch as ar } from "./components/switch.js";
-import { Table as pr, TableBody as ir, TableCell as lr, TableHead as mr, TableHeader as ur, TableRow as xr } from "./components/table.js";
-import { Textarea as br } from "./components/textarea.js";
-import { Collapsible as cr, CollapsibleContent as Cr, CollapsibleTrigger as Sr } from "./components/collapsible.js";
+import { Table as nr, TableBody as mr, TableCell as ir, TableHead as lr, TableHeader as ur, TableRow as xr } from "./components/table.js";
+import { Textarea as dr } from "./components/textarea.js";
+import { Collapsible as Cr, CollapsibleContent as Sr, CollapsibleTrigger as cr } from "./components/collapsible.js";
 import { Combobox as gr } from "./components/combobox.js";
-import { Dialog as Mr, DialogClose as sr, DialogContent as hr, DialogDescription as wr, DialogFooter as Pr, DialogHeader as Ir, DialogOverlay as Ar, DialogPortal as Br, DialogSurfaceContext as kr, DialogTitle as Lr, DialogTrigger as Er, useDialogSurface as Rr } from "./components/dialog.js";
-import { DropdownMenu as yr, DropdownMenuCheckboxItem as Fr, DropdownMenuContent as Gr, DropdownMenuGroup as Hr, DropdownMenuItem as _r, DropdownMenuLabel as Or, DropdownMenuPortal as Ur, DropdownMenuRadioGroup as Vr, DropdownMenuRadioItem as Wr, DropdownMenuSeparator as Nr, DropdownMenuShortcut as Zr, DropdownMenuSub as Yr, DropdownMenuSubContent as jr, DropdownMenuSubTrigger as qr, DropdownMenuTrigger as zr } from "./components/dropdown-menu.js";
-import { Menubar as Kr, MenubarCheckboxItem as Qr, MenubarContent as Xr, MenubarGroup as $r, MenubarItem as ro, MenubarLabel as oo, MenubarMenu as eo, MenubarPortal as to, MenubarRadioGroup as ao, MenubarRadioItem as no, MenubarSeparator as po, MenubarShortcut as io, MenubarSub as lo, MenubarSubContent as mo, MenubarSubTrigger as uo, MenubarTrigger as xo } from "./components/menubar.js";
-import { Popover as fo, PopoverAnchor as co, PopoverContent as Co, PopoverTrigger as So } from "./components/popover.js";
+import { Dialog as Mr, DialogClose as sr, DialogContent as hr, DialogDescription as wr, DialogFooter as Pr, DialogHeader as Br, DialogOverlay as Ir, DialogPortal as Ar, DialogSurfaceContext as Lr, DialogTitle as kr, DialogTrigger as Rr, useDialogSurface as Er } from "./components/dialog.js";
+import { DropdownMenu as _r, DropdownMenuCheckboxItem as yr, DropdownMenuContent as Fr, DropdownMenuGroup as Gr, DropdownMenuItem as Hr, DropdownMenuLabel as Wr, DropdownMenuPortal as Or, DropdownMenuRadioGroup as Ur, DropdownMenuRadioItem as Vr, DropdownMenuSeparator as Nr, DropdownMenuShortcut as Zr, DropdownMenuSub as Kr, DropdownMenuSubContent as Yr, DropdownMenuSubTrigger as jr, DropdownMenuTrigger as qr } from "./components/dropdown-menu.js";
+import { Menubar as Jr, MenubarCheckboxItem as Qr, MenubarContent as Xr, MenubarGroup as $r, MenubarItem as ro, MenubarLabel as oo, MenubarMenu as eo, MenubarPortal as to, MenubarRadioGroup as ao, MenubarRadioItem as po, MenubarSeparator as no, MenubarShortcut as mo, MenubarSub as io, MenubarSubContent as lo, MenubarSubTrigger as uo, MenubarTrigger as xo } from "./components/menubar.js";
+import { Popover as bo, PopoverAnchor as Co, PopoverContent as So, PopoverTrigger as co } from "./components/popover.js";
 import { ScrollArea as go, ScrollBar as Do } from "./components/scroll-area.js";
-import { Sheet as so, SheetContent as ho, SheetDescription as wo, SheetHeader as Po, SheetTitle as Io } from "./components/sheet.js";
-import { Tooltip as Bo, TooltipContent as ko, TooltipProvider as Lo, TooltipTrigger as Eo } from "./components/tooltip.js";
-import { Accordion as vo, AccordionContent as yo, AccordionItem as Fo, AccordionTrigger as Go } from "./components/accordion.js";
-import { Breadcrumb as _o, BreadcrumbEllipsis as Oo, BreadcrumbItem as Uo, BreadcrumbLink as Vo, BreadcrumbList as Wo, BreadcrumbPage as No, BreadcrumbSeparator as Zo } from "./components/breadcrumb.js";
-import { ColorSwatchPicker as jo } from "./components/color-swatch.js";
-import { CopyButton as zo } from "./components/copy-button.js";
-import { Select as Ko } from "./components/select.js";
+import { Sheet as so, SheetContent as ho, SheetDescription as wo, SheetHeader as Po, SheetTitle as Bo } from "./components/sheet.js";
+import { Tooltip as Ao, TooltipContent as Lo, TooltipProvider as ko, TooltipTrigger as Ro } from "./components/tooltip.js";
+import { Accordion as vo, AccordionContent as _o, AccordionItem as yo, AccordionTrigger as Fo } from "./components/accordion.js";
+import { Breadcrumb as Ho, BreadcrumbEllipsis as Wo, BreadcrumbItem as Oo, BreadcrumbLink as Uo, BreadcrumbList as Vo, BreadcrumbPage as No, BreadcrumbSeparator as Zo } from "./components/breadcrumb.js";
+import { ColorSwatchPicker as Yo } from "./components/color-swatch.js";
+import { CopyButton as qo } from "./components/copy-button.js";
+import { Select as Jo } from "./components/select.js";
 import { Tabs as Xo, TabsContent as $o, TabsList as re, TabsTrigger as oe } from "./components/tabs.js";
 import { nameColour as te } from "./lib/colour/nameColour.js";
-import { SCHEDULE_COLOURS as ne, scheduleColourClass as pe } from "./lib/colour/scheduleColour.js";
-import { ScheduleWeekCalendar as le } from "./components/schedule-week-calendar.js";
+import { SCHEDULE_COLOURS as pe, scheduleColourClass as ne } from "./lib/colour/scheduleColour.js";
+import { ScheduleWeekCalendar as ie } from "./components/schedule-week-calendar.js";
 import { ScheduleWeekRows as ue } from "./components/schedule-week-rows.js";
-import { ScheduleMonthGrid as de } from "./components/schedule-month-grid.js";
-import { AllSchedulesView as fe, CHIP_LIMIT as ce } from "./components/all-schedules-view.js";
-import { WeekStrip as Se } from "./components/week-strip.js";
+import { ScheduleMonthGrid as fe } from "./components/schedule-month-grid.js";
+import { AllSchedulesView as be, CHIP_LIMIT as Ce } from "./components/all-schedules-view.js";
+import { WeekStrip as ce } from "./components/week-strip.js";
 import { NameSwatch as ge } from "./components/name-swatch.js";
 import { FilterTiles as Me } from "./components/filter-tiles.js";
 import { FacetChip as he } from "./components/facet-chip.js";
 import { PanelFrame as Pe } from "./components/panel-frame.js";
-import { canWriteText as Ae, writeText as Be } from "./lib/clipboard/writeText.js";
-import { useClipboard as Le } from "./lib/clipboard/useClipboard.js";
+import { StatTiles as Ie } from "./components/stat-tiles.js";
+import { SegmentRing as Le } from "./components/segment-ring.js";
+import { BreakdownList as Re, BreakdownRow as Ee } from "./components/breakdown-list.js";
+import { CountToggle as _e } from "./components/count-toggle.js";
+import { BarList as Fe } from "./components/bar-list.js";
+import { CountChips as He } from "./components/count-chips.js";
+import { ShareBar as Oe } from "./components/share-bar.js";
+import { CountPill as Ve } from "./components/count-pill.js";
+import { SPLIT_STACK_BELOW as Ze, SplitCard as Ke } from "./components/split-card.js";
+import { SplitRow as je } from "./components/split-row.js";
+import { useElementWidth as ze } from "./lib/element-width.js";
+import { tone as Qe } from "./lib/tone.js";
+import { canWriteText as $e, writeText as rt } from "./lib/clipboard/writeText.js";
+import { useClipboard as et } from "./lib/clipboard/useClipboard.js";
 export {
   vo as Accordion,
-  yo as AccordionContent,
-  Fo as AccordionItem,
-  Go as AccordionTrigger,
-  m as Alert,
+  _o as AccordionContent,
+  yo as AccordionItem,
+  Fo as AccordionTrigger,
+  l as Alert,
   u as AlertDescription,
   x as AlertTitle,
-  fe as AllSchedulesView,
+  be as AllSchedulesView,
   v as Badge,
-  _o as Breadcrumb,
-  Oo as BreadcrumbEllipsis,
-  Uo as BreadcrumbItem,
-  Vo as BreadcrumbLink,
-  Wo as BreadcrumbList,
+  Fe as BarList,
+  Ho as Breadcrumb,
+  Wo as BreadcrumbEllipsis,
+  Oo as BreadcrumbItem,
+  Uo as BreadcrumbLink,
+  Vo as BreadcrumbList,
   No as BreadcrumbPage,
   Zo as BreadcrumbSeparator,
-  G as Button,
-  ce as CHIP_LIMIT,
-  O as Card,
-  U as CardContent,
-  V as CardDescription,
-  W as CardFooter,
+  Re as BreakdownList,
+  Ee as BreakdownRow,
+  F as Button,
+  Ce as CHIP_LIMIT,
+  W as Card,
+  O as CardContent,
+  U as CardDescription,
+  V as CardFooter,
   N as CardHeader,
   Z as CardTitle,
-  j as Checkbox,
-  cr as Collapsible,
-  Cr as CollapsibleContent,
-  Sr as CollapsibleTrigger,
-  jo as ColorSwatchPicker,
+  Y as Checkbox,
+  Cr as Collapsible,
+  Sr as CollapsibleContent,
+  cr as CollapsibleTrigger,
+  Yo as ColorSwatchPicker,
   gr as Combobox,
-  zo as CopyButton,
-  I as DAY_MINS,
+  qo as CopyButton,
+  He as CountChips,
+  Ve as CountPill,
+  _e as CountToggle,
+  B as DAY_MINS,
   T as DEFAULT_PAGE_SIZE,
-  f as DatePicker,
+  b as DatePicker,
   Mr as Dialog,
   sr as DialogClose,
   hr as DialogContent,
   wr as DialogDescription,
   Pr as DialogFooter,
-  Ir as DialogHeader,
-  Ar as DialogOverlay,
-  Br as DialogPortal,
-  kr as DialogSurfaceContext,
-  Lr as DialogTitle,
-  Er as DialogTrigger,
-  yr as DropdownMenu,
-  Fr as DropdownMenuCheckboxItem,
-  Gr as DropdownMenuContent,
-  Hr as DropdownMenuGroup,
-  _r as DropdownMenuItem,
-  Or as DropdownMenuLabel,
-  Ur as DropdownMenuPortal,
-  Vr as DropdownMenuRadioGroup,
-  Wr as DropdownMenuRadioItem,
+  Br as DialogHeader,
+  Ir as DialogOverlay,
+  Ar as DialogPortal,
+  Lr as DialogSurfaceContext,
+  kr as DialogTitle,
+  Rr as DialogTrigger,
+  _r as DropdownMenu,
+  yr as DropdownMenuCheckboxItem,
+  Fr as DropdownMenuContent,
+  Gr as DropdownMenuGroup,
+  Hr as DropdownMenuItem,
+  Wr as DropdownMenuLabel,
+  Or as DropdownMenuPortal,
+  Ur as DropdownMenuRadioGroup,
+  Vr as DropdownMenuRadioItem,
   Nr as DropdownMenuSeparator,
   Zr as DropdownMenuShortcut,
-  Yr as DropdownMenuSub,
-  jr as DropdownMenuSubContent,
-  qr as DropdownMenuSubTrigger,
-  zr as DropdownMenuTrigger,
-  C as EmptyState,
+  Kr as DropdownMenuSub,
+  Yr as DropdownMenuSubContent,
+  jr as DropdownMenuSubTrigger,
+  qr as DropdownMenuTrigger,
+  S as EmptyState,
   he as FacetChip,
   Me as FilterTiles,
-  z as Input,
-  K as Label,
-  Kr as Menubar,
+  q as Input,
+  J as Label,
+  Jr as Menubar,
   Qr as MenubarCheckboxItem,
   Xr as MenubarContent,
   $r as MenubarGroup,
@@ -125,69 +143,77 @@ export {
   eo as MenubarMenu,
   to as MenubarPortal,
   ao as MenubarRadioGroup,
-  no as MenubarRadioItem,
-  po as MenubarSeparator,
-  io as MenubarShortcut,
-  lo as MenubarSub,
-  mo as MenubarSubContent,
+  po as MenubarRadioItem,
+  no as MenubarSeparator,
+  mo as MenubarShortcut,
+  io as MenubarSub,
+  lo as MenubarSubContent,
   uo as MenubarSubTrigger,
   xo as MenubarTrigger,
   ge as NameSwatch,
   g as PAGE_SIZES,
   D as Pager,
   Pe as PanelFrame,
-  fo as Popover,
-  co as PopoverAnchor,
-  Co as PopoverContent,
-  So as PopoverTrigger,
+  bo as Popover,
+  Co as PopoverAnchor,
+  So as PopoverContent,
+  co as PopoverTrigger,
   s as Radio,
-  n as RubixUiProvider,
-  ne as SCHEDULE_COLOURS,
-  de as ScheduleMonthGrid,
-  le as ScheduleWeekCalendar,
+  p as RubixUiProvider,
+  pe as SCHEDULE_COLOURS,
+  Ze as SPLIT_STACK_BELOW,
+  fe as ScheduleMonthGrid,
+  ie as ScheduleWeekCalendar,
   ue as ScheduleWeekRows,
   go as ScrollArea,
   Do as ScrollBar,
-  Ko as Select,
+  Le as SegmentRing,
+  Jo as Select,
   X as Separator,
+  Oe as ShareBar,
   so as Sheet,
   ho as SheetContent,
   wo as SheetDescription,
   Po as SheetHeader,
-  Io as SheetTitle,
+  Bo as SheetTitle,
   rr as Skeleton,
   er as Spinner,
+  Ke as SplitCard,
+  je as SplitRow,
+  Ie as StatTiles,
   ar as Switch,
-  pr as Table,
-  ir as TableBody,
-  lr as TableCell,
-  mr as TableHead,
+  nr as Table,
+  mr as TableBody,
+  ir as TableCell,
+  lr as TableHead,
   ur as TableHeader,
   xr as TableRow,
   Xo as Tabs,
   $o as TabsContent,
   re as TabsList,
   oe as TabsTrigger,
-  br as Textarea,
+  dr as Textarea,
   w as TimeField,
-  Bo as Tooltip,
-  ko as TooltipContent,
-  Lo as TooltipProvider,
-  Eo as TooltipTrigger,
-  Se as WeekStrip,
-  d as alertVariants,
-  y as badgeVariants,
-  H as buttonVariants,
-  Ae as canWriteText,
+  Ao as Tooltip,
+  Lo as TooltipContent,
+  ko as TooltipProvider,
+  Ro as TooltipTrigger,
+  ce as WeekStrip,
+  f as alertVariants,
+  _ as badgeVariants,
+  G as buttonVariants,
+  $e as canWriteText,
   t as cn,
-  L as formatDay,
-  A as hhmm,
-  E as localToday,
+  k as formatDay,
+  I as hhmm,
+  R as localToday,
   te as nameColour,
-  B as parseTime,
-  pe as scheduleColourClass,
-  Le as useClipboard,
-  Rr as useDialogSurface,
-  i as useOverlayContainer,
-  Be as writeText
+  A as parseTime,
+  ne as scheduleColourClass,
+  Qe as tone,
+  et as useClipboard,
+  Er as useDialogSurface,
+  ze as useElementWidth,
+  m as useOverlayContainer,
+  rt as writeText
 };
