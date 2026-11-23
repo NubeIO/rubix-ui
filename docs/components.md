@@ -438,7 +438,7 @@ lighter `alpha` for the second), so the arcs read as the middle's share. Props: 
 ### BreakdownList, BreakdownRow
 
 A total in a few groups (Healthy, Needs attention, Offline): each row its `value` in its `tone`, its
-`title` with its `share` right beside it, and its parts in words under it (children, often
+`title` with its `share` at the title line's right end, and its parts in words under it (children, often
 `CountToggle`s), a hairline between rows.
 
 ### CountToggle

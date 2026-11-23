@@ -143,7 +143,7 @@ export declare interface BreakdownRowProps {
     /** The count's colour: a token without `--`. */
     tone: string;
     title: string;
-    /** Beside the title, faint: "67%". */
+    /** At the title line's right end: "67%". */
     share?: string;
     /** The words under the title: the group's parts. */
     children: ReactNode;
