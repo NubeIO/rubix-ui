@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import { BreakdownList, BreakdownRow } from "./breakdown-list";
 
 describe("BreakdownList", () => {
-  it("shows each group's count in its tone, its share beside its title, and its words, a hairline between", () => {
+  it("shows each group's count in its tone, its share at its title line's end, and its words, a hairline between", () => {
     const { container } = render(
       <BreakdownList>
         <BreakdownRow value={28} tone="success" title="Healthy" share="67%">20 running · 8 stopped</BreakdownRow>
@@ -12,7 +12,9 @@ describe("BreakdownList", () => {
       </BreakdownList>,
     );
     expect(screen.getByText("28").style.color).toBe("hsl(var(--success))");
-    expect(screen.getByText("Healthy").nextElementSibling!.textContent).toBe("67%");
+    const share = screen.getByText("Healthy").nextElementSibling as HTMLElement;
+    expect(share.textContent).toBe("67%");
+    expect(share.parentElement!.className).toContain("justify-between");
     expect(screen.getByText("20 running · 8 stopped")).toBeTruthy();
     expect((container.firstElementChild as HTMLElement).className).toContain("[&>*+*]:border-t");
   });

@@ -1,7 +1,7 @@
 // Rows that break a total into a few groups (the UART Overview's Fleet health: Healthy, Needs attention,
-// Offline): each row its count in its colour, its title with its share right beside it (never off at the
-// row's far end, where it reads as belonging to nothing), and a line of words under the title, which can
-// hold `CountToggle`s for the group's parts. A hairline parts the rows.
+// Offline): each row its count in its colour, its title with its share at the title line's right end,
+// and a line of words under them, which can hold `CountToggle`s for the group's parts. A hairline parts
+// the rows.
 //
 // One responsibility: lay out a total's groups.
 
@@ -18,7 +18,7 @@ export interface BreakdownRowProps {
   /** The count's colour: a token without `--`. */
   tone: string;
   title: string;
-  /** Beside the title, faint: "67%". */
+  /** At the title line's right end: "67%". */
   share?: string;
   /** The words under the title: the group's parts. */
   children: ReactNode;
@@ -31,14 +31,14 @@ export function BreakdownRow({ value, tone: t, title, share, children }: Breakdo
         {value.toLocaleString()}
       </span>
       <span className="grid min-w-0 gap-1">
-        <span className="flex items-baseline gap-2">
+        <span className="flex items-baseline justify-between gap-3">
           {/* Line height inline: an extension's own Tailwind 3 `text-sm` (a fixed 1.25rem) loads after this
               package's CSS and would win over a `leading-*` class on the same element. */}
           <span className="text-sm font-semibold text-ink-strong" style={{ lineHeight: 1.25 }}>
             {title}
           </span>
           {share ? (
-            <span className="text-xs tabular-nums text-ink-faint" style={{ lineHeight: 1.45 }}>
+            <span className="text-sm tabular-nums text-ink-muted" style={{ lineHeight: 1.45 }}>
               {share}
             </span>
           ) : null}

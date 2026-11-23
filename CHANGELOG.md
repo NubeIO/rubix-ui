@@ -2,6 +2,11 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
+## v0.8.1
+
+- **BreakdownRow**: the `share` sits at the title line's right end, at the body size in muted ink (it
+  was faint and small right beside the title), as the UART Overview's Fleet health now has it.
+
 ## v0.8.0
 
 - New: the **overview kit**, the UART Overview's pieces for every extension's Overview (`docs/components.md`,
