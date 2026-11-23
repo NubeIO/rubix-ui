@@ -38,7 +38,7 @@ export function BreakdownRow({ value, tone: t, title, share, children }: Breakdo
             {title}
           </span>
           {share ? (
-            <span className="text-sm tabular-nums text-ink-muted" style={{ lineHeight: 1.45 }}>
+            <span className="text-sm tabular-nums text-ink-muted" style={{ lineHeight: 1.5 }}>
               {share}
             </span>
           ) : null}

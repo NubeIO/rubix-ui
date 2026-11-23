@@ -2,6 +2,11 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
+## v0.8.2
+
+- **BreakdownRow**: the `share` takes the body text's line height (1.5, was 1.45), so a row is as tall as
+  the UART Overview's own Fleet health row was; each row had come out half a pixel short.
+
 ## v0.8.1
 
 - **BreakdownRow**: the `share` sits at the title line's right end, at the body size in muted ink (it
