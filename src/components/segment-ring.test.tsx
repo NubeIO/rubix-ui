@@ -37,4 +37,18 @@ describe("SegmentRing", () => {
     const none = render(<SegmentRing segments={[]} total={0} value="0%" />);
     expect(none.container.textContent).toContain("—");
   });
+
+  it("names each part on hover when it has a label; one without a label has no tooltip", () => {
+    const { container } = render(
+      <SegmentRing
+        segments={[{ key: "running", value: 20, tone: "success", label: "20 running, no issues · 48%" }, { key: "fault", value: 3, tone: "destructive" }]}
+        total={42}
+        value="48%"
+      />,
+    );
+    expect(container.querySelector("[data-arc='running'] > title")!.textContent).toBe("20 running, no issues · 48%");
+    expect(container.querySelector("[data-arc='fault'] > title")).toBeNull();
+    // The middle's value and caption sit over the whole ring: they must let the pointer reach the arcs.
+    expect(container.querySelector(".inset-0")).toHaveClass("pointer-events-none");
+  });
 });

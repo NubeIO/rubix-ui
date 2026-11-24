@@ -591,6 +591,8 @@ export declare interface RingSegment {
     tone: string;
     /** The tone's alpha, 0–1 (a lighter shade of a neighbour's hue). */
     alpha?: number;
+    /** The arc's hover tooltip: what the part is and how many ("20 running, no issues · 48%"). */
+    label?: string;
 }
 
 export declare interface RubixUiMotion {

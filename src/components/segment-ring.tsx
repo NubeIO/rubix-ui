@@ -1,6 +1,8 @@
 // A ring of parts (the UART Overview's Fleet health): each part an arc of its share of the total, in
 // its own colour and the given order, with a hair gap between neighbours, and a value and caption in
-// the middle ("67%" · "healthy"). Decorative: the rows beside it should carry every count in words.
+// the middle ("67%" · "healthy"). Decorative: the rows beside it should carry every count in words; a
+// part's `label` is only its hover tooltip ("20 running, no issues · 48%"): mouse only, as an SVG title
+// shows only on hover and the arcs take no focus.
 //
 // Plain data in: the app counts and picks the colours (a part the middle counts should share its hue,
 // so the arcs read as the middle's share).
@@ -16,6 +18,8 @@ export interface RingSegment {
   tone: string;
   /** The tone's alpha, 0–1 (a lighter shade of a neighbour's hue). */
   alpha?: number;
+  /** The arc's hover tooltip: what the part is and how many ("20 running, no issues · 48%"). */
+  label?: string;
 }
 
 export interface SegmentRingProps {
@@ -45,7 +49,7 @@ export function SegmentRing({ segments, total, value, caption, size = 148, thick
       const len = (s.value / total) * c;
       // The gap comes out of the arc's own slot; a sliver too short to spare it is drawn whole, never
       // stretched past its slot into the next arc.
-      const arc = { key: s.key, color: tone(s.tone, s.alpha), len: len > 2 * GAP ? len - GAP : len, at };
+      const arc = { key: s.key, label: s.label, color: tone(s.tone, s.alpha), len: len > 2 * GAP ? len - GAP : len, at };
       at += len;
       return arc;
     });
@@ -67,10 +71,13 @@ export function SegmentRing({ segments, total, value, caption, size = 148, thick
             strokeDasharray={arcs.length === 1 ? undefined : `${a.len} ${c - a.len}`}
             strokeDashoffset={arcs.length === 1 ? undefined : -a.at}
             style={{ stroke: a.color }}
-          />
+          >
+            {a.label ? <title>{a.label}</title> : null}
+          </circle>
         ))}
       </svg>
-      <div className="absolute inset-0 grid place-content-center text-center">
+      {/* Over the whole ring, so it lets the pointer through to the arcs and their tooltips. */}
+      <div className="pointer-events-none absolute inset-0 grid place-content-center text-center">
         <span className="text-value-lg leading-none font-semibold tracking-tight tabular-nums text-ink-strong">{total > 0 ? value : "—"}</span>
         {caption ? <span className="text-caption text-ink-muted">{caption}</span> : null}
       </div>

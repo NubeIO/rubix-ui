@@ -2,6 +2,13 @@
 
 Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/rubix-ui#vX.Y.Z"`.
 
+## v0.9.0
+
+- **SegmentRing**: a part takes an optional `label`, the arc's hover tooltip ("20 running, no issues ·
+  48%"). Mouse only: an SVG title shows on hover, and the arcs take no focus. The ring stays decorative
+  to a screen reader; the rows beside it carry the counts in words. The middle's value and caption now
+  let the pointer through to the arcs.
+
 ## v0.8.2
 
 - **BreakdownRow**: the `share` takes the body text's line height (1.5, was 1.45), so a row is as tall as
