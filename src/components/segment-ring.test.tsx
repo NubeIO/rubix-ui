@@ -48,5 +48,7 @@ describe("SegmentRing", () => {
     );
     expect(container.querySelector("[data-arc='running'] > title")!.textContent).toBe("20 running, no issues · 48%");
     expect(container.querySelector("[data-arc='fault'] > title")).toBeNull();
+    // The middle's value and caption sit over the whole ring: they must let the pointer reach the arcs.
+    expect(container.querySelector(".inset-0")).toHaveClass("pointer-events-none");
   });
 });

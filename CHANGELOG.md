@@ -5,7 +5,9 @@ Each release is a git tag; install one with `"@nube/rubix-ui": "github:NubeIO/ru
 ## v0.9.0
 
 - **SegmentRing**: a part takes an optional `label`, the arc's hover tooltip ("20 running, no issues ·
-  48%"). The ring stays decorative to a screen reader; the rows beside it carry the counts in words.
+  48%"). Mouse only: an SVG title shows on hover, and the arcs take no focus. The ring stays decorative
+  to a screen reader; the rows beside it carry the counts in words. The middle's value and caption now
+  let the pointer through to the arcs.
 
 ## v0.8.2
 

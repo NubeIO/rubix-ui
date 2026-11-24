@@ -1,7 +1,8 @@
 // A ring of parts (the UART Overview's Fleet health): each part an arc of its share of the total, in
 // its own colour and the given order, with a hair gap between neighbours, and a value and caption in
 // the middle ("67%" · "healthy"). Decorative: the rows beside it should carry every count in words; a
-// part's `label` is only its hover tooltip ("20 running, no issues · 48%").
+// part's `label` is only its hover tooltip ("20 running, no issues · 48%"): mouse only, as an SVG title
+// shows only on hover and the arcs take no focus.
 //
 // Plain data in: the app counts and picks the colours (a part the middle counts should share its hue,
 // so the arcs read as the middle's share).
@@ -75,7 +76,8 @@ export function SegmentRing({ segments, total, value, caption, size = 148, thick
           </circle>
         ))}
       </svg>
-      <div className="absolute inset-0 grid place-content-center text-center">
+      {/* Over the whole ring, so it lets the pointer through to the arcs and their tooltips. */}
+      <div className="pointer-events-none absolute inset-0 grid place-content-center text-center">
         <span className="text-value-lg leading-none font-semibold tracking-tight tabular-nums text-ink-strong">{total > 0 ? value : "—"}</span>
         {caption ? <span className="text-caption text-ink-muted">{caption}</span> : null}
       </div>

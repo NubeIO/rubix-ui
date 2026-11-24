@@ -432,7 +432,7 @@ by two, never three and one. Props: `tiles` (`StatTile[]`), `label` (the row's a
 A ring of parts, each an arc of its share of `total` in its tone (and `alpha`), in order, with a hair gap,
 and `value` / `caption` in the middle ("67%" · "healthy"). Give the parts the middle counts one hue (a
 lighter `alpha` for the second), so the arcs read as the middle's share. Props: `segments`
-(`RingSegment[]`: `key`, `value`, `tone`, `alpha?`, `label?`: the arc's hover tooltip), `total`, `value`, `caption?`, `size?` (148),
+(`RingSegment[]`: `key`, `value`, `tone`, `alpha?`, `label?`: the arc's hover tooltip, mouse only), `total`, `value`, `caption?`, `size?` (148),
 `thickness?` (14).
 
 ### BreakdownList, BreakdownRow
